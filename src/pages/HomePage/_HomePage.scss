@@ -1,0 +1,29 @@
+@import "../../style/variables";
+@import "../../style/typography";
+@import "../../style/components/page";
+
+.home {
+  @include Page();
+}
+
+.home__container {
+  @include PageContainer();
+}
+
+.home__heading {
+  @include PageHeading();
+}
+
+.home__heading_special {
+  @include FontElegant();
+  display: block;
+}
+
+.home__group {
+  @include PageBlock();
+  margin-top: 35px;
+}
+
+.home__link {
+  @include PageLink();
+}

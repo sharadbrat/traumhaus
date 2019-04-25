@@ -1,0 +1,48 @@
+@import "../../style/variables";
+@import "../../style/components/page";
+
+.about {
+  @include Page();
+}
+
+.about__container {
+  @include PageContainer();
+}
+
+.about__heading {
+  @include PageHeading();
+}
+
+.about__block {
+  @include PageBlock();
+}
+
+.about__subheading {
+  @include PageHeading();
+  @include FontElegant();
+  font-size: 36px;
+}
+
+.about__paragraph {
+  @include FontPixel();
+  font-size: 20px;
+  line-height: 1.5;
+  margin-top: 10px;
+  text-align: justify;
+}
+
+.about__paragraph._florian {
+  color: $color-palette-indigo;
+}
+
+.about__paragraph._jacob {
+  color: $color-palette-blue;
+}
+
+.about__paragraph._georgii {
+  color: $color-palette-purple;
+}
+
+.about__back {
+  @include PageLink();
+}

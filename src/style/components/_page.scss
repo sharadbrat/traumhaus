@@ -1,0 +1,76 @@
+@import "../variables";
+@import "../typography";
+
+@mixin Page() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  user-select: none;
+}
+
+@mixin PageContainer() {
+  height: fit-content;
+  max-width: 450px;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin PageHeading() {
+  @include FontPixel();
+
+  color: $color-dark-text-primary;
+
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: 3px;
+
+  text-align: center;
+  text-decoration: none;
+}
+
+@mixin PageBlock() {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 20px 0;
+}
+
+@mixin PageLink() {
+  position: relative;
+  font-family: "VT323", "-apple-system", sans-serif;
+  font-size: 32px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: $color-dark-text-primary;
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
+
+  &:hover, &:focus, &:active {
+    &:before {
+      max-width: 100%;
+    }
+  }
+
+  &:before {
+    position: absolute;
+    content: '';
+    display: block;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    max-width: 10px;
+
+    height: 2px;
+    background-color: $color-palette-purple;
+
+    transition: max-width ease-in-out 100ms;
+    will-change: max-width;
+  }
+}

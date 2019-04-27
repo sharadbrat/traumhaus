@@ -50,7 +50,7 @@ export class GameScene extends Phaser.Scene {
       this.scene.start(SceneIdentifier.REFERENCE_SCENE);
     });
 
-    this.input.keyboard.on("keydown_I", () => {
+    this.input.keyboard.on("keydown_ESC", () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
 

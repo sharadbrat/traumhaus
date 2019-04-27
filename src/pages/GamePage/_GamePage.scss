@@ -1,4 +1,6 @@
 @import "../../style/variables";
+@import "../../style/spacing";
+@import "../../style/components/page";
 
 .game {
 
@@ -17,7 +19,13 @@
   image-rendering: pixelated;
 }
 
-iframe {
-  height: 100vh;
-  width: 100vw;
+.game__menu-option {
+  @include PageLink();
+
+  appearance: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+
+  margin: $spacing-margin-outer auto;
 }

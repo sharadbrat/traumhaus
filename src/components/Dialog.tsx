@@ -13,7 +13,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
     let dialogClass = 'dialog';
 
     if (this.props.isActive) {
-      dialogClass = dialogClass + 'dialog_active';
+      dialogClass = dialogClass + ' dialog_active';
     }
 
     let footer;

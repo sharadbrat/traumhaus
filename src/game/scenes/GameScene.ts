@@ -5,6 +5,7 @@ import { SceneIdentifier } from './SceneManager';
 import { LevelMap, MapPosition } from '../entities/LevelMap';
 import { LEVEL_1_DATA, LevelManager } from '../levels';
 import { LightLayer } from '../entities/LightLayer';
+import { GameMenuService } from '../../service';
 
 export class GameScene extends Phaser.Scene {
   lastX: number;
@@ -47,6 +48,10 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard.on("keydown_R", () => {
       this.scene.stop(SceneIdentifier.INFO_SCENE);
       this.scene.start(SceneIdentifier.REFERENCE_SCENE);
+    });
+
+    this.input.keyboard.on("keydown_I", () => {
+      GameMenuService.getInstance().triggerOnMenuToggle();
     });
 
     this.scene.run(SceneIdentifier.INFO_SCENE);

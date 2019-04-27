@@ -1,0 +1,61 @@
+@import "../style/typography";
+@import "../style/variables";
+@import "../style/spacing";
+
+.dialog {
+
+  position: fixed;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+
+  transition-property: visibility, opacity, z-index;
+  transition-timing-function: ease-in-out;
+  transition-duration: 100ms;
+
+  &.dialog_active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1000;
+
+    .dialog__container {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
+
+.dialog__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin-left: $spacing-margin-outer;
+  margin-right: $spacing-margin-outer;
+
+  padding: $spacing-padding-container;
+
+  border-radius: $border-radius-outer;
+  background-color: white;
+  box-shadow: 0 5px 15px -7px rgba(0, 0, 0, 0.15);
+}
+
+.dialog__header {
+  @include TypographyHeadingLarge();
+  text-align: center;
+}
+
+.dialog__main {
+  padding-top: $spacing-padding-element;
+}
+
+.dialog__actions {
+
+}

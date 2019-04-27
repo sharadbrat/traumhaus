@@ -5,3 +5,27 @@
 @mixin FontElegant() {
   font-family: "Poiret One", "VT323", "-apple-system", sans-serif;
 }
+
+@mixin TypographyHeadingLarge() {
+  @include FontPixel();
+  font-size: 64px;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+@mixin TypographyHeadingMedium() {
+  @include FontPixel();
+  font-size: 40px;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+@mixin TypographyHeadingSmall() {
+  @include FontPixel();
+  font-size: 40px;
+  line-height: 1.4;
+  letter-spacing: 1px;
+  font-weight: 600;
+}

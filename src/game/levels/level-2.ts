@@ -51,7 +51,7 @@ export const LEVEL_2_DATA: LevelMapData = {
   doors: [
     {
       fromPosition: {x: 3, y: 17},
-      toPosition: {x: 2, y: 16},
+      toPosition: {x: 5, y: 17},
       toId: '01',
     }
   ],
@@ -61,7 +61,7 @@ export const LEVEL_2_DATA: LevelMapData = {
   },
   lightSettings: {
     playerLightRadius: 7,
-    playerLightRolloff: 5,
-    fogAlpha: 0.3,
+    playerLightRolloff: 4,
+    fogAlpha: 0.95,
   }
 };

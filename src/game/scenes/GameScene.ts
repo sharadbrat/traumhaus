@@ -2,64 +2,66 @@ import Phaser from 'phaser';
 import { FOVLayer, Player } from '../entities';
 import { AssetManager } from '../AssetManager';
 import { SceneIdentifier } from './SceneManager';
-import { LevelMap, MapPosition } from '../entities/LevelMap';
+import { LevelMap, LevelMapConstructorOptions, MapPosition } from '../entities/LevelMap';
 import { LEVEL_1_DATA, LevelManager } from '../levels';
 import { LightLayer } from '../entities/LightLayer';
-import { GameMenuService } from '../../service';
+import { GameDataService, GameMenuService } from '../../service';
 
 export class GameScene extends Phaser.Scene {
-  lastX: number;
-  lastY: number;
-  player: Player | null;
-  fov: FOVLayer | null;
-  tilemap: Phaser.Tilemaps.Tilemap | null;
+  private lastX: number;
+  private lastY: number;
+  private player: Player | null;
   cameraResizeNeeded: boolean;
 
   myfov: LightLayer;
 
   private levelMap: LevelMap;
+  private doorFlag: boolean;
+  private playerCollider: Phaser.Physics.Arcade.Collider;
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
     this.lastX = -1;
     this.lastY = -1;
-    this.player = null;
-    this.fov = null;
-    this.tilemap = null;
     this.cameraResizeNeeded = false;
+    this.doorFlag = false;
   }
 
   create(): void {
+    this.setupLevelMap();
 
-    const temp = new LevelMap(LEVEL_1_DATA, this);
-    this.levelMap = temp;
-    this.tilemap = temp.getTilemap();
-
-    this.player = this.createPlayer(LEVEL_1_DATA.startPosition);
-
-    this.createCamera(temp);
-
-    this.physics.add.collider(this.player.sprite, temp.getCollisionLayer());
-
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.cameraResizeNeeded = true;
     });
 
-    this.input.keyboard.on("keydown_R", () => {
+    this.input.keyboard.on('keydown_R', () => {
       this.scene.stop(SceneIdentifier.INFO_SCENE);
       this.scene.start(SceneIdentifier.REFERENCE_SCENE);
     });
 
-    this.input.keyboard.on("keydown_ESC", () => {
+    this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
-
-    this.scene.run(SceneIdentifier.INFO_SCENE);
-
-    this.myfov = new LightLayer(temp);
   }
 
   update(time: number, delta: number) {
+
+
+    const door = this.levelMap.checkPlayerDoorCollision(this.player.getBody());
+
+    if (door) {
+      GameDataService.getInstance().changeLevel(door.toId);
+      GameDataService.getInstance().setLastDoor(door);
+      this.scene.start(SceneIdentifier.GAME_SCENE);
+      // this.tilemap.destroy();
+      // this.levelMap = new LevelMap(LevelManager.getLevelById(door.toId), this);
+      // this.tilemap = this.levelMap.getTilemap();
+      // this.doorFlag = true;
+      // this.playerCollider.destroy();
+      // this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer());
+      return;
+    }
+
     this.player.update(time);
     const camera = this.cameras.main;
 
@@ -71,26 +73,37 @@ export class GameScene extends Phaser.Scene {
     }
 
     const player = new Phaser.Math.Vector2({
-      x: this.tilemap.worldToTileX(this.player.sprite.body.x),
-      y: this.tilemap.worldToTileY(this.player.sprite.body.y)
+      x: this.levelMap.getTilemap().worldToTileX(this.player.sprite.body.x),
+      y: this.levelMap.getTilemap().worldToTileY(this.player.sprite.body.y)
     });
 
     const bounds = this.getCameraBounds(camera);
 
     this.myfov.update(player, bounds, delta);
 
-    const door = this.levelMap.checkPlayerDoorCollision(this.player.getBody());
-
-    if (door) {
-      this.tilemap.destroy();
-      this.levelMap = new LevelMap(LevelManager.getLevelById(door.toId), this);
-      this.tilemap = this.levelMap.getTilemap();
-    }
-
     // this.fov!.update(player, bounds, delta);
   }
 
-  private createPlayer(pos: MapPosition): Player {
+  private getCurrentLevel() {
+    let level = GameDataService.getInstance().getCurrentLevel();
+
+    if (!level) {
+      level = LEVEL_1_DATA;
+      GameDataService.getInstance().setCurrentLevel(level);
+    }
+
+    return level;
+  }
+
+  private createPlayer(): Player {
+    let pos;
+    let lastDoor = GameDataService.getInstance().getLastDoor();
+    if (lastDoor) {
+      pos = lastDoor.toPosition;
+    } else {
+      pos = GameDataService.getInstance().getCurrentLevel().startPosition;
+    }
+
     Object.values(AssetManager.player.animations).forEach((anim: any) => {
       if (!this.anims.get(anim.name)) {
         this.anims.create({
@@ -103,8 +116,8 @@ export class GameScene extends Phaser.Scene {
     });
 
     return new Player(
-      pos.x * this.tilemap.tileWidth,
-      pos.y * this.tilemap.tileHeight,
+      pos.x * this.levelMap.getTilemap().tileWidth,
+      pos.y * this.levelMap.getTilemap().tileHeight,
       this
     );
   }
@@ -123,10 +136,24 @@ export class GameScene extends Phaser.Scene {
 
   private getCameraBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Geom.Rectangle {
     return new Phaser.Geom.Rectangle(
-      this.tilemap!.worldToTileX(camera.worldView.x) - 1,
-      this.tilemap!.worldToTileY(camera.worldView.y) - 1,
-      this.tilemap!.worldToTileX(camera.worldView.width) + 2,
-      this.tilemap!.worldToTileY(camera.worldView.height) + 2
+      this.levelMap.getTilemap().worldToTileX(camera.worldView.x) - 1,
+      this.levelMap.getTilemap().worldToTileY(camera.worldView.y) - 1,
+      this.levelMap.getTilemap().worldToTileX(camera.worldView.width) + 2,
+      this.levelMap.getTilemap().worldToTileY(camera.worldView.height) + 2
     );
+  }
+
+  private setupLevelMap() {
+    let currentLevel = this.getCurrentLevel();
+
+    this.levelMap = new LevelMap({data: currentLevel, scene: this});
+
+    this.player = this.createPlayer();
+
+    this.createCamera(this.levelMap);
+
+    this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer());
+
+    this.myfov = new LightLayer(this.levelMap);
   }
 }

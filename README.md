@@ -78,7 +78,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 - Dialogs and cut scenes
 - Items layer
 - HUD
-- Level management
+- Level management + 
 - Shooting mechanics
 - Change of tileset mechanics
 - Change of collision for jumping/crouching objects layer

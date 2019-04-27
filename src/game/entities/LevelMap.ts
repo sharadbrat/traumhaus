@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { AssetManager } from '../AssetManager';
 import { Player } from './Player';
+import { GameScene } from '../scenes/GameScene';
 
 export type CollisionDetector = 0 | 1;
 
@@ -32,6 +33,11 @@ export interface LevelMapData {
   lightSettings: LightSettings;
 }
 
+export interface LevelMapConstructorOptions {
+  data: LevelMapData;
+  scene: GameScene;
+}
+
 export class LevelMap {
   static readonly GRAPHIC_LAYER_ID = 'GRAPHIC';
   static readonly COLLISION_LAYER_ID = 'COLLISION';
@@ -41,18 +47,17 @@ export class LevelMap {
   private tilemap: Phaser.Tilemaps.Tilemap;
   private collisionLayer: Phaser.Tilemaps.StaticTilemapLayer;
   private backgroundLayer: Phaser.Tilemaps.StaticTilemapLayer;
-  private doorLayer: Phaser.Tilemaps.StaticTilemapLayer;
   private mapData: LevelMapData;
 
-  constructor(levelMapData: LevelMapData, scene: Phaser.Scene) {
-    this.mapData = levelMapData;
+  constructor(options: LevelMapConstructorOptions) {
+    this.mapData = options.data;
 
-    this.tilemap = this.createTilemap(scene, levelMapData.width, levelMapData.height);
+    this.tilemap = this.createTilemap(options.scene, options.data.width, options.data.height);
 
     const environmentTiles = this.tilemap.addTilesetImage(AssetManager.environment.name);
-    this.backgroundLayer = this.createBackgroundLayer(levelMapData.tileMap);
+    this.backgroundLayer = this.createBackgroundLayer(options.data.tileMap);
 
-    this.collisionLayer = this.createCollisionLayer(this.tilemap, levelMapData, environmentTiles);
+    this.collisionLayer = this.createCollisionLayer(this.tilemap, options.data, environmentTiles);
   }
 
   getTilemap(): Phaser.Tilemaps.Tilemap {
@@ -73,6 +78,17 @@ export class LevelMap {
 
   getMapData(): LevelMapData {
     return this.mapData;
+  }
+
+  checkPlayerDoorCollision(body: Phaser.Physics.Arcade.Body): Door | null {
+    const x = body.position.x;
+    const y = body.position.y;
+
+    for (let door of this.mapData.doors) {
+      if (this.tilemap.worldToTileX(x) === door.fromPosition.x && this.tilemap.worldToTileY(y) === door.fromPosition.y) {
+        return door;
+      }
+    }
   }
 
   private createTilemap(scene: Phaser.Scene, width: number, height: number): Phaser.Tilemaps.Tilemap {
@@ -104,16 +120,5 @@ export class LevelMap {
     }
     collisionLayer.setCollisionBetween(0, 256);
     return tilemap.convertLayerToStatic(collisionLayer);
-  }
-
-  checkPlayerDoorCollision(body: Phaser.Physics.Arcade.Body): Door | null {
-    const x = body.position.x;
-    const y = body.position.y;
-
-    for (let door of this.mapData.doors) {
-      if (this.tilemap.worldToTileX(x) === door.fromPosition.x && this.tilemap.worldToTileY(y) === door.fromPosition.y) {
-        return door;
-      }
-    }
   }
 }

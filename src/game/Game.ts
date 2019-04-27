@@ -1,7 +1,4 @@
 import Phaser from 'phaser';
-import DungeonScene from './scenes/DungeonScene';
-import InfoScene from './scenes/InfoScene';
-import ReferenceScene from './scenes/ReferenceScene';
 import { SceneIdentifier, SceneManager, SceneObject } from './scenes/SceneManager';
 
 export class Game extends Phaser.Game {

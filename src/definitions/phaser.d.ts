@@ -37378,7 +37378,7 @@ declare namespace Phaser {
             static GetCenter<O extends Phaser.Geom.Point>(rect: Phaser.Geom.Rectangle, out?: O): O;
 
             /**
-             * Position is a value between 0 and 1 where 0 = the top-left of the rectangle and 0.5 = the bottom right.
+             * MapPosition is a value between 0 and 1 where 0 = the top-left of the rectangle and 0.5 = the bottom right.
              * @param rectangle [description]
              * @param position [description]
              * @param out [description]
@@ -37920,7 +37920,7 @@ declare namespace Phaser {
 
             /**
              * Returns a specific point  on the triangle.
-             * @param position Position as float within `0` and `1`. `0` equals the first point.
+             * @param position MapPosition as float within `0` and `1`. `0` equals the first point.
              * @param output Optional Point, or point-like object, that the calculated point will be written to.
              */
             getPoint<O extends Phaser.Geom.Point>(position: number, output?: O): O;
@@ -47318,7 +47318,7 @@ declare namespace Phaser {
 
             /**
              * Generate a look-at matrix with the given eye position, focal point, and up axis.
-             * @param eye Position of the viewer
+             * @param eye MapPosition of the viewer
              * @param center Point the viewer is looking at
              * @param up vec3 pointing up.
              */
@@ -77080,7 +77080,7 @@ declare type SoundConfig = {
      */
     detune?: number;
     /**
-     * Position of playback for this sound, in seconds.
+     * MapPosition of playback for this sound, in seconds.
      */
     seek?: number;
     /**

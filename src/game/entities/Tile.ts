@@ -1,4 +1,4 @@
-import Map from "./Map";
+import { Map } from "./Map";
 import { AssetManager } from '../AssetManager';
 
 export enum TileType {
@@ -7,7 +7,7 @@ export enum TileType {
   Door
 }
 
-export default class Tile {
+export class Tile {
   public readonly collides: boolean;
   public readonly type: TileType;
   public readonly map: Map;

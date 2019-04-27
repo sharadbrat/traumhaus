@@ -16,6 +16,6 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.run(SceneIdentifier.DUNGEON_SCENE);
+    this.scene.run(SceneIdentifier.GAME_SCENE);
   }
 }

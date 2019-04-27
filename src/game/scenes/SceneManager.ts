@@ -2,10 +2,10 @@ import Phaser from 'phaser';
 import { PreloaderScene } from './PreloaderScene';
 import ReferenceScene from './ReferenceScene';
 import InfoScene from './InfoScene';
-import DungeonScene from './DungeonScene';
+import { GameScene } from './GameScene';
 
 export enum SceneIdentifier {
-  GAMEPLAY_SCENE = 'GAMEPLAY_SCENE',
+  GAME_SCENE = 'GAME_SCENE',
   TITLES_SCENE = 'TITLES_SCENE',
   PRELOADER_SCENE = 'PRELOADER_SCENE',
   DUNGEON_SCENE = 'DUNGEON',
@@ -35,8 +35,8 @@ export class SceneManager {
         scene: InfoScene,
       },
       {
-        key: SceneIdentifier.DUNGEON_SCENE,
-        scene: DungeonScene,
+        key: SceneIdentifier.GAME_SCENE,
+        scene: GameScene,
       }
     ];
   }

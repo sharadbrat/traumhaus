@@ -1,18 +1,33 @@
 import * as React from 'react';
 
 import './_GamePage.scss';
-import { GameManager } from '../../game';
+import { GameManager, GameManagerOptions } from '../../game';
+import { Dialog } from '../../components';
 
-export class GamePage extends React.Component {
+interface GamePageState {
+  pause: boolean;
+}
+
+export class GamePage extends React.Component<any, GamePageState> {
 
   private readonly GAME_CANVAS_ID = 'game__canvas';
 
   private gameManager: GameManager;
   private canvasRef: React.Ref<HTMLCanvasElement>;
 
+  state = {
+    pause: false,
+  };
+
   componentDidMount(): void {
     const canvas: HTMLCanvasElement = document.getElementById(this.GAME_CANVAS_ID) as HTMLCanvasElement;
-    this.gameManager = new GameManager(canvas)
+
+    const options: GameManagerOptions = {
+      canvas,
+      onGamePause: () => this.setState({ pause: true })
+    };
+
+    this.gameManager = new GameManager(options);
     this.gameManager.run();
   }
 
@@ -21,7 +36,7 @@ export class GamePage extends React.Component {
       <section className="game">
         <div className="game__container">
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
-          {/*<iframe src="https://dungeon-dash.surge.sh"/>*/}
+          <Dialog heading="Pause" isActive={this.state.pause}/>
         </div>
       </section>
     );

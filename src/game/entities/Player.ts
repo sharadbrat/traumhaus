@@ -18,7 +18,7 @@ interface Keys {
   d: Phaser.Input.Keyboard.Key;
 }
 
-export default class Player {
+export class Player {
   public sprite: Phaser.Physics.Arcade.Sprite;
   private keys: Keys;
 
@@ -125,5 +125,9 @@ export default class Player {
         this.emitter.stop();
       }
     }
+  }
+
+  public getBody(): Phaser.Physics.Arcade.Body {
+    return this.body;
   }
 }

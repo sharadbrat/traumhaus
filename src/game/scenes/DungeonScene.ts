@@ -1,7 +1,5 @@
-import Phaser from "phaser";
-import FOVLayer from "../entities/FOVLayer";
-import Player from "../entities/Player";
-import Map from "../entities/Map";
+import Phaser from 'phaser';
+import { FOVLayer, Map, Player } from '../entities';
 import { AssetManager } from '../AssetManager';
 import { SceneIdentifier } from './SceneManager';
 
@@ -15,15 +13,6 @@ export default class DungeonScene extends Phaser.Scene {
   fov: FOVLayer | null;
   tilemap: Phaser.Tilemaps.Tilemap | null;
   cameraResizeNeeded: boolean;
-
-  preload(): void {
-    this.load.image(AssetManager.environment.name, AssetManager.environment.file);
-    this.load.image(AssetManager.util.name, AssetManager.util.file);
-    this.load.spritesheet(AssetManager.player.name, AssetManager.player.file, {
-      frameHeight: AssetManager.player.height,
-      frameWidth: AssetManager.player.width
-    });
-  }
 
   constructor() {
     super(SceneIdentifier.DUNGEON_SCENE);
@@ -74,11 +63,11 @@ export default class DungeonScene extends Phaser.Scene {
     });
 
     this.input.keyboard.on("keydown_R", () => {
-      this.scene.stop("InfoScene");
-      this.scene.start("ReferenceScene");
+      this.scene.stop(SceneIdentifier.INFO_SCENE);
+      this.scene.start(SceneIdentifier.REFERENCE_SCENE);
     });
 
-    this.scene.run("InfoScene");
+    this.scene.run(SceneIdentifier.INFO_SCENE);
   }
 
   update(time: number, delta: number) {

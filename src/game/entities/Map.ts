@@ -1,4 +1,4 @@
-import Tile, { TileType } from "./Tile";
+import { Tile, TileType } from "./Tile";
 import DungeonFactory from "dungeon-factory";
 import { AssetManager } from '../AssetManager';
 
@@ -7,7 +7,7 @@ interface DungeonFactoryOutput {
   rooms: Array<{ height: number; width: number; x: number; y: number }>;
 }
 
-export default class Map {
+export class Map {
   public readonly tiles: Array<Array<Tile>>;
   public readonly width: number;
   public readonly height: number;
@@ -94,10 +94,11 @@ export default class Map {
           // } else {
           //   idx = randomTile(Tiles.World.Wall.Brown.Vertical);
           // }
-          wallLayer.putTileAt(tile.wallIndex(), x, y);
+          wallLayer.putTileAt(0x10, x, y);
         }
       }
     }
+
     wallLayer.setCollisionBetween(0, 256);
     this.tilemap.convertLayerToStatic(groundLayer);
     this.wallLayer = this.tilemap.convertLayerToStatic(wallLayer);

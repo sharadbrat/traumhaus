@@ -66,3 +66,19 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+### Things to do
+- Rotate level map + 
+- Shadows and lightning + 
+- Light settings for level - character + 
+- Light settings for level - light sources
+- Foreground layer
+- Game pausing
+- Dialogs and cut scenes
+- Items layer
+- HUD
+- Level management
+- Shooting mechanics
+- Change of tileset mechanics
+- Change of collision for jumping/crouching objects layer

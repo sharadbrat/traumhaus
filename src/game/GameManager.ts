@@ -1,6 +1,11 @@
 import { SceneManager } from './scenes/SceneManager';
 import { Game } from './Game';
 
+export interface GameManagerOptions {
+  canvas: HTMLCanvasElement;
+  onGamePause: () => void;
+}
+
 export class GameManager {
 
   private game: Game;
@@ -8,8 +13,8 @@ export class GameManager {
   private gameConfig: GameConfig;
   private canvas: HTMLCanvasElement;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
+  constructor(options: GameManagerOptions) {
+    this.canvas = options.canvas;
     window.addEventListener('resize', () => {
       // this.game.canvas.width = window.innerWidth;
       // this.game.canvas.height = window.innerHeight;

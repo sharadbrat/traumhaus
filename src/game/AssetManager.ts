@@ -46,7 +46,8 @@ const environmentGraphicalAsset: GraphicalAsset = {
         n: 0x32,
         n_w: 0x33
       }
-    }
+    },
+    transparent: 0x88,
   }
 };
 

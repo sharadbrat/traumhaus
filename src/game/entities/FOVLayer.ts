@@ -1,4 +1,4 @@
-import Map from "./Map";
+import { Map } from "./Map";
 import Phaser from "phaser";
 import { Mrpas } from 'mrpas';
 import { AssetManager } from '../AssetManager';
@@ -25,7 +25,7 @@ function updateTileAlpha(desiredAlpha: number, delta: number, tile: Phaser.Tilem
   }
 }
 
-export default class FOVLayer {
+export class FOVLayer {
   public layer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mrpas: any;
   private lastPos: Phaser.Math.Vector2;
@@ -84,15 +84,10 @@ export default class FOVLayer {
       radius,
       (x: number, y: number) => this.map.tiles[y][x].seen,
       (x: number, y: number) => {
-        const distance = Math.floor(
-          new Phaser.Math.Vector2(x, y).distance(
-            new Phaser.Math.Vector2(pos.x, pos.y)
-          )
-        );
+        const distance = Math.floor(new Phaser.Math.Vector2(x, y).distance(new Phaser.Math.Vector2(pos.x, pos.y)));
 
         const rolloffIdx = distance <= radius ? radius - distance : 0;
-        const alpha =
-          rolloffIdx < lightDropoff.length ? lightDropoff[rolloffIdx] : 0;
+        const alpha = rolloffIdx < lightDropoff.length ? lightDropoff[rolloffIdx] : 0;
         this.map.tiles[y][x].desiredAlpha = alpha;
         this.map.tiles[y][x].seen = true;
       }

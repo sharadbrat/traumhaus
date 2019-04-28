@@ -39,10 +39,12 @@ export class GamePage extends React.Component<any, GamePageState> {
   }
 
   onMenuToggle() {
+    this.gameManager.pause();
     this.setState({pause: true});
   }
 
   onMenuContinueClick = () => {
+    this.gameManager.resume();
     this.setState({pause: false});
   };
 

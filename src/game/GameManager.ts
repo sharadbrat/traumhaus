@@ -9,7 +9,6 @@ export interface GameManagerOptions {
 export class GameManager {
 
   private game: Game;
-  private sceneManager: SceneManager;
   private gameConfig: GameConfig;
   private canvas: HTMLCanvasElement;
 
@@ -35,10 +34,10 @@ export class GameManager {
   }
 
   public pause() {
-
+    SceneManager.getScenes().forEach(el => this.game.scene.pause(el.key));
   }
 
   public resume() {
-
+    SceneManager.getScenes().forEach(el => this.game.scene.resume(el.key));
   }
 }

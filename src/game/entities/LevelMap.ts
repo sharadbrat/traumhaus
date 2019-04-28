@@ -16,10 +16,17 @@ export interface Door {
   toId: string;
 }
 
+export interface LightSource {
+  radius: number;
+  rolloff: number | number[];
+  position: MapPosition;
+}
+
 export interface LightSettings {
   playerLightRadius: number;
   playerLightRolloff: number;
   fogAlpha: number;
+  sources?: LightSource[];
 }
 
 export interface LevelMapData {

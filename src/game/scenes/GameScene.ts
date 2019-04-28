@@ -53,12 +53,6 @@ export class GameScene extends Phaser.Scene {
       GameDataService.getInstance().changeLevel(door.toId);
       GameDataService.getInstance().setLastDoor(door);
       this.scene.start(SceneIdentifier.GAME_SCENE);
-      // this.tilemap.destroy();
-      // this.levelMap = new LevelMap(LevelManager.getLevelById(door.toId), this);
-      // this.tilemap = this.levelMap.getTilemap();
-      // this.doorFlag = true;
-      // this.playerCollider.destroy();
-      // this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer());
       return;
     }
 
@@ -80,8 +74,6 @@ export class GameScene extends Phaser.Scene {
     const bounds = this.getCameraBounds(camera);
 
     this.myfov.update(player, bounds, delta);
-
-    // this.fov!.update(player, bounds, delta);
   }
 
   private getCurrentLevel() {

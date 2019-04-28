@@ -72,7 +72,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 - Rotate level map + 
 - Shadows and lightning + 
 - Light settings for level - character + 
-- Light settings for level - light sources
+- Light settings for level - light sources +
 - Foreground layer
 - Game pausing
 - Dialogs and cut scenes

@@ -31,7 +31,7 @@ export interface SpriteAsset extends GraphicalAsset {
 
 const mainThemeAudioAsset: SoundAsset = {
   name: MAIN_THEME_AUDIO_ID,
-  file: '/sounds/maintheme.wav',
+  file: '/sounds/main_theme.mp3',
 };
 
 const dashSoundAsset: SoundAsset = {

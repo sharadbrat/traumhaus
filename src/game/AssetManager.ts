@@ -4,8 +4,20 @@ export const SLIME_GRAPHICAL_ASSET_ID = 'SLIME_GRAPHICAL_ASSET';
 export const ITEMS_GRAPHICAL_ASSET_ID = 'ITEMS_GRAPHICAL_ASSET';
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
+export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
 
-export interface GraphicalAsset {
+export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
+
+export interface Asset {
+  name: string;
+  file: string;
+}
+
+export interface SoundAsset extends Asset {
+  soundConfig?: SoundConfig;
+}
+
+export interface GraphicalAsset extends Asset {
   name: string;
   width: number;
   height: number;
@@ -16,6 +28,17 @@ export interface GraphicalAsset {
 export interface SpriteAsset extends GraphicalAsset {
   animations: any;
 }
+
+const mainThemeAudioAsset: SoundAsset = {
+  name: MAIN_THEME_AUDIO_ID,
+  file: '/sounds/maintheme.wav',
+};
+
+const dashSoundAsset: SoundAsset = {
+  name: DASH_SOUND_ASSET_ID,
+  file: '/sounds/dash.mp3',
+  soundConfig: { loop: false, volume: 0.05 },
+};
 
 const environmentGraphicalAsset: GraphicalAsset = {
   name: ENVIRONMENT_GRAPHICAL_ASSET_ID,
@@ -58,21 +81,21 @@ const playerGraphicalAsset: SpriteAsset = {
   file: '/tiles/RoguePlayer.png',
   animations: {
     idle: {
-      name: "playerIdle",
+      name: 'playerIdle',
       start: 0x01,
       end: 0x07,
       frameRate: 6,
       repeat: true
     },
     walk: {
-      name: "playerWalk",
+      name: 'playerWalk',
       start: 0x08,
       end: 0x0d,
       frameRate: 10,
       repeat: true
     },
     walkBack: {
-      name: "playerWalkBack",
+      name: 'playerWalkBack',
       start: 0x10,
       end: 0x15,
       frameRate: 10,
@@ -81,32 +104,32 @@ const playerGraphicalAsset: SpriteAsset = {
     // Ideally attacks should be five frames at 30fps to
     // align with the attack duration of 165ms
     slash: {
-      name: "playerSlash",
+      name: 'playerSlash',
       frames: [0x18, 0x19, 0x19, 0x1a, 0x1b],
       frameRate: 30,
       repeat: false
     },
     slashUp: {
-      name: "playerSlashUp",
+      name: 'playerSlashUp',
       frames: [0x21, 0x22, 0x22, 0x23, 0x24],
       frameRate: 30,
       repeat: false
     },
     slashDown: {
-      name: "playerSlashDown",
+      name: 'playerSlashDown',
       frames: [0x29, 0x2a, 0x2a, 0x2b, 0x2c],
       frameRate: 30,
       repeat: false
     },
     hit: {
-      name: "playerHit",
+      name: 'playerHit',
       start: 0x30,
       end: 0x34,
       frameRate: 24,
       repeat: false
     },
     death: {
-      name: "playerDeath",
+      name: 'playerDeath',
       start: 0x38,
       end: 0x3d,
       frameRate: 24,
@@ -122,7 +145,7 @@ export const slimeGraphicalAsset: SpriteAsset = {
   file: '/tiles/RogueSlime.png',
   animations: {
     idle: {
-      name: "slimeIdle",
+      name: 'slimeIdle',
       start: 0x01,
       end: 0x04,
       frameRate: 6,
@@ -160,6 +183,27 @@ export class AssetManager {
     playerGraphicalAsset,
   ];
 
+  public static readonly sounds: SoundAsset[] = [
+    dashSoundAsset,
+    mainThemeAudioAsset
+  ];
+
+  public static readonly graphicalAssets: { [id: string]: GraphicalAsset } = {
+    environment: environmentGraphicalAsset,
+    slime: slimeGraphicalAsset,
+    items: itemsGraphicalAsset,
+    util: utilGraphicalAsset,
+  };
+
+  public static readonly spriteAssets: { [id: string]: SpriteAsset } = {
+    player: playerGraphicalAsset,
+  };
+
+  public static readonly soundAssets: { [id: string]: SoundAsset } = {
+    dash: dashSoundAsset,
+    main: mainThemeAudioAsset,
+  };
+
   public static readonly environment: GraphicalAsset = environmentGraphicalAsset;
   public static readonly slime: GraphicalAsset = slimeGraphicalAsset;
   public static readonly items: GraphicalAsset = itemsGraphicalAsset;
@@ -173,7 +217,14 @@ export class AssetManager {
     this.game = game
   }
 
-  public static loadAssets() {
+  public static loadAssets(scene: Phaser.Scene) {
+    AssetManager.tiles.forEach(el => scene.load.image(el.name, el.file));
 
+    AssetManager.sprites.forEach(el => scene.load.spritesheet(el.name, el.file, {
+      frameHeight: el.height,
+      frameWidth: el.width
+    }));
+
+    AssetManager.sounds.forEach(el => scene.load.audio(el.name, el.file));
   }
 }

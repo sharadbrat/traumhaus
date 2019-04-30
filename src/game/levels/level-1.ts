@@ -62,7 +62,7 @@ export const LEVEL_1_DATA: LevelMapData = {
   lightSettings: {
     playerLightRadius: 7,
     playerLightRolloff: 5,
-    fogAlpha: 0.7,
+    fogAlpha: 0.4,
     sources: [
       {
         radius: 5,

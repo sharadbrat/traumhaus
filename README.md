@@ -41,6 +41,7 @@ Georgii Sharadze - coding
 - Shadows and lightning + 
 - Light settings for level - character + 
 - Light settings for level - light sources +
+- Sound Management +
 - Change to free assets
 - Foreground layer
 - Several background layers

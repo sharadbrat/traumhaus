@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { AssetManager } from '../AssetManager';
+import { GameSoundService } from '../../service/GameSoundService';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -26,12 +27,16 @@ export class Player {
   private attackLockedUntil: number;
   private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
   private body: Phaser.Physics.Arcade.Body;
+  private scene: Phaser.Scene;
+
+  private flag: boolean = false;
 
   constructor(x: number, y: number, scene: Phaser.Scene) {
     this.sprite = scene.physics.add.sprite(x, y, AssetManager.player.name, 0);
     this.sprite.setSize(8, 8);
     this.sprite.setOffset(12, 20);
     this.sprite.anims.play(AssetManager.player.animations.idle.name);
+    this.scene = scene;
 
     this.keys = scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -60,6 +65,10 @@ export class Player {
       }
     });
     this.emitter.stop();
+
+    // this.scene.sound.add('dash', {
+    //   loop: false,
+    // });
 
     this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
   }
@@ -117,6 +126,7 @@ export class Player {
       this.sprite.anims.play(attackAnim, true);
       this.emitter.start();
       this.sprite.setBlendMode(Phaser.BlendModes.ADD);
+      GameSoundService.getInstance().playSound(AssetManager.soundAssets.dash.name);
     } else {
       this.sprite.anims.play(moveAnim, true);
       this.body.velocity.normalize().scale(speed);

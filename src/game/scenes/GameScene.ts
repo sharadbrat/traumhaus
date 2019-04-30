@@ -6,6 +6,7 @@ import { LevelMap, LevelMapConstructorOptions, MapPosition } from '../entities/L
 import { LEVEL_1_DATA, LevelManager } from '../levels';
 import { LightLayer } from '../entities/LightLayer';
 import { GameDataService, GameMenuService } from '../../service';
+import { GameSoundService } from '../../service/GameSoundService';
 
 export class GameScene extends Phaser.Scene {
   private lastX: number;
@@ -42,6 +43,10 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
+
+    const mainTheme = this.game.sound.add(AssetManager.soundAssets.main.name);
+
+    GameSoundService.getInstance().playSound(AssetManager.soundAssets.main.name);
   }
 
   update(time: number, delta: number) {

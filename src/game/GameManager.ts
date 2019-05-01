@@ -21,7 +21,9 @@ export class GameManager {
     });
   }
 
-  public run() {
+
+  // todo: add impl of running a game from data, which is basically a loading of progress feature
+  public run(data?: any) {
     this.game = new Game(this.canvas);
   }
 

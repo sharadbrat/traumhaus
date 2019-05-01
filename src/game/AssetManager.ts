@@ -138,44 +138,26 @@ const playerGraphicalAsset: SpriteAsset = {
   }
 };
 
-export const slimeGraphicalAsset: SpriteAsset = {
-  name: SLIME_GRAPHICAL_ASSET_ID,
-  width: 32,
-  height: 32,
-  file: '/tiles/RogueSlime.png',
-  animations: {
-    idle: {
-      name: 'slimeIdle',
-      start: 0x01,
-      end: 0x04,
-      frameRate: 6,
-      repeat: true
-    }
-  }
-};
-
-export const itemsGraphicalAsset: GraphicalAsset = {
-  name: ITEMS_GRAPHICAL_ASSET_ID,
-  width: 16,
-  height: 16,
-  file: '/tiles/RogueItems.png'
-};
-
 export const utilGraphicalAsset: GraphicalAsset = {
   name: UTIL_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/Util.png',
+  file: '/tiles/UtilTiles.png',
   indices: {
-    black: 0x00
-  }
+    black: 0x00,
+    transparent: 0x01,
+    blue: 0x02,
+    red: 0x03,
+    orange: 0x04,
+    green: 0x05,
+    pink: 0x06,
+    purple: 0x07,
+  },
 };
 
 export class AssetManager {
   public static readonly tiles: GraphicalAsset[] = [
     environmentGraphicalAsset,
-    slimeGraphicalAsset,
-    itemsGraphicalAsset,
     utilGraphicalAsset,
   ];
 
@@ -190,8 +172,6 @@ export class AssetManager {
 
   public static readonly graphicalAssets: { [id: string]: GraphicalAsset } = {
     environment: environmentGraphicalAsset,
-    slime: slimeGraphicalAsset,
-    items: itemsGraphicalAsset,
     util: utilGraphicalAsset,
   };
 
@@ -205,8 +185,6 @@ export class AssetManager {
   };
 
   public static readonly environment: GraphicalAsset = environmentGraphicalAsset;
-  public static readonly slime: GraphicalAsset = slimeGraphicalAsset;
-  public static readonly items: GraphicalAsset = itemsGraphicalAsset;
   public static readonly util: GraphicalAsset = utilGraphicalAsset;
 
   public static readonly player: SpriteAsset = playerGraphicalAsset;

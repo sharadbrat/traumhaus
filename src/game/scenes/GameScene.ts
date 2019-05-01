@@ -7,6 +7,7 @@ import { LEVEL_1_DATA, LevelManager } from '../levels';
 import { LightLayer } from '../entities/LightLayer';
 import { GameDataService, GameMenuService } from '../../service';
 import { GameSoundService } from '../../service/GameSoundService';
+import { GameGhostService } from '../../service/GameGhostService';
 
 export class GameScene extends Phaser.Scene {
   private lastX: number;
@@ -17,15 +18,23 @@ export class GameScene extends Phaser.Scene {
   myfov: LightLayer;
 
   private levelMap: LevelMap;
-  private doorFlag: boolean;
   private playerCollider: Phaser.Physics.Arcade.Collider;
+
+  private ghostService: GameGhostService;
+  private menuService: GameMenuService;
+  private soundService: GameSoundService;
+  private dataService: GameDataService;
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
     this.lastX = -1;
     this.lastY = -1;
     this.cameraResizeNeeded = false;
-    this.doorFlag = false;
+
+    this.menuService = GameMenuService.getInstance();
+    this.ghostService = GameGhostService.getInstance();
+    this.soundService = GameSoundService.getInstance()
+    this.dataService = GameDataService.getInstance()
   }
 
   create(): void {
@@ -40,11 +49,23 @@ export class GameScene extends Phaser.Scene {
       this.scene.start(SceneIdentifier.REFERENCE_SCENE);
     });
 
+    this.input.keyboard.on('keydown_Q', () => {
+      const mode = !this.ghostService.isGhostMode();
+
+      this.ghostService.setGhostMode(mode);
+      this.myfov.setGhostMode(mode);
+      this.levelMap.setGhostMode(mode);
+
+      this.playerCollider.destroy();
+      this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer())
+
+    });
+
     this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
 
-    const mainTheme = this.game.sound.add(AssetManager.soundAssets.main.name);
+    // const mainTheme = this.game.sound.add(AssetManager.soundAssets.main.name);
 
     GameSoundService.getInstance().playSound(AssetManager.soundAssets.main.name);
   }
@@ -81,12 +102,16 @@ export class GameScene extends Phaser.Scene {
     this.myfov.update(player, bounds, delta);
   }
 
+  private createCollider() {
+    // nihuya
+  }
+
   private getCurrentLevel() {
-    let level = GameDataService.getInstance().getCurrentLevel();
+    let level = this.dataService.getCurrentLevel();
 
     if (!level) {
       level = LEVEL_1_DATA;
-      GameDataService.getInstance().setCurrentLevel(level);
+      this.dataService.setCurrentLevel(level);
     }
 
     return level;
@@ -95,6 +120,7 @@ export class GameScene extends Phaser.Scene {
   private createPlayer(): Player {
     let pos;
     let lastDoor = GameDataService.getInstance().getLastDoor();
+
     if (lastDoor) {
       pos = lastDoor.toPosition;
     } else {

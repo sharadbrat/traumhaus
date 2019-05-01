@@ -1,7 +1,22 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 import { AssetManager } from '../AssetManager';
-import { LevelMap, LightSource } from './LevelMap';
-import { type } from 'os';
+import { LevelMap, LevelMapData, LightSettings, LightSource, MapPosition } from './LevelMap';
+import { GameGhostService } from '../../service/GameGhostService';
+
+interface LightSourceSetup {
+  id: string,
+  radius: number;
+  rolloff: number[];
+  position: MapPosition;
+}
+
+interface LightSetup {
+  playerRadius: number;
+  fogAlpha: number;
+  fogColor: number;
+  playerRolloff: number[];
+  sources?: LightSourceSetup[];
+}
 
 export class LightLayer {
   private static readonly ALPHA_PER_MS = 0.01;
@@ -10,11 +25,10 @@ export class LightLayer {
   private lastPos: Phaser.Math.Vector2;
   private map: LevelMap;
 
-  private fogAlpha: number;
-  private playerRadius: number;
-  private playerRoloff: number[];
+  private realWorldLightSettings: LightSetup;
+  private ghostWorldLightSettings: LightSetup;
 
-  private sources: LightSource[];
+  private currentLightSettings: LightSetup;
 
   constructor(map: LevelMap) {
     const utilTiles = map.getTilemap().addTilesetImage(AssetManager.util.name);
@@ -26,18 +40,22 @@ export class LightLayer {
     this.lastPos = new Phaser.Math.Vector2({ x: -1, y: -1 });
     this.map = map;
 
-    const settings = map.getMapData().lightSettings;
-    this.playerRadius = settings.playerLightRadius;
-    this.fogAlpha = settings.fogAlpha;
-    this.playerRoloff = this.generateRoloff(settings.playerLightRolloff, settings.fogAlpha);
+    const mapData: LevelMapData = map.getMapData();
 
-    const sources = settings.sources || [];
-    this.sources = sources.map(el => {
-      if (typeof el.rolloff === 'number') {
-        return {...el, rolloff: this.generateRoloff(el.rolloff, this.fogAlpha)};
+    if (mapData.realWorld) {
+      const settings = mapData.realWorld.lightSettings;
+      this.realWorldLightSettings = this.generateLightSetup(settings);
+      this.currentLightSettings = this.realWorldLightSettings;
+    }
+
+    if (mapData.ghostWorld) {
+      const settings = mapData.ghostWorld.lightSettings;
+      this.ghostWorldLightSettings = this.generateLightSetup(settings);
+
+      if (GameGhostService.getInstance().isGhostMode()) {
+        this.currentLightSettings = this.ghostWorldLightSettings;
       }
-      return el;
-    });
+    }
   }
 
   update(pos: Phaser.Math.Vector2, bounds: Phaser.Geom.Rectangle, delta: number) {
@@ -64,11 +82,43 @@ export class LightLayer {
         this.updateTileAlpha(desiredAlpha, delta, tile);
       }
     }
-
   }
 
-  private getLightSourcesInBounds(bounds: Phaser.Geom.Rectangle): LightSource[] {
-    return this.sources.filter(el => {
+  setGhostMode(isGhost: boolean) {
+    if (isGhost) {
+      this.currentLightSettings = this.ghostWorldLightSettings;
+    } else {
+      this.currentLightSettings = this.realWorldLightSettings;
+    }
+  }
+
+  private generateLightSetup(settings: LightSettings): LightSetup {
+    return {
+      playerRadius: settings.playerLightRadius,
+      fogAlpha: settings.fogAlpha,
+      fogColor: settings.fogColor,
+      playerRolloff: this.generateRoloff(settings.playerLightRolloff, settings.fogAlpha),
+      sources: this.createLightSourcesWithRolloff(settings.sources, settings.fogAlpha),
+    };
+  }
+
+  private createLightSourcesWithRolloff(sources: LightSource[], alpha: number): LightSourceSetup[] {
+    if (sources) {
+      return sources.map(el => {
+        return {
+          id: el.id,
+          position: el.position,
+          radius: el.radius,
+          rolloff: this.generateRoloff(el.rolloff, alpha)
+        };
+      });
+    } else {
+      return [];
+    }
+  }
+
+  private getLightSourcesInBounds(bounds: Phaser.Geom.Rectangle): LightSourceSetup[] {
+    return this.currentLightSettings.sources.filter(el => {
       const inBoundsX = el.position.x + el.radius > bounds.x && el.position.x - el.radius < bounds.x + bounds.width;
       const inBoundsY = el.position.y + el.radius > bounds.y && el.position.y - el.radius < bounds.y + bounds.height;
       return inBoundsX && inBoundsY;
@@ -100,12 +150,13 @@ export class LightLayer {
 
   private getPlayerDesiredAlpha(x: number, y: number, pos: Phaser.Math.Vector2): number {
     let distance = Math.floor(new Phaser.Math.Vector2(x, y).distance(new Phaser.Math.Vector2(pos.x, pos.y)));
+    const settings = this.currentLightSettings;
 
-    let desiredAlpha = this.fogAlpha;
-    if (distance <= this.playerRadius) {
-      const rolloffIndex = this.playerRadius - distance;
-      if (rolloffIndex < this.playerRoloff.length) {
-        desiredAlpha = this.playerRoloff[rolloffIndex];
+    let desiredAlpha = settings.fogAlpha;
+    if (distance <= settings.playerRadius) {
+      const rolloffIndex = settings.playerRadius - distance;
+      if (rolloffIndex < settings.playerRolloff.length) {
+        desiredAlpha = settings.playerRolloff[rolloffIndex];
       } else {
         desiredAlpha = 0;
       }
@@ -114,11 +165,11 @@ export class LightLayer {
     return desiredAlpha;
   }
 
-  private getSourceDesiredAlpha(x: number, y: number, sources: LightSource[]): number {
+  private getSourceDesiredAlpha(x: number, y: number, sources: LightSourceSetup[]): number {
     const alphas = sources.map(el => {
       let distance = Math.floor(new Phaser.Math.Vector2(x, y).distance(new Phaser.Math.Vector2(el.position.x, el.position.y)));
 
-      let desiredAlpha = this.fogAlpha;
+      let desiredAlpha = this.currentLightSettings.fogAlpha;
       if (distance <= el.radius) {
         const rolloffIndex = el.radius - distance;
         if (rolloffIndex < (el.rolloff as number[]).length) {

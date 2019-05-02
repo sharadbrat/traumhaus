@@ -1,7 +1,8 @@
 # Traumhaus
-## 8-bit of Bauhaus game project
+ 
+   **8-bit of Bauhaus game project**
 
-Traumhaus - indie game, made specially for 8-bit of Bauhaus project in Bauhaus university, SS2019.<br>
+Traumhaus - is an indie game, made specially for 8-bit of Bauhaus project in Bauhaus university, SS2019.<br>
 Development is still in progress for now, we are rapidly improving the game to make it marvelous!<br>
 Please, check out the [live demo](https://angry-benz-8001b6.netlify.com/)
 
@@ -33,8 +34,10 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 ### Authors
-Georgii Sharadze - coding
 
+Florian Batze - Graphics
+Jacob Januar - Music
+Georgii Sharadze - coding
 
 ### Things to do
 - Rotate level map + 
@@ -42,14 +45,16 @@ Georgii Sharadze - coding
 - Light settings for level - character + 
 - Light settings for level - light sources +
 - Sound Management +
-- Change to free assets
-- Foreground layer
-- Several background layers
+- Ghost mode +
+- Level management +
 - Game pausing +
+- Several graphical layers (Background and foreground layers) + 
+- Change to free assets
 - Dialogs and cut scenes
-- Items layer
 - HUD
-- Level management + 
+- Action mechanics
 - Shooting mechanics
-- Change of tileset mechanics
 - Change of collision for jumping/crouching objects layer
+- Game saving / loading
+- Enemies
+- Netlify toml

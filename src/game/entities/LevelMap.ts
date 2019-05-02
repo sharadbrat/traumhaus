@@ -117,6 +117,7 @@ export class LevelMap {
         this.ghostBackgroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.GHOST_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId));
       }
 
+      this.ghostCollisionLayer = this.createCollisionLayer(LevelMap.GHOST_COLLISION_LAYER_ID, options.data.width, options.data.height, options.data.ghostWorld.collisionMap);
       this.setGhostMode(this.ghostService.isGhostMode());
     }
   }

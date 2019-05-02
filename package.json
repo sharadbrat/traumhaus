@@ -2,6 +2,7 @@
   "name": "traumhaus",
   "version": "0.0.0",
   "private": true,
+  "author": "Georgii Sharadze, Florian Batze, Jacob Januar",
   "dependencies": {
     "dungeon-factory": "^1.0.6",
     "mrpas": "^2.0.0",

@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { AssetManager } from '../AssetManager';
-import { Player } from './Player';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service/GameGhostService';
 
@@ -32,10 +31,15 @@ export interface LightSettings {
   fogColor?: number;
 }
 
+export interface GraphicLayer {
+  tileMapId: string;
+  tileMap: number[][];
+}
+
 export interface World {
   collisionMap: CollisionDetector[][];
-  tileMap: number[][];
-  tileMapId: string;
+  backgroundGraphicLayers: GraphicLayer[];
+  foregroundGraphicLayers?: GraphicLayer[];
   doors?: Door[];
   lightSettings: LightSettings;
 }
@@ -55,10 +59,12 @@ export interface LevelMapConstructorOptions {
 }
 
 export class LevelMap {
-  static readonly REAL_GRAPHIC_LAYER_ID = 'REAL_GRAPHIC';
+  static readonly REAL_BACKGROUND_GRAPHIC_LAYER_ID = 'REAL_BACKGROUND_GRAPHIC';
+  static readonly REAL_FOREGROUND_GRAPHIC_LAYER_ID = 'REAL_FOREGROUND_GRAPHIC';
   static readonly REAL_COLLISION_LAYER_ID = 'REAL_COLLISION';
 
-  static readonly GHOST_GRAPHIC_LAYER_ID = 'GHOST_GRAPHIC';
+  static readonly GHOST_BACKGROUND_GRAPHIC_LAYER_ID = 'GHOST_BACKGROUND_GRAPHIC';
+  static readonly GHOST_FOREGROUND_GRAPHIC_LAYER_ID = 'GHOST_FOREGROUND_GRAPHIC';
   static readonly GHOST_COLLISION_LAYER_ID = 'GHOST_COLLISION';
 
   static readonly LIGHT_LAYER_ID = 'LIGHT';
@@ -67,12 +73,14 @@ export class LevelMap {
   private mapData: LevelMapData;
   private utilTiles: Phaser.Tilemaps.Tileset;
 
-  private realWorldTiles: Phaser.Tilemaps.Tileset;
-  private realGraphicLayer: Phaser.Tilemaps.StaticTilemapLayer;
+  private realWorldTiles: Phaser.Tilemaps.Tileset[];
+  private realBackgroundGraphicLayers: Phaser.Tilemaps.StaticTilemapLayer[];
+  private realForegroundGraphicLayers: Phaser.Tilemaps.StaticTilemapLayer[];
   private realCollisionLayer: Phaser.Tilemaps.StaticTilemapLayer;
 
-  private ghostWorldTiles: Phaser.Tilemaps.Tileset;
-  private ghostGraphicLayer: Phaser.Tilemaps.StaticTilemapLayer;
+  private ghostWorldTiles: Phaser.Tilemaps.Tileset[];
+  private ghostBackgroundGraphicLayers: Phaser.Tilemaps.StaticTilemapLayer[];
+  private ghostForegroundGraphicLayers: Phaser.Tilemaps.StaticTilemapLayer[];
   private ghostCollisionLayer: Phaser.Tilemaps.StaticTilemapLayer;
 
   private ghostService: GameGhostService;
@@ -86,22 +94,30 @@ export class LevelMap {
     this.utilTiles = this.tilemap.addTilesetImage(AssetManager.util.name);
 
     if (options.data.realWorld) {
-      this.realWorldTiles = this.tilemap.addTilesetImage(options.data.realWorld.tileMapId);
-      this.realGraphicLayer = this.createGraphicLayer(LevelMap.REAL_GRAPHIC_LAYER_ID, options.data.realWorld.tileMap);
+      this.realBackgroundGraphicLayers = [];
+      this.realWorldTiles = [];
+
+      for (let i = 0; i < options.data.realWorld.backgroundGraphicLayers.length; i++) {
+        const layer = options.data.realWorld.backgroundGraphicLayers[i];
+        this.realWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
+        this.realBackgroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.REAL_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId));
+      }
+
       this.realCollisionLayer = this.createCollisionLayer(LevelMap.REAL_COLLISION_LAYER_ID, options.data.width, options.data.height, options.data.realWorld.collisionMap);
     }
 
     if (options.data.ghostWorld) {
 
-      this.ghostWorldTiles = this.tilemap.addTilesetImage(options.data.ghostWorld.tileMapId);
-      this.ghostGraphicLayer = this.createGraphicLayer(LevelMap.GHOST_GRAPHIC_LAYER_ID, options.data.ghostWorld.tileMap);
-      this.ghostCollisionLayer = this.createCollisionLayer(LevelMap.GHOST_COLLISION_LAYER_ID, options.data.width, options.data.height, options.data.ghostWorld.collisionMap);
+      this.ghostWorldTiles = [];
+      this.ghostBackgroundGraphicLayers = [];
 
-      if (this.ghostService.isGhostMode()) {
-        this.ghostGraphicLayer.setAlpha(1);
-      } else {
-        this.ghostGraphicLayer.setAlpha(0);
+      for (let i = 0; i < options.data.ghostWorld.backgroundGraphicLayers.length; i++) {
+        const layer = options.data.ghostWorld.backgroundGraphicLayers[i];
+        this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
+        this.ghostBackgroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.GHOST_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId));
       }
+
+      this.setGhostMode(this.ghostService.isGhostMode());
     }
   }
 
@@ -151,9 +167,38 @@ export class LevelMap {
   }
 
   setGhostMode(isGhost: boolean) {
-    if (this.ghostGraphicLayer) {
-      this.ghostGraphicLayer.setAlpha(isGhost ? 1 : 0);
+    if (this.ghostBackgroundGraphicLayers) {
+      this.ghostBackgroundGraphicLayers.forEach(el => el.setAlpha(isGhost ? 1 : 0));
     }
+
+    if (this.ghostForegroundGraphicLayers) {
+      this.ghostForegroundGraphicLayers.forEach(el => el.setAlpha(isGhost ? 1 : 0));
+    }
+  }
+
+  createForegroundLayers() {
+    if (this.mapData.realWorld.foregroundGraphicLayers) {
+      this.realForegroundGraphicLayers = [];
+
+      for (let i = 0; i < this.mapData.realWorld.foregroundGraphicLayers.length; i++) {
+        const layer = this.mapData.realWorld.foregroundGraphicLayers[i];
+        this.realWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
+        this.realForegroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.REAL_FOREGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId, 1000));
+      }
+    }
+
+    if (this.mapData.ghostWorld) {
+      if (this.mapData.ghostWorld.foregroundGraphicLayers) {
+        this.ghostForegroundGraphicLayers = [];
+
+        for (let i = 0; i < this.mapData.ghostWorld.foregroundGraphicLayers.length; i++) {
+          const layer = this.mapData.ghostWorld.foregroundGraphicLayers[i];
+          this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
+          this.ghostForegroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.GHOST_FOREGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId, 1000));
+        }
+      }
+    }
+
   }
 
   private createTilemap(scene: Phaser.Scene, width: number, height: number): Phaser.Tilemaps.Tilemap {
@@ -165,11 +210,15 @@ export class LevelMap {
     });
   }
 
-  private createGraphicLayer(layerId: string, tileMap: number[][]) {
-    const graphicLayer = this.tilemap.createBlankDynamicLayer(layerId, AssetManager.environment.name, 0, 0);
+  private createGraphicLayer(layerId: string, tileMap: number[][], tileMapId: string, z: number = null) {
+    const graphicLayer = this.tilemap.createBlankDynamicLayer(layerId, tileMapId, 0, 0);
 
     graphicLayer.putTilesAt(tileMap, 0, 0);
     graphicLayer.setAlpha(1);
+
+    if (z) {
+      graphicLayer.setZ(z);
+    }
 
     return this.tilemap.convertLayerToStatic(graphicLayer);
   }

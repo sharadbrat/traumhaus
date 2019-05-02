@@ -173,6 +173,8 @@ export class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
 
+    this.levelMap.createForegroundLayers();
+
     this.createCamera(this.levelMap);
 
     this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer());

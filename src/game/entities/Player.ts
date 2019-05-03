@@ -1,6 +1,7 @@
 import Phaser from "phaser";
-import { AssetManager } from '../AssetManager';
+import { AssetManager, SpriteAsset } from '../AssetManager';
 import { GameSoundService } from '../../service/GameSoundService';
+import { GameGhostService } from '../../service/GameGhostService';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -20,7 +21,10 @@ interface Keys {
 }
 
 export class Player {
-  public sprite: Phaser.Physics.Arcade.Sprite;
+
+  private sprite: Phaser.Physics.Arcade.Sprite;
+  private ghostSprite: Phaser.Physics.Arcade.Sprite;
+
   private keys: Keys;
 
   private attackUntil: number;
@@ -28,15 +32,24 @@ export class Player {
   private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
   private body: Phaser.Physics.Arcade.Body;
   private scene: Phaser.Scene;
+  private currentAnimationAsset: SpriteAsset;
 
-  private flag: boolean = false;
+  private ghostService: GameGhostService;
 
   constructor(x: number, y: number, scene: Phaser.Scene) {
-    this.sprite = scene.physics.add.sprite(x, y, AssetManager.player.name, 0);
-    this.sprite.setSize(8, 8);
-    this.sprite.setOffset(12, 20);
-    this.sprite.anims.play(AssetManager.player.animations.idle.name);
     this.scene = scene;
+
+    this.ghostService = GameGhostService.getInstance();
+
+    // this.sprite = this.setupSprite(x, y, AssetManager.spriteAssets.player);
+
+    if (this.ghostService.isGhostMode()) {
+      this.sprite = this.setupSprite(x, y, AssetManager.spriteAssets.ghostPlayer);
+      this.currentAnimationAsset = AssetManager.spriteAssets.ghostPlayer
+    } else {
+      this.sprite = this.setupSprite(x, y, AssetManager.spriteAssets.player);
+      this.currentAnimationAsset = AssetManager.spriteAssets.player
+    }
 
     this.keys = scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -52,7 +65,7 @@ export class Player {
 
     this.attackUntil = 0;
     this.attackLockedUntil = 0;
-    const particles = scene.add.particles(AssetManager.player.name);
+    const particles = scene.add.particles(AssetManager.spriteAssets.ghostPlayer.name);
     this.emitter = particles.createEmitter({
       alpha: { start: 0.7, end: 0, ease: "Cubic.easeOut" },
       follow: this.sprite,
@@ -65,10 +78,6 @@ export class Player {
       }
     });
     this.emitter.stop();
-
-    // this.scene.sound.add('dash', {
-    //   loop: false,
-    // });
 
     this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
   }
@@ -102,23 +111,39 @@ export class Player {
       this.body.setVelocityY(speed);
     }
 
+
+    const animationPrefix = this.currentAnimationAsset.name;
     if (left || right) {
-      moveAnim = AssetManager.player.animations.walk.name;
-      attackAnim = AssetManager.player.animations.slash.name;
+      moveAnim = animationPrefix + this.currentAnimationAsset.animations.walk.name;
+      attackAnim = animationPrefix + this.currentAnimationAsset.animations.slash.name;
     } else if (down) {
-      moveAnim = AssetManager.player.animations.walk.name;
-      attackAnim = AssetManager.player.animations.slashDown.name;
+      moveAnim = animationPrefix + this.currentAnimationAsset.animations.walk.name;
+      attackAnim = animationPrefix + this.currentAnimationAsset.animations.slashDown.name;
     } else if (up) {
-      moveAnim = AssetManager.player.animations.walkBack.name;
-      attackAnim = AssetManager.player.animations.slashUp.name;
+      moveAnim = animationPrefix + this.currentAnimationAsset.animations.walkBack.name;
+      attackAnim = animationPrefix + this.currentAnimationAsset.animations.slashUp.name;
     } else {
-      moveAnim = AssetManager.player.animations.idle.name;
+      moveAnim = animationPrefix + this.currentAnimationAsset.animations.idle.name;
     }
+
+    // if (left || right) {
+    //   moveAnim = AssetManager.player.animations.walk.name;
+    //   attackAnim = AssetManager.player.animations.slash.name;
+    // } else if (down) {
+    //   moveAnim = AssetManager.player.animations.walk.name;
+    //   attackAnim = AssetManager.player.animations.slashDown.name;
+    // } else if (up) {
+    //   moveAnim = AssetManager.player.animations.walkBack.name;
+    //   attackAnim = AssetManager.player.animations.slashUp.name;
+    // } else {
+    //   moveAnim = AssetManager.player.animations.idle.name;
+    // }
 
     if (
       keys.space!.isDown &&
       time > this.attackLockedUntil &&
-      this.body.velocity.length() > 0
+      this.body.velocity.length() > 0 &&
+      this.ghostService.isGhostMode()
     ) {
       this.attackUntil = time + attackDuration;
       this.attackLockedUntil = time + attackDuration + attackCooldown;
@@ -139,5 +164,24 @@ export class Player {
 
   public getBody(): Phaser.Physics.Arcade.Body {
     return this.body;
+  }
+
+  public setGhostMode(value: boolean) {
+    const spriteAsset = value ? AssetManager.spriteAssets.ghostPlayer : AssetManager.spriteAssets.player;
+    this.sprite.setTexture(spriteAsset.name);
+    this.currentAnimationAsset = spriteAsset;
+  }
+
+  public getSprite(): Phaser.Physics.Arcade.Sprite {
+    return this.sprite;
+  }
+
+  private setupSprite(x: number, y: number, asset: SpriteAsset) {
+    const sprite = this.scene.physics.add.sprite(x, y, asset.name, 0);
+    sprite.setSize(8, 8);
+    sprite.setOffset(12, 20);
+    sprite.anims.play(asset.name + asset.animations.idle.name);
+
+    return sprite;
   }
 }

@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import { FOVLayer, Player } from '../entities';
+import { Player } from '../entities';
 import { AssetManager } from '../AssetManager';
 import { SceneIdentifier } from './SceneManager';
-import { LevelMap, LevelMapConstructorOptions, MapPosition } from '../entities/LevelMap';
-import { LEVEL_1_DATA, LevelManager } from '../levels';
+import { LevelMap } from '../entities/LevelMap';
+import { LEVEL_1_DATA } from '../levels';
 import { LightLayer } from '../entities/LightLayer';
 import { GameDataService, GameMenuService } from '../../service';
 import { GameSoundService } from '../../service/GameSoundService';
@@ -33,8 +33,8 @@ export class GameScene extends Phaser.Scene {
 
     this.menuService = GameMenuService.getInstance();
     this.ghostService = GameGhostService.getInstance();
-    this.soundService = GameSoundService.getInstance()
-    this.dataService = GameDataService.getInstance()
+    this.soundService = GameSoundService.getInstance();
+    this.dataService = GameDataService.getInstance();
   }
 
   create(): void {
@@ -55,9 +55,10 @@ export class GameScene extends Phaser.Scene {
       this.ghostService.setGhostMode(mode);
       this.myfov.setGhostMode(mode);
       this.levelMap.setGhostMode(mode);
+      this.player.setGhostMode(mode);
 
       this.playerCollider.destroy();
-      this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer())
+      this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer())
 
     });
 
@@ -93,8 +94,8 @@ export class GameScene extends Phaser.Scene {
     }
 
     const player = new Phaser.Math.Vector2({
-      x: this.levelMap.getTilemap().worldToTileX(this.player.sprite.body.x),
-      y: this.levelMap.getTilemap().worldToTileY(this.player.sprite.body.y)
+      x: this.levelMap.getTilemap().worldToTileX(this.player.getBody().x),
+      y: this.levelMap.getTilemap().worldToTileY(this.player.getBody().y)
     });
 
     const bounds = this.getCameraBounds(camera);
@@ -119,24 +120,17 @@ export class GameScene extends Phaser.Scene {
 
   private createPlayer(): Player {
     let pos;
-    let lastDoor = GameDataService.getInstance().getLastDoor();
+    let lastDoor = this.dataService.getLastDoor();
 
     if (lastDoor) {
       pos = lastDoor.toPosition;
     } else {
-      pos = GameDataService.getInstance().getCurrentLevel().startPosition;
+      pos = this.dataService.getCurrentLevel().startPosition;
     }
 
-    Object.values(AssetManager.player.animations).forEach((anim: any) => {
-      if (!this.anims.get(anim.name)) {
-        this.anims.create({
-          key: anim.name,
-          frames: this.anims.generateFrameNumbers(AssetManager.player.name, anim),
-          frameRate: anim.frameRate,
-          repeat: anim.repeat ? -1 : 0
-        });
-      }
-    });
+    this.setupPlayerAnimations(AssetManager.spriteAssets.player.name, AssetManager.spriteAssets.player.animations);
+
+    this.setupPlayerAnimations(AssetManager.spriteAssets.ghostPlayer.name, AssetManager.spriteAssets.ghostPlayer.animations);
 
     return new Player(
       pos.x * this.levelMap.getTilemap().tileWidth,
@@ -154,7 +148,7 @@ export class GameScene extends Phaser.Scene {
       levelMap.getWidth() * AssetManager.environment.width,
       levelMap.getHeight() * AssetManager.environment.height
     );
-    this.cameras.main.startFollow(this.player.sprite);
+    this.cameras.main.startFollow(this.player.getSprite());
   }
 
   private getCameraBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Geom.Rectangle {
@@ -164,6 +158,19 @@ export class GameScene extends Phaser.Scene {
       this.levelMap.getTilemap().worldToTileX(camera.worldView.width) + 2,
       this.levelMap.getTilemap().worldToTileY(camera.worldView.height) + 2
     );
+  }
+
+  private setupPlayerAnimations(spriteName: string, spriteAnimations: any) {
+    Object.values(spriteAnimations).forEach((anim: any) => {
+      if (!this.anims.get(spriteName + anim.name)) {
+        this.anims.create({
+          key: spriteName + anim.name,
+          frames: this.anims.generateFrameNumbers(spriteName, anim),
+          frameRate: anim.frameRate,
+          repeat: anim.repeat ? -1 : 0
+        });
+      }
+    });
   }
 
   private setupLevelMap() {
@@ -177,7 +184,7 @@ export class GameScene extends Phaser.Scene {
 
     this.createCamera(this.levelMap);
 
-    this.playerCollider = this.physics.add.collider(this.player.sprite, this.levelMap.getCollisionLayer());
+    this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
 
     this.myfov = new LightLayer(this.levelMap);
   }

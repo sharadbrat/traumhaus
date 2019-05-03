@@ -1,6 +1,6 @@
 export const ENVIRONMENT_GRAPHICAL_ASSET_ID = 'ENVIRONMENT_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
-export const SLIME_GRAPHICAL_ASSET_ID = 'SLIME_GRAPHICAL_ASSET';
+export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
 export const ITEMS_GRAPHICAL_ASSET_ID = 'ITEMS_GRAPHICAL_ASSET';
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
@@ -26,7 +26,9 @@ export interface GraphicalAsset extends Asset {
 }
 
 export interface SpriteAsset extends GraphicalAsset {
-  animations: any;
+  animations: {
+    [id:string]: Phaser.Animations.Types.GenerateFrameNumbers & {name: string, frameRate: number, repeat: boolean};
+  };
 }
 
 const mainThemeAudioAsset: SoundAsset = {
@@ -78,7 +80,71 @@ const playerGraphicalAsset: SpriteAsset = {
   name: PLAYER_GRAPHICAL_ASSET_ID,
   width: 32,
   height: 32,
-  file: '/tiles/RoguePlayer.png',
+  file: '/tiles/Player.png',
+  animations: {
+    idle: {
+      name: 'playerIdle',
+      start: 0x01,
+      end: 0x07,
+      frameRate: 6,
+      repeat: true
+    },
+    walk: {
+      name: 'playerWalk',
+      start: 0x08,
+      end: 0x0d,
+      frameRate: 10,
+      repeat: true
+    },
+    walkBack: {
+      name: 'playerWalkBack',
+      start: 0x10,
+      end: 0x15,
+      frameRate: 10,
+      repeat: true
+    },
+    // Ideally attacks should be five frames at 30fps to
+    // align with the attack duration of 165ms
+    slash: {
+      name: 'playerSlash',
+      frames: [0x18, 0x19, 0x19, 0x1a, 0x1b],
+      frameRate: 30,
+      repeat: false
+    },
+    slashUp: {
+      name: 'playerSlashUp',
+      frames: [0x21, 0x22, 0x22, 0x23, 0x24],
+      frameRate: 30,
+      repeat: false
+    },
+    slashDown: {
+      name: 'playerSlashDown',
+      frames: [0x29, 0x2a, 0x2a, 0x2b, 0x2c],
+      frameRate: 30,
+      repeat: false
+    },
+    hit: {
+      name: 'playerHit',
+      start: 0x30,
+      end: 0x34,
+      frameRate: 24,
+      repeat: false
+    },
+    death: {
+      name: 'playerDeath',
+      start: 0x38,
+      end: 0x3d,
+      frameRate: 24,
+      repeat: false
+    }
+  }
+};
+
+const ghostPlayerGraphicalAsset: SpriteAsset = {
+  name: GHOST_PLAYER_GRAPHICAL_ASSET_ID,
+  width: 32,
+  height: 32,
+  file: '/tiles/GhostPlayer.png',
   animations: {
     idle: {
       name: 'playerIdle',
@@ -161,8 +227,9 @@ export class AssetManager {
     utilGraphicalAsset,
   ];
 
-  public static readonly sprites: GraphicalAsset[] = [
+  public static readonly sprites: SpriteAsset[] = [
     playerGraphicalAsset,
+    ghostPlayerGraphicalAsset,
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -177,6 +244,7 @@ export class AssetManager {
 
   public static readonly spriteAssets: { [id: string]: SpriteAsset } = {
     player: playerGraphicalAsset,
+    ghostPlayer: ghostPlayerGraphicalAsset,
   };
 
   public static readonly soundAssets: { [id: string]: SoundAsset } = {
@@ -204,5 +272,9 @@ export class AssetManager {
     }));
 
     AssetManager.sounds.forEach(el => scene.load.audio(el.name, el.file));
+  }
+
+  public static getSpriteAssetByKey(key: string): SpriteAsset {
+    return this.sprites.find(el => el.name === key);
   }
 }

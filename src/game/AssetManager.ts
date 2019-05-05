@@ -48,7 +48,7 @@ const environmentGraphicalAsset: GraphicalAsset = {
   name: ENVIRONMENT_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/RogueEnvironment.png',
+  file: '/tiles/tf_jungle_tileset.png',
   indices: {
     floor: {
       outer: [0x05, 0x05, 0x05, 0x15, 0x07, 0x17]

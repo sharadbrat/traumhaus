@@ -177,9 +177,15 @@ export class Player {
   }
 
   private setupSprite(x: number, y: number, asset: SpriteAsset) {
-    const sprite = this.scene.physics.add.sprite(x, y, asset.name, 0);
-    sprite.setSize(8, 8);
-    sprite.setOffset(12, 20);
+    const offsetX = 12;
+    const offsetY = 20;
+
+    const sizeX = 8;
+    const sizeY = 8;
+
+    const sprite = this.scene.physics.add.sprite(x + sizeX, y, asset.name, 0);
+    sprite.setSize(sizeX, sizeY);
+    sprite.setOffset(offsetX, offsetY);
     sprite.anims.play(asset.name + asset.animations.idle.name);
 
     return sprite;

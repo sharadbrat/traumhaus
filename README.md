@@ -49,8 +49,8 @@ Georgii Sharadze - coding
 - Level management +
 - Game pausing +
 - Several graphical layers (Background and foreground layers) + 
+- Change to free assets +
 - Trigger system
-- Change to free assets
 - Dialogs and cut scenes
 - HUD
 - Action mechanics

@@ -1,4 +1,4 @@
-import { LevelMapData } from '../entities/LevelMap';
+import { LevelMapData, LevelObjectAnimation, TriggerEvent } from '../entities/LevelMap';
 import { AssetManager } from '../AssetManager';
 
 export const LEVEL_1_DATA: LevelMapData = {
@@ -127,6 +127,37 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
       ],
     },
+    objects: [
+      {
+        id: 'professor',
+        movable: false,
+
+        graphics: {
+          spriteId: AssetManager.spriteAssets.player.name,
+          width: 20,
+          height: 24,
+          tileHeight: 32,
+          tileWidth: 32,
+          offsetX: 10,
+          offsetY: 10,
+        },
+        animations: {
+          [LevelObjectAnimation.IDLE]: {
+            name: 'playerIdle',
+            start: 0x01,
+            end: 0x07,
+            frameRate: 6,
+            repeat: true
+          },
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_COLLIDE,
+            action: 'ON_PROFESSOR_COLLIDE',
+          },
+        ],
+      },
+    ],
   },
   ghostWorld: {
     collisionMap: [

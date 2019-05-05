@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetManager } from '../AssetManager';
+import { AssetManager, Animation } from '../AssetManager';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service/GameGhostService';
 
@@ -40,8 +40,46 @@ export interface World {
   collisionMap: CollisionDetector[][];
   backgroundGraphicLayers: GraphicLayer[];
   foregroundGraphicLayers?: GraphicLayer[];
-  doors?: Door[];
   lightSettings: LightSettings;
+  doors?: Door[];
+  objects?: LevelObject[];
+}
+
+export enum LevelObjectAnimation {
+  IDLE = 'idle',
+}
+
+export type LevelObjectAnimations = {
+  [id in LevelObjectAnimation]: Animation;
+}
+
+export enum TriggerEvent {
+  ON_COLLIDE,
+  ON_ACTION,
+}
+
+export interface Trigger {
+  event: TriggerEvent;
+  action: string;
+}
+
+export interface LevelObject {
+  id: string;
+
+  movable: boolean;
+
+  graphics: {
+    spriteId: string;
+    width: number;
+    height: number;
+    tileHeight: number;
+    tileWidth: number;
+    offsetX: number;
+    offsetY: number;
+  }
+
+  animations: LevelObjectAnimations;
+  triggers?: Trigger[];
 }
 
 export interface LevelMapData {

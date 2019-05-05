@@ -8,6 +8,8 @@ export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
 
 export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
 
+export type Animation = Phaser.Animations.Types.GenerateFrameNumbers & {name: string, frameRate: number, repeat: boolean};
+
 export interface Asset {
   name: string;
   file: string;
@@ -27,7 +29,7 @@ export interface GraphicalAsset extends Asset {
 
 export interface SpriteAsset extends GraphicalAsset {
   animations: {
-    [id:string]: Phaser.Animations.Types.GenerateFrameNumbers & {name: string, frameRate: number, repeat: boolean};
+    [id:string]: Animation;
   };
 }
 

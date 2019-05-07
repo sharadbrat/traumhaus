@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetManager, Animation } from '../AssetManager';
+import { AssetManager, Animation, SpriteAsset } from '../AssetManager';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service/GameGhostService';
 
@@ -42,15 +42,17 @@ export interface World {
   foregroundGraphicLayers?: GraphicLayer[];
   lightSettings: LightSettings;
   doors?: Door[];
-  objects?: LevelObject[];
+  objects?: LevelObjectData[];
 }
 
 export enum LevelObjectAnimation {
   IDLE = 'idle',
-}
-
-export type LevelObjectAnimations = {
-  [id in LevelObjectAnimation]: Animation;
+  WALK = 'walk',
+  WALK_BACK = 'walk_back',
+  SLASH = 'slash',
+  SLASH_DOWN = 'slash_down',
+  SLASH_UP = 'slash_up',
+  HIT = 'hit',
 }
 
 export enum TriggerEvent {
@@ -63,22 +65,28 @@ export interface Trigger {
   action: string;
 }
 
-export interface LevelObject {
+export enum LevelObjectType {
+  STATIC,
+  NPC,
+  ENEMY
+}
+
+export interface LevelObjectGraphicData {
+  asset: SpriteAsset;
+  offsetX: number;
+  offsetY: number;
+}
+
+export interface LevelObjectData {
   id: string;
+  type: LevelObjectType;
 
-  movable: boolean;
+  position: MapPosition;
+  width: number;
+  height: number;
 
-  graphics: {
-    spriteId: string;
-    width: number;
-    height: number;
-    tileHeight: number;
-    tileWidth: number;
-    offsetX: number;
-    offsetY: number;
-  }
+  graphics: LevelObjectGraphicData;
 
-  animations: LevelObjectAnimations;
   triggers?: Trigger[];
 }
 
@@ -185,8 +193,7 @@ export class LevelMap {
   }
 
   checkPlayerDoorCollision(body: Phaser.Physics.Arcade.Body): Door | null {
-    const x = body.position.x;
-    const y = body.position.y;
+    const {x, y} = body.position;
 
     if (this.ghostService.isGhostMode()) {
       if (this.mapData.ghostWorld.doors) {

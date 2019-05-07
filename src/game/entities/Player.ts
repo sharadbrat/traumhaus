@@ -1,7 +1,8 @@
-import Phaser from "phaser";
-import { AssetManager, SpriteAsset } from '../AssetManager';
+import Phaser from 'phaser';
+import { Animation, AssetManager, SpriteAsset } from '../AssetManager';
 import { GameSoundService } from '../../service/GameSoundService';
 import { GameGhostService } from '../../service/GameGhostService';
+import { LevelObjectAnimation } from './LevelMap';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -18,6 +19,7 @@ interface Keys {
   a: Phaser.Input.Keyboard.Key;
   s: Phaser.Input.Keyboard.Key;
   d: Phaser.Input.Keyboard.Key;
+  u: Phaser.Input.Keyboard.Key;
 }
 
 export class Player {
@@ -41,8 +43,6 @@ export class Player {
 
     this.ghostService = GameGhostService.getInstance();
 
-    // this.sprite = this.setupSprite(x, y, AssetManager.spriteAssets.player);
-
     if (this.ghostService.isGhostMode()) {
       this.sprite = this.setupSprite(x, y, AssetManager.spriteAssets.ghostPlayer);
       this.currentAnimationAsset = AssetManager.spriteAssets.ghostPlayer
@@ -57,17 +57,18 @@ export class Player {
       left: Phaser.Input.Keyboard.KeyCodes.LEFT,
       right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-      w: "w",
-      a: "a",
-      s: "s",
-      d: "d"
+      w: 'w',
+      a: 'a',
+      s: 's',
+      d: 'd',
+      u: 'u',
     }) as Keys;
 
     this.attackUntil = 0;
     this.attackLockedUntil = 0;
     const particles = scene.add.particles(AssetManager.spriteAssets.ghostPlayer.name);
     this.emitter = particles.createEmitter({
-      alpha: { start: 0.7, end: 0, ease: "Cubic.easeOut" },
+      alpha: {start: 0.7, end: 0, ease: 'Cubic.easeOut'},
       follow: this.sprite,
       quantity: 1,
       lifespan: 200,
@@ -84,8 +85,8 @@ export class Player {
 
   update(time: number) {
     const keys = this.keys;
-    let attackAnim = "";
-    let moveAnim = "";
+    let attackAnim = '';
+    let moveAnim = '';
 
     if (time < this.attackUntil) {
       return;
@@ -114,30 +115,17 @@ export class Player {
 
     const animationPrefix = this.currentAnimationAsset.name;
     if (left || right) {
-      moveAnim = animationPrefix + this.currentAnimationAsset.animations.walk.name;
-      attackAnim = animationPrefix + this.currentAnimationAsset.animations.slash.name;
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
+      attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH].name}`;
     } else if (down) {
-      moveAnim = animationPrefix + this.currentAnimationAsset.animations.walk.name;
-      attackAnim = animationPrefix + this.currentAnimationAsset.animations.slashDown.name;
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
+      attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_DOWN].name}`;
     } else if (up) {
-      moveAnim = animationPrefix + this.currentAnimationAsset.animations.walkBack.name;
-      attackAnim = animationPrefix + this.currentAnimationAsset.animations.slashUp.name;
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK_BACK].name}`;
+      attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_UP].name}`;
     } else {
-      moveAnim = animationPrefix + this.currentAnimationAsset.animations.idle.name;
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.IDLE].name}`;
     }
-
-    // if (left || right) {
-    //   moveAnim = AssetManager.player.animations.walk.name;
-    //   attackAnim = AssetManager.player.animations.slash.name;
-    // } else if (down) {
-    //   moveAnim = AssetManager.player.animations.walk.name;
-    //   attackAnim = AssetManager.player.animations.slashDown.name;
-    // } else if (up) {
-    //   moveAnim = AssetManager.player.animations.walkBack.name;
-    //   attackAnim = AssetManager.player.animations.slashUp.name;
-    // } else {
-    //   moveAnim = AssetManager.player.animations.idle.name;
-    // }
 
     if (
       keys.space!.isDown &&
@@ -145,13 +133,13 @@ export class Player {
       this.body.velocity.length() > 0 &&
       this.ghostService.isGhostMode()
     ) {
+      GameSoundService.getInstance().playSound(AssetManager.soundAssets.dash.name);
       this.attackUntil = time + attackDuration;
       this.attackLockedUntil = time + attackDuration + attackCooldown;
       this.body.velocity.normalize().scale(attackSpeed);
       this.sprite.anims.play(attackAnim, true);
       this.emitter.start();
       this.sprite.setBlendMode(Phaser.BlendModes.ADD);
-      GameSoundService.getInstance().playSound(AssetManager.soundAssets.dash.name);
     } else {
       this.sprite.anims.play(moveAnim, true);
       this.body.velocity.normalize().scale(speed);
@@ -162,18 +150,22 @@ export class Player {
     }
   }
 
-  public getBody(): Phaser.Physics.Arcade.Body {
+  getBody(): Phaser.Physics.Arcade.Body {
     return this.body;
   }
 
-  public setGhostMode(value: boolean) {
+  setGhostMode(value: boolean) {
     const spriteAsset = value ? AssetManager.spriteAssets.ghostPlayer : AssetManager.spriteAssets.player;
     this.sprite.setTexture(spriteAsset.name);
     this.currentAnimationAsset = spriteAsset;
   }
 
-  public getSprite(): Phaser.Physics.Arcade.Sprite {
+  getSprite(): Phaser.Physics.Arcade.Sprite {
     return this.sprite;
+  }
+
+  getKeys(): Keys {
+    return this.keys;
   }
 
   private setupSprite(x: number, y: number, asset: SpriteAsset) {
@@ -186,7 +178,7 @@ export class Player {
     const sprite = this.scene.physics.add.sprite(x + sizeX, y, asset.name, 0);
     sprite.setSize(sizeX, sizeY);
     sprite.setOffset(offsetX, offsetY);
-    sprite.anims.play(asset.name + asset.animations.idle.name);
+    sprite.anims.play(`${asset.name}__${asset.animations.idle.name}`);
 
     return sprite;
   }

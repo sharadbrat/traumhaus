@@ -1,5 +1,10 @@
-import { LevelMapData, LevelObjectAnimation, TriggerEvent } from '../entities/LevelMap';
+import { LevelMapData, LevelObjectAnimation, LevelObjectType, TriggerEvent } from '../entities/LevelMap';
 import { AssetManager } from '../AssetManager';
+
+export const LEVEL_1_TRIGGERS = {
+  ON_PROFESSOR_COLLIDE: 'ON_PROFESSOR_COLLIDE',
+  ON_PROFESSOR_ACTION: 'ON_PROFESSOR_ACTION',
+};
 
 export const LEVEL_1_DATA: LevelMapData = {
   id: '01',
@@ -39,30 +44,23 @@ export const LEVEL_1_DATA: LevelMapData = {
     objects: [
       {
         id: 'professor',
-        movable: false,
-
+        type: LevelObjectType.NPC,
+        width: 12,
+        height: 16,
+        position: {x: 10, y: 10},
         graphics: {
-          spriteId: AssetManager.spriteAssets.player.name,
-          width: 20,
-          height: 24,
-          tileHeight: 32,
-          tileWidth: 32,
+          asset: AssetManager.spriteAssets.player,
           offsetX: 10,
           offsetY: 10,
-        },
-        animations: {
-          [LevelObjectAnimation.IDLE]: {
-            name: 'playerIdle',
-            start: 0x01,
-            end: 0x07,
-            frameRate: 6,
-            repeat: true
-          },
         },
         triggers: [
           {
             event: TriggerEvent.ON_COLLIDE,
-            action: 'ON_PROFESSOR_COLLIDE',
+            action: LEVEL_1_TRIGGERS.ON_PROFESSOR_COLLIDE,
+          },
+          {
+            event: TriggerEvent.ON_ACTION,
+            action: LEVEL_1_TRIGGERS.ON_PROFESSOR_ACTION,
           },
         ],
       },

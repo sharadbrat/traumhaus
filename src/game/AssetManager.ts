@@ -1,3 +1,6 @@
+import { LevelObjectAnimation } from './entities/LevelMap';
+import { GameScene } from './scenes/GameScene';
+
 export const ENVIRONMENT_GRAPHICAL_ASSET_ID = 'ENVIRONMENT_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
@@ -27,10 +30,12 @@ export interface GraphicalAsset extends Asset {
   indices?: any;
 }
 
+export type AnimationMap = {
+  [id in LevelObjectAnimation]: Animation;
+};
+
 export interface SpriteAsset extends GraphicalAsset {
-  animations: {
-    [id:string]: Animation;
-  };
+  animations: AnimationMap;
 }
 
 const mainThemeAudioAsset: SoundAsset = {
@@ -84,22 +89,22 @@ const playerGraphicalAsset: SpriteAsset = {
   height: 32,
   file: '/tiles/Player.png',
   animations: {
-    idle: {
-      name: 'playerIdle',
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
       start: 0x01,
       end: 0x07,
       frameRate: 6,
       repeat: true
     },
-    walk: {
-      name: 'playerWalk',
+    [LevelObjectAnimation.WALK]: {
+      name: LevelObjectAnimation.WALK,
       start: 0x08,
       end: 0x0d,
       frameRate: 10,
       repeat: true
     },
-    walkBack: {
-      name: 'playerWalkBack',
+    [LevelObjectAnimation.WALK_BACK]: {
+      name: LevelObjectAnimation.WALK_BACK,
       start: 0x10,
       end: 0x15,
       frameRate: 10,
@@ -107,38 +112,31 @@ const playerGraphicalAsset: SpriteAsset = {
     },
     // Ideally attacks should be five frames at 30fps to
     // align with the attack duration of 165ms
-    slash: {
-      name: 'playerSlash',
+    [LevelObjectAnimation.SLASH]: {
+      name: LevelObjectAnimation.SLASH,
       frames: [0x18, 0x19, 0x19, 0x1a, 0x1b],
       frameRate: 30,
       repeat: false
     },
-    slashUp: {
-      name: 'playerSlashUp',
+    [LevelObjectAnimation.SLASH_UP]: {
+      name: LevelObjectAnimation.SLASH_UP,
       frames: [0x21, 0x22, 0x22, 0x23, 0x24],
       frameRate: 30,
       repeat: false
     },
-    slashDown: {
-      name: 'playerSlashDown',
+    [LevelObjectAnimation.SLASH_DOWN]: {
+      name: LevelObjectAnimation.SLASH_DOWN,
       frames: [0x29, 0x2a, 0x2a, 0x2b, 0x2c],
       frameRate: 30,
       repeat: false
     },
-    hit: {
-      name: 'playerHit',
+    [LevelObjectAnimation.HIT]: {
+      name: LevelObjectAnimation.HIT,
       start: 0x30,
       end: 0x34,
       frameRate: 24,
       repeat: false
     },
-    death: {
-      name: 'playerDeath',
-      start: 0x38,
-      end: 0x3d,
-      frameRate: 24,
-      repeat: false
-    }
   }
 };
 
@@ -148,22 +146,22 @@ const ghostPlayerGraphicalAsset: SpriteAsset = {
   height: 32,
   file: '/tiles/GhostPlayer.png',
   animations: {
-    idle: {
-      name: 'playerIdle',
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
       start: 0x01,
       end: 0x07,
       frameRate: 6,
       repeat: true
     },
-    walk: {
-      name: 'playerWalk',
+    [LevelObjectAnimation.WALK]: {
+      name: LevelObjectAnimation.WALK,
       start: 0x08,
       end: 0x0d,
       frameRate: 10,
       repeat: true
     },
-    walkBack: {
-      name: 'playerWalkBack',
+    [LevelObjectAnimation.WALK_BACK]: {
+      name: LevelObjectAnimation.WALK_BACK,
       start: 0x10,
       end: 0x15,
       frameRate: 10,
@@ -171,38 +169,31 @@ const ghostPlayerGraphicalAsset: SpriteAsset = {
     },
     // Ideally attacks should be five frames at 30fps to
     // align with the attack duration of 165ms
-    slash: {
-      name: 'playerSlash',
+    [LevelObjectAnimation.SLASH]: {
+      name: LevelObjectAnimation.SLASH,
       frames: [0x18, 0x19, 0x19, 0x1a, 0x1b],
       frameRate: 30,
       repeat: false
     },
-    slashUp: {
-      name: 'playerSlashUp',
+    [LevelObjectAnimation.SLASH_UP]: {
+      name: LevelObjectAnimation.SLASH_UP,
       frames: [0x21, 0x22, 0x22, 0x23, 0x24],
       frameRate: 30,
       repeat: false
     },
-    slashDown: {
-      name: 'playerSlashDown',
+    [LevelObjectAnimation.SLASH_DOWN]: {
+      name: LevelObjectAnimation.SLASH_DOWN,
       frames: [0x29, 0x2a, 0x2a, 0x2b, 0x2c],
       frameRate: 30,
       repeat: false
     },
-    hit: {
-      name: 'playerHit',
+    [LevelObjectAnimation.HIT]: {
+      name: LevelObjectAnimation.HIT,
       start: 0x30,
       end: 0x34,
       frameRate: 24,
       repeat: false
     },
-    death: {
-      name: 'playerDeath',
-      start: 0x38,
-      end: 0x3d,
-      frameRate: 24,
-      repeat: false
-    }
   }
 };
 
@@ -268,15 +259,37 @@ export class AssetManager {
   public static loadAssets(scene: Phaser.Scene) {
     AssetManager.tiles.forEach(el => scene.load.image(el.name, el.file));
 
-    AssetManager.sprites.forEach(el => scene.load.spritesheet(el.name, el.file, {
-      frameHeight: el.height,
-      frameWidth: el.width
-    }));
+    AssetManager.sprites.forEach(el => AssetManager.loadSprite(scene, el));
 
     AssetManager.sounds.forEach(el => scene.load.audio(el.name, el.file));
   }
 
   public static getSpriteAssetByKey(key: string): SpriteAsset {
     return this.sprites.find(el => el.name === key);
+  }
+
+  public static loadAnimations(scene: Phaser.Scene) {
+    AssetManager.sprites.forEach(el => AssetManager.loadSpriteAnimations(scene, el));
+  }
+
+  private static loadSprite(scene: Phaser.Scene, sprite: SpriteAsset) {
+    scene.load.spritesheet(sprite.name, sprite.file, {
+      frameHeight: sprite.height,
+      frameWidth: sprite.width
+    });
+  }
+
+  private static loadSpriteAnimations(scene: Phaser.Scene, sprite: SpriteAsset) {
+    Object.values(sprite.animations).forEach((anim: Animation) => {
+      const key = `${sprite.name}__${anim.name}`;
+      if (!scene.anims.get(key)) {
+        scene.anims.create({
+          key: key,
+          frames: scene.anims.generateFrameNumbers(sprite.name, anim),
+          frameRate: anim.frameRate,
+          repeat: anim.repeat ? -1 : 0
+        });
+      }
+    });
   }
 }

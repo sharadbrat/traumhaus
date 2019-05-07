@@ -4,6 +4,8 @@ import './_GamePage.scss';
 import { GameManager, GameManagerOptions } from '../../game';
 import { Dialog } from '../../components';
 import { GameMenuService } from '../../service';
+import { TriggerManager } from '../../game/TriggerManager';
+import { LEVEL_1_TRIGGERS } from '../../game/levels';
 
 interface GamePageProps {
   history: History;
@@ -23,6 +25,18 @@ export class GamePage extends React.Component<any, GamePageState> {
   state = {
     pause: false,
   };
+
+  constructor(props: GamePageProps) {
+    super(props);
+
+    TriggerManager.add(LEVEL_1_TRIGGERS.ON_PROFESSOR_COLLIDE, ((scene, object, player) => {
+      console.log('collision happened!');
+    }));
+
+    TriggerManager.add(LEVEL_1_TRIGGERS.ON_PROFESSOR_ACTION, (((scene, object, player) => {
+      console.log('action')
+    })));
+  }
 
   componentDidMount(): void {
     const canvas: HTMLCanvasElement = document.getElementById(this.GAME_CANVAS_ID) as HTMLCanvasElement;

@@ -197,9 +197,11 @@ export class LevelMap {
         }
       }
     } else {
-      for (let door of this.mapData.realWorld.doors) {
-        if (this.tilemap.worldToTileX(x) === door.fromPosition.x && this.tilemap.worldToTileY(y) === door.fromPosition.y) {
-          return door;
+      if (this.mapData.realWorld.doors) {
+        for (let door of this.mapData.realWorld.doors) {
+          if (this.tilemap.worldToTileX(x) === door.fromPosition.x && this.tilemap.worldToTileY(y) === door.fromPosition.y) {
+            return door;
+          }
         }
       }
     }

@@ -3,6 +3,7 @@ import { GameScene } from './scenes/GameScene';
 
 export const ENVIRONMENT_GRAPHICAL_ASSET_ID = 'ENVIRONMENT_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
+export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
 export const ITEMS_GRAPHICAL_ASSET_ID = 'ITEMS_GRAPHICAL_ASSET';
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
@@ -140,6 +141,23 @@ const playerGraphicalAsset: SpriteAsset = {
   }
 };
 
+const professor: SpriteAsset = {
+  name: PROFESSOR_GRAPHICAL_ASSET_ID,
+  width: 32,
+  height: 32,
+  file: '/tiles/NPC_Prof.png',
+// @ts-ignore
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      start: 0x00,
+      end: 0x02,
+      frameRate: 6,
+      repeat: true
+    }
+  }
+};
+
 const ghostPlayerGraphicalAsset: SpriteAsset = {
   name: GHOST_PLAYER_GRAPHICAL_ASSET_ID,
   width: 32,
@@ -223,6 +241,7 @@ export class AssetManager {
   public static readonly sprites: SpriteAsset[] = [
     playerGraphicalAsset,
     ghostPlayerGraphicalAsset,
+    professor
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -238,6 +257,7 @@ export class AssetManager {
   public static readonly spriteAssets: { [id: string]: SpriteAsset } = {
     player: playerGraphicalAsset,
     ghostPlayer: ghostPlayerGraphicalAsset,
+    professor
   };
 
   public static readonly soundAssets: { [id: string]: SoundAsset } = {

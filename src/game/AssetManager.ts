@@ -2,6 +2,7 @@ import { LevelObjectAnimation } from './entities/LevelMap';
 import { GameScene } from './scenes/GameScene';
 
 export const ENVIRONMENT_GRAPHICAL_ASSET_ID = 'ENVIRONMENT_GRAPHICAL_ASSET';
+export const GHOST_ENVIRONMENT_GRAPHICAL_ASSET_ID = 'GHOST_ENVIRONMENT_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
@@ -82,6 +83,13 @@ const environmentGraphicalAsset: GraphicalAsset = {
     },
     transparent: 0x88,
   }
+};
+
+const ghostEnvironmentGraphicalAsset: GraphicalAsset = {
+  name: GHOST_ENVIRONMENT_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/Stage1_Tiles_Ghostworld.png',
 };
 
 const playerGraphicalAsset: SpriteAsset = {
@@ -236,6 +244,7 @@ export class AssetManager {
   public static readonly tiles: GraphicalAsset[] = [
     environmentGraphicalAsset,
     utilGraphicalAsset,
+    ghostEnvironmentGraphicalAsset
   ];
 
   public static readonly sprites: SpriteAsset[] = [
@@ -252,6 +261,7 @@ export class AssetManager {
   public static readonly graphicalAssets: { [id: string]: GraphicalAsset } = {
     environment: environmentGraphicalAsset,
     util: utilGraphicalAsset,
+    ghost: ghostEnvironmentGraphicalAsset
   };
 
   public static readonly spriteAssets: { [id: string]: SpriteAsset } = {

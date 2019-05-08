@@ -7,8 +7,8 @@ import { TriggerManager } from '../../game/TriggerManager';
 import { LEVEL_1_TRIGGERS } from '../../game/levels';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
 import { LEVEL_1_DIALOGS, LEVEL_1_DIALOGS_IDS } from '../../game/dialogs/dialogs-level-1';
-import { Menu } from '../../components/Menu';
-import { Dialog } from '../../components/Dialog';
+import { Dialog } from '../../components';
+import { Menu } from '../../components';
 
 interface GamePageProps {
   history: History;

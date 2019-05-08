@@ -1,8 +1,8 @@
-@import "../style/typography";
-@import "../style/variables";
-@import "../style/spacing";
+@import "../../style/typography";
+@import "../../style/variables";
+@import "../../style/spacing";
 
-.dialog {
+.menu {
 
   position: fixed;
 
@@ -23,18 +23,18 @@
 
   will-change: visibility, opacity, z-index;
 
-  &.dialog_active {
+  &.menu_active {
     opacity: 1;
     visibility: visible;
     z-index: 1000;
 
-    .dialog__container {
+    .menu__container {
       transform: translate3d(0, 0, 0);
     }
   }
 }
 
-.dialog__container {
+.menu__container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -54,15 +54,15 @@
   will-change: transform;
 }
 
-.dialog__header {
+.menu__header {
   @include TypographyHeadingLarge();
   text-align: center;
 }
 
-.dialog__main {
+.menu__main {
   padding-top: $spacing-padding-element;
 }
 
-.dialog__actions {
+.menu__actions {
 
 }

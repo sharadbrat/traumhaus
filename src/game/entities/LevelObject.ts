@@ -2,6 +2,8 @@ import { LevelObjectData, MapPosition, Trigger, TriggerEvent } from './LevelMap'
 import { GameScene } from '../scenes/GameScene';
 import { TriggerManager } from '../TriggerManager';
 
+type CheckedTrigger = Trigger & { lastCheckedOn: number };
+
 export class LevelObject {
 
   protected sprite: Phaser.Physics.Arcade.Sprite;
@@ -11,6 +13,8 @@ export class LevelObject {
 
   protected position: MapPosition;
   protected tilemap: Phaser.Tilemaps.Tilemap;
+  private triggers: CheckedTrigger[];
+  private isCollided: boolean;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     this.scene = scene;
@@ -19,12 +23,22 @@ export class LevelObject {
     this.tilemap = this.scene.getLevelMap().getTilemap();
 
     this.position = options.position;
+    if (options.triggers) {
+      this.triggers = options.triggers.map(el => ({...el, lastCheckedOn: 0}));
+    }
+
+    this.isCollided = false;
   }
 
   update(time: number) {
     // time in miliseconds
+
+    if (this.options.isCollideable) {
+      this.isCollided = this.scene.physics.collide(this.scene.getPlayer().getSprite(), this.sprite);
+    }
+
     if (this.options.triggers) {
-      this.checkTriggers();
+      this.checkTriggers(time);
     }
   }
 
@@ -34,7 +48,7 @@ export class LevelObject {
   }
 
   protected setupSprite(options: LevelObjectData) {
-    const { asset, offsetX, offsetY } = options.graphics;
+    const {asset, offsetX, offsetY} = options.graphics;
     const {x, y} = this.getWorldPositionFromTilePosition(this.scene, options.position);
 
     const sprite = this.scene.physics.add.sprite(x + options.width / 2, y, asset.name, 0);
@@ -53,29 +67,33 @@ export class LevelObject {
     };
   }
 
-  protected checkTriggers() {
-    if (this.options.triggers) {
-      this.options.triggers.forEach(el => this.checkTrigger(el));
+  protected checkTriggers(time: number) {
+    if (this.triggers) {
+      this.triggers.forEach(el => this.checkTrigger(el, time));
     }
   }
 
-  protected checkTrigger(trigger: Trigger) {
-    if (trigger.event === TriggerEvent.ON_COLLIDE) {
-      const player = this.scene.getPlayer();
+  protected checkTrigger(trigger: CheckedTrigger, time: number) {
+    if (time > trigger.fixTime + trigger.lastCheckedOn) {
 
-      if (this.scene.physics.collide(player.getSprite(), this.sprite)) {
-        TriggerManager.fire(trigger.action, this.scene, this, player);
+      if (trigger.event === TriggerEvent.ON_COLLIDE) {
+        const player = this.scene.getPlayer();
+
+        if (this.isCollided) {
+          TriggerManager.fire(trigger.action, this.scene, this, player);
+          trigger.lastCheckedOn = time;
+        }
+
+      } else if (trigger.event === TriggerEvent.ON_ACTION) {
+        const player = this.scene.getPlayer();
+
+        const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
+
+        if (player.getKeys().u.isDown && distance < 20) {
+          TriggerManager.fire(trigger.action, this.scene, this, player);
+          trigger.lastCheckedOn = time;
+        }
       }
-
-    } else if (trigger.event === TriggerEvent.ON_ACTION) {
-      const player = this.scene.getPlayer();
-
-      const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
-
-      if (player.getKeys().u.isDown && distance < 20) {
-        TriggerManager.fire(trigger.action, this.scene, this, player);
-      }
-
     }
   }
 

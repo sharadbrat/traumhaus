@@ -63,6 +63,7 @@ export enum TriggerEvent {
 export interface Trigger {
   event: TriggerEvent;
   action: string;
+  fixTime: number;
 }
 
 export enum LevelObjectType {
@@ -80,6 +81,7 @@ export interface LevelObjectGraphicData {
 export interface LevelObjectData {
   id: string;
   type: LevelObjectType;
+  isCollideable: boolean;
 
   position: MapPosition;
   width: number;

@@ -1,0 +1,86 @@
+@import "../../style/typography";
+@import "../../style/variables";
+@import "../../style/spacing";
+
+.dialog {
+
+  position: fixed;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: stretch;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+
+  transition-property: visibility, opacity, z-index;
+  transition-timing-function: ease-in-out;
+  transition-duration: 100ms;
+
+  will-change: visibility, opacity, z-index;
+
+  &.dialog_active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1000;
+
+    .dialog__container {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
+
+.dialog__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 300px;
+
+  padding: $spacing-padding-container;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  transform: translate3d(0, 100%, 0);
+
+  transition: transform ease-in-out 100ms 20ms;
+  will-change: transform;
+
+  color: #f0f0f0;
+}
+
+.dialog__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.dialog__title {
+  line-height: 1;
+  height: 24px;
+  font-size: 24px;
+  font-family: sans-serif;
+  padding-bottom: $spacing-padding-element;
+  flex-shrink: 0;
+}
+
+.dialog__portrait {
+  width: 300px;
+  flex-grow: 1;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.dialog__phrase {
+  flex-grow: 1;
+  font-size: 18px;
+  font-family: sans-serif;
+}

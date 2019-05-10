@@ -217,8 +217,7 @@ export class LevelMap {
   }
 
   setGhostMode(isGhost: boolean) {
-    // todo: maybe hide the real world background layers as well?
-
+    // Handle ghost graphics
     if (this.ghostBackgroundGraphicLayers) {
       this.ghostBackgroundGraphicLayers.forEach(el => el.setAlpha(isGhost ? 1 : 0));
     }
@@ -227,8 +226,13 @@ export class LevelMap {
       this.ghostForegroundGraphicLayers.forEach(el => el.setAlpha(isGhost ? 1 : 0));
     }
 
+    // Handle real graphics
     if (this.realForegroundGraphicLayers) {
       this.realForegroundGraphicLayers.forEach(el => el.setAlpha(isGhost? 0 : 1));
+    }
+
+    if (this.realBackgroundGraphicLayers) {
+      this.realBackgroundGraphicLayers.forEach(el => el.setAlpha(isGhost? 0 : 1));
     }
   }
 

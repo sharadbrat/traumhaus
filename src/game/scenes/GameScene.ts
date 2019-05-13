@@ -183,8 +183,6 @@ export class GameScene extends Phaser.Scene {
     this.createCamera(this.levelMap);
     this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
 
-    this.levelMap.createForegroundLayers();
-
     this.myfov = new LightLayer(this.levelMap);
   }
 

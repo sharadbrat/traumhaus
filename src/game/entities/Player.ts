@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { Animation, AssetManager, SpriteAsset } from '../AssetManager';
 import { GameSoundService } from '../../service/GameSoundService';
 import { GameGhostService } from '../../service/GameGhostService';
-import { LevelObjectAnimation } from './LevelMap';
+import { LevelMap, LevelObjectAnimation } from './LevelMap';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -78,6 +78,7 @@ export class Player {
         particle.frame = this.sprite.frame;
       }
     });
+    particles.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
     this.emitter.stop();
 
     this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
@@ -179,6 +180,7 @@ export class Player {
     sprite.setSize(sizeX, sizeY);
     sprite.setOffset(offsetX, offsetY);
     sprite.anims.play(`${asset.name}__${asset.animations.idle.name}`);
+    sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
 
     return sprite;
   }

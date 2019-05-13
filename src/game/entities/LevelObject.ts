@@ -1,4 +1,4 @@
-import { LevelObjectData, MapPosition, Trigger, TriggerEvent } from './LevelMap';
+import { LevelMap, LevelObjectData, MapPosition, Trigger, TriggerEvent } from './LevelMap';
 import { GameScene } from '../scenes/GameScene';
 import { TriggerManager } from '../TriggerManager';
 
@@ -56,6 +56,7 @@ export class LevelObject {
     sprite.setOffset(offsetX, offsetY);
     const key = `${asset.name}__${asset.animations.idle.name}`;
     sprite.anims.play(key);
+    sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
 
     return sprite;
   }

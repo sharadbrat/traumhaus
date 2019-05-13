@@ -117,6 +117,11 @@ export class LevelMap {
 
   static readonly LIGHT_LAYER_ID = 'LIGHT';
 
+  static readonly BACKGROUND_LAYER_DEPTH = 1;
+  static readonly FOREGROUND_LAYER_DEPTH = 100;
+  static readonly LIGHT_LAYER_DEPTH = 1000;
+  static readonly OBJECT_LAYER_DEPTH = 10;
+
   private tilemap: Phaser.Tilemaps.Tilemap;
   private mapData: LevelMapData;
   private utilTiles: Phaser.Tilemaps.Tileset;
@@ -146,9 +151,11 @@ export class LevelMap {
       this.realWorldTiles = [];
 
       for (let i = 0; i < options.data.realWorld.backgroundGraphicLayers.length; i++) {
-        const layer = options.data.realWorld.backgroundGraphicLayers[i];
-        this.realWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
-        this.realBackgroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.REAL_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId));
+        const layerData = options.data.realWorld.backgroundGraphicLayers[i];
+        this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
+        const layer = this.createGraphicLayer(`${LevelMap.REAL_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
+        layer.setDepth(LevelMap.BACKGROUND_LAYER_DEPTH);
+        this.realBackgroundGraphicLayers.push(layer);
       }
 
       this.realCollisionLayer = this.createCollisionLayer(LevelMap.REAL_COLLISION_LAYER_ID, options.data.width, options.data.height, options.data.realWorld.collisionMap);
@@ -160,14 +167,19 @@ export class LevelMap {
       this.ghostBackgroundGraphicLayers = [];
 
       for (let i = 0; i < options.data.ghostWorld.backgroundGraphicLayers.length; i++) {
-        const layer = options.data.ghostWorld.backgroundGraphicLayers[i];
-        this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
-        this.ghostBackgroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.GHOST_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId));
+        const layerData = options.data.ghostWorld.backgroundGraphicLayers[i];
+        this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
+        const layer = this.createGraphicLayer(`${LevelMap.GHOST_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
+        layer.setDepth(LevelMap.BACKGROUND_LAYER_DEPTH);
+        this.ghostBackgroundGraphicLayers.push(layer);
       }
 
       this.ghostCollisionLayer = this.createCollisionLayer(LevelMap.GHOST_COLLISION_LAYER_ID, options.data.width, options.data.height, options.data.ghostWorld.collisionMap);
-      this.setGhostMode(this.ghostService.isGhostMode());
     }
+
+    this.createForegroundLayers();
+
+    this.setGhostMode(this.ghostService.isGhostMode());
   }
 
   getTilemap(): Phaser.Tilemaps.Tilemap {
@@ -219,20 +231,20 @@ export class LevelMap {
   setGhostMode(isGhost: boolean) {
     // Handle ghost graphics
     if (this.ghostBackgroundGraphicLayers) {
-      this.ghostBackgroundGraphicLayers.forEach(el => el.setAlpha(isGhost ? 1 : 0));
+      this.ghostBackgroundGraphicLayers.forEach(el => el.setVisible(isGhost));
     }
 
     if (this.ghostForegroundGraphicLayers) {
-      this.ghostForegroundGraphicLayers.forEach(el => el.setAlpha(isGhost ? 1 : 0));
+      this.ghostForegroundGraphicLayers.forEach(el => el.setVisible(isGhost));
     }
 
     // Handle real graphics
     if (this.realForegroundGraphicLayers) {
-      this.realForegroundGraphicLayers.forEach(el => el.setAlpha(isGhost? 0 : 1));
+      this.realForegroundGraphicLayers.forEach(el => el.setVisible(!isGhost));
     }
 
     if (this.realBackgroundGraphicLayers) {
-      this.realBackgroundGraphicLayers.forEach(el => el.setAlpha(isGhost? 0 : 1));
+      this.realBackgroundGraphicLayers.forEach(el => el.setVisible(!isGhost));
     }
   }
 
@@ -241,9 +253,11 @@ export class LevelMap {
       this.realForegroundGraphicLayers = [];
 
       for (let i = 0; i < this.mapData.realWorld.foregroundGraphicLayers.length; i++) {
-        const layer = this.mapData.realWorld.foregroundGraphicLayers[i];
-        this.realWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
-        this.realForegroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.REAL_FOREGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId, 1000));
+        const layerData = this.mapData.realWorld.foregroundGraphicLayers[i];
+        this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
+        const layer = this.createGraphicLayer(`${LevelMap.REAL_FOREGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
+        layer.setDepth(LevelMap.FOREGROUND_LAYER_DEPTH);
+        this.realForegroundGraphicLayers.push(layer);
       }
     }
 
@@ -252,9 +266,11 @@ export class LevelMap {
         this.ghostForegroundGraphicLayers = [];
 
         for (let i = 0; i < this.mapData.ghostWorld.foregroundGraphicLayers.length; i++) {
-          const layer = this.mapData.ghostWorld.foregroundGraphicLayers[i];
-          this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layer.tileMapId));
-          this.ghostForegroundGraphicLayers.push(this.createGraphicLayer(`${LevelMap.GHOST_FOREGROUND_GRAPHIC_LAYER_ID}_${i}`, layer.tileMap, layer.tileMapId, 1000));
+          const layerData = this.mapData.ghostWorld.foregroundGraphicLayers[i];
+          this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
+          const layer = this.createGraphicLayer(`${LevelMap.GHOST_FOREGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
+          layer.setDepth(LevelMap.FOREGROUND_LAYER_DEPTH);
+          this.ghostForegroundGraphicLayers.push(layer);
         }
       }
     }
@@ -270,21 +286,17 @@ export class LevelMap {
     });
   }
 
-  private createGraphicLayer(layerId: string, tileMap: number[][], tileMapId: string, z: number = null) {
-    const graphicLayer = this.tilemap.createBlankDynamicLayer(layerId, tileMapId, 0, 0);
+  private createGraphicLayer(layerId: string, tileMap: number[][], tileMapId: string): Phaser.Tilemaps.StaticTilemapLayer {
+    const graphicLayer = this.tilemap.createBlankDynamicLayer(layerId, tileMapId, 0, 0, undefined, undefined, 16, 16);
 
     graphicLayer.putTilesAt(tileMap, 0, 0);
     graphicLayer.setAlpha(1);
-
-    if (z) {
-      graphicLayer.setZ(z);
-    }
 
     return this.tilemap.convertLayerToStatic(graphicLayer);
   }
 
   private createCollisionLayer(layerId: string, width: number, height: number, collisionMap: CollisionDetector[][]): Phaser.Tilemaps.StaticTilemapLayer {
-    const collisionLayer = this.tilemap.createBlankDynamicLayer(layerId, this.utilTiles, 0, 0);
+    const collisionLayer = this.tilemap.createBlankDynamicLayer(layerId, this.utilTiles, 0, 0, undefined, undefined, 16, 16);
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
         if (collisionMap[y][x] === 1) {

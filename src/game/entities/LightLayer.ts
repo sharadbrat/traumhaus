@@ -40,6 +40,8 @@ export class LightLayer {
     this.lastPos = new Phaser.Math.Vector2({ x: -1, y: -1 });
     this.map = map;
 
+    this.layer.setDepth(LevelMap.LIGHT_LAYER_DEPTH);
+
     const mapData: LevelMapData = map.getMapData();
 
     if (mapData.realWorld) {

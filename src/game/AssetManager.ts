@@ -56,33 +56,6 @@ const environmentGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/Stage1_Tiles.png',
-  indices: {
-    floor: {
-      outer: [0x05, 0x05, 0x05, 0x15, 0x07, 0x17]
-    },
-    block: 0x17,
-    walls: {
-      alone: 0x14,
-      intersections: {
-        e_s: 0x00,
-        n_e_s_w: 0x01,
-        e_w: 0x02,
-        s_w: 0x03,
-        n_e_s: 0x10,
-        w: 0x11,
-        e: 0x12,
-        n_s_w: 0x13,
-        n_s: 0x20,
-        s: 0x21,
-        e_s_w: 0x22,
-        n_e: 0x30,
-        n_e_w: 0x31,
-        n: 0x32,
-        n_w: 0x33
-      }
-    },
-    transparent: 0x88,
-  }
 };
 
 const ghostEnvironmentGraphicalAsset: GraphicalAsset = {

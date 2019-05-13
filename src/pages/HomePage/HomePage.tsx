@@ -15,7 +15,7 @@ export class HomePage extends React.Component {
     return (
       <section className="home">
         <div className="home__container">
-          <h1 className="home__heading">8-bit of<br/><span className="home__heading_special">bauhaus</span></h1>
+          <h1 className="home__heading">TRAUMHAUS</h1>
           <div className="home__group">
             <Link to="game" className="home__link">New game</Link>
             <Link to="game" className="home__link" onClick={this.onContinueClick}>Continue</Link>

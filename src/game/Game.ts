@@ -7,7 +7,7 @@ export class Game extends Phaser.Game {
   private scenes: SceneObject[];
 
   constructor(canvas: HTMLCanvasElement) {
-    const gameConfig: GameConfig = {
+    const gameConfig = {
       type: Phaser.WEBGL,
       width: window.innerWidth,
       height: window.innerHeight,

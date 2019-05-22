@@ -278,12 +278,14 @@ export class LevelMap {
   }
 
   private createTilemap(scene: Phaser.Scene, width: number, height: number): Phaser.Tilemaps.Tilemap {
-    return scene.make.tilemap({
+    const tilemap = scene.make.tilemap({
       tileWidth: AssetManager.environment.width,
       tileHeight: AssetManager.environment.height,
       width: width,
       height: height,
     });
+    tilemap.setBaseTileSize(AssetManager.environment.width, AssetManager.environment.height);
+    return tilemap;
   }
 
   private createGraphicLayer(layerId: string, tileMap: number[][], tileMapId: string): Phaser.Tilemaps.StaticTilemapLayer {

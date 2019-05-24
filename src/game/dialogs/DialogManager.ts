@@ -15,7 +15,7 @@ export interface GameDialogActor {
 export interface GameDialog {
   id: string;
   steps: GameDialogStep[];
-  onDialogFinishedTrigger: string;
+  onDialogFinishedTrigger?: string;
 }
 
 export class DialogManager {
@@ -23,12 +23,12 @@ export class DialogManager {
   private static dialogs: GameDialog[];
   private static dialogStartCallback: (dialog: GameDialog) => void;
 
-  static initialize(dialogStartCallback: (dialog: GameDialog) => void) {
+  public static initialize(dialogStartCallback: (dialog: GameDialog) => void) {
     this.dialogStartCallback = dialogStartCallback;
     this.dialogs = [];
   }
 
-  static registerDialog(dialog: GameDialog) {
+  public static registerDialog(dialog: GameDialog) {
     if (this.dialogs.find(el => el.id === dialog.id)) {
       throw new TypeError(`Can not register dialog with id: ${dialog.id}. Dialog with that id is already registered`);
     }
@@ -36,11 +36,11 @@ export class DialogManager {
     this.dialogs.push(dialog);
   }
 
-  static registerDialogs(dialogs: GameDialog[]) {
+  public static registerDialogs(dialogs: GameDialog[]) {
     dialogs.forEach(el => DialogManager.registerDialog(el));
   }
 
-  static runDialog(id: string) {
+  public static runDialog(id: string) {
     if (!this.dialogs || !this.dialogs.find(el => el.id === id)) {
       throw new TypeError(`Can not run dialog with id: ${id}. Dialog with that id is not registered`);
     }
@@ -48,5 +48,9 @@ export class DialogManager {
     const dialog = DialogManager.dialogs.find(el => el.id === id);
 
     this.dialogStartCallback(dialog);
+  }
+
+  public static clear() {
+    this.dialogs = [];
   }
 }

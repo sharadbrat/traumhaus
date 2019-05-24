@@ -92,7 +92,9 @@ export class GamePage extends React.Component<any, GamePageState> {
             this.gameManager.resume();
             window.removeEventListener('keydown', keydownListener);
             this.setState({dialogStep: null, isDialogActive: false});
-            TriggerManager.fire(dialog.onDialogFinishedTrigger, null, null, null);
+            if (dialog.onDialogFinishedTrigger) {
+              TriggerManager.fire(dialog.onDialogFinishedTrigger, null, null, null);
+            }
           }
         }
       };

@@ -4,7 +4,6 @@ import { GameScene } from './scenes/GameScene';
 
 export interface GameManagerOptions {
   canvas: HTMLCanvasElement;
-  onGamePause: () => void;
 }
 
 export class GameManager {

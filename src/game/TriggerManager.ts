@@ -1,6 +1,5 @@
 import { GameScene } from './scenes/GameScene';
-import { LevelObject } from './entities/LevelObject';
-import { Player } from './entities';
+import { LevelObject, Player } from './entities';
 
 export type TriggerCallback = (scene: GameScene, object: LevelObject, player: Player) => void;
 
@@ -22,7 +21,7 @@ export class TriggerManager {
     }
 
     if (TriggerManager.triggerMap[id]) {
-      throw new TypeError(`Can not register trigger with id: ${id}. Trigger is already registered`);
+      console.log(`Trigger with id: ${id} is already registered. Registering new callback for it.`)
     }
 
     TriggerManager.triggerMap[id] = callback;

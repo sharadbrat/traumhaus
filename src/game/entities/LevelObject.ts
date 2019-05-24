@@ -2,7 +2,7 @@ import { LevelMap, LevelObjectData, MapPosition, Trigger, TriggerEvent } from '.
 import { GameScene } from '../scenes/GameScene';
 import { TriggerManager } from '../TriggerManager';
 
-type CheckedTrigger = Trigger & { lastCheckedOn: number };
+export type CheckedTrigger = Trigger & { lastCheckedOn: number };
 
 export class LevelObject {
 
@@ -13,8 +13,8 @@ export class LevelObject {
 
   protected position: MapPosition;
   protected tilemap: Phaser.Tilemaps.Tilemap;
-  private triggers: CheckedTrigger[];
-  private isCollided: boolean;
+  protected triggers: CheckedTrigger[];
+  protected isCollided: boolean;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     this.scene = scene;
@@ -78,23 +78,49 @@ export class LevelObject {
     if (time > trigger.fixTime + trigger.lastCheckedOn) {
 
       if (trigger.event === TriggerEvent.ON_COLLIDE) {
-        const player = this.scene.getPlayer();
-
-        if (this.isCollided) {
-          TriggerManager.fire(trigger.action, this.scene, this, player);
-          trigger.lastCheckedOn = time;
-        }
-
+        this.checkCollideTrigger(trigger, time);
       } else if (trigger.event === TriggerEvent.ON_ACTION) {
-        const player = this.scene.getPlayer();
-
-        const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
-
-        if (player.getKeys().u.isDown && distance < 20) {
-          TriggerManager.fire(trigger.action, this.scene, this, player);
-          trigger.lastCheckedOn = time;
-        }
+        this.checkActionTrigger(trigger, time);
+      } else if (trigger.event === TriggerEvent.ON_IN_AREA) {
+        this.checkInAreaTrigger(trigger, time);
+      } else if (trigger.event === TriggerEvent.ON_IN_NEAR_AREA) {
+        this.checkInNearAreaTrigger(trigger, time);
       }
+    }
+  }
+
+  protected checkCollideTrigger(trigger: CheckedTrigger, time: number) {
+    const player = this.scene.getPlayer();
+
+    if (this.isCollided) {
+      TriggerManager.fire(trigger.action, this.scene, this, player);
+      trigger.lastCheckedOn = time;
+    }
+  }
+
+  protected checkActionTrigger(trigger: CheckedTrigger, time: number) {
+    const player = this.scene.getPlayer();
+
+    const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
+
+    if (player.getKeys().u.isDown && distance < 20) {
+      TriggerManager.fire(trigger.action, this.scene, this, player);
+      trigger.lastCheckedOn = time;
+    }
+  }
+
+  protected checkInAreaTrigger(trigger: CheckedTrigger, time: number) {
+
+  }
+
+  protected checkInNearAreaTrigger(trigger: CheckedTrigger, time: number) {
+    const player = this.scene.getPlayer();
+
+    const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
+
+    if (distance < 20) {
+      TriggerManager.fire(trigger.action, this.scene, this, player);
+      trigger.lastCheckedOn = time;
     }
   }
 

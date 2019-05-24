@@ -1,8 +1,12 @@
 import Phaser from 'phaser';
-import { Animation, AssetManager, SpriteAsset } from '../AssetManager';
+import { AssetManager, SpriteAsset } from '../AssetManager';
 import { GameSoundService } from '../../service/GameSoundService';
 import { GameGhostService } from '../../service/GameGhostService';
 import { LevelMap, LevelObjectAnimation } from './LevelMap';
+import { TriggerManager } from '../TriggerManager';
+import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
+import { GameScene } from '../scenes/GameScene';
+import { LevelObject } from './LevelObject';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -82,6 +86,11 @@ export class Player {
     this.emitter.stop();
 
     this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
+
+    TriggerManager.add(NPC_TRIGGERS_ACTIONS.ON_IN_NEAR_AREA, (scene: GameScene, object: LevelObject, player: Player) => {
+      // todo: add glowing implementation
+      console.log('near');
+    });
   }
 
   update(time: number) {

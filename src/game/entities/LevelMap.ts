@@ -43,6 +43,7 @@ export interface World {
   lightSettings: LightSettings;
   doors?: Door[];
   objects?: LevelObjectData[];
+  triggers?: Trigger[];
 }
 
 export enum LevelObjectAnimation {

@@ -55,7 +55,7 @@ const environmentGraphicalAsset: GraphicalAsset = {
   name: ENVIRONMENT_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/Stage1_Tiles.png',
+  file: '/tiles/Stage1_Tiles-1.png',
 };
 
 const ghostEnvironmentGraphicalAsset: GraphicalAsset = {

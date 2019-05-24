@@ -88,28 +88,15 @@ export class GameScene extends Phaser.Scene {
       GameDataService.getInstance().setLastDoor(door);
       this.scene.start(SceneIdentifier.GAME_SCENE);
       return;
+    } else {
+      this.updatePlayer(time);
+
+      this.updateCamera();
+
+      this.updateGameObjects(time);
+
+      this.updateMyFOV(delta);
     }
-
-    this.player.update(time);
-    const camera = this.cameras.main;
-
-    if (this.cameraResizeNeeded) {
-      // Do this here rather than the resize callback as it limits
-      // how much we'll slow down the game
-      camera.setSize(window.innerWidth, window.innerHeight);
-      this.cameraResizeNeeded = false;
-    }
-
-    this.updateGameObjects(time);
-
-    const player = new Phaser.Math.Vector2({
-      x: this.levelMap.getTilemap().worldToTileX(this.player.getBody().x),
-      y: this.levelMap.getTilemap().worldToTileY(this.player.getBody().y)
-    });
-
-    const bounds = this.getCameraBounds(camera);
-
-    this.myfov.update(player, bounds, delta);
   }
 
   getPlayer(): Player {
@@ -193,6 +180,8 @@ export class GameScene extends Phaser.Scene {
         object.setVisible(this.ghostService.isGhostMode());
         return object;
       });
+    } else {
+      this.ghostWorldObjects = [];
     }
 
     if (currentLevel.realWorld.objects) {
@@ -201,6 +190,8 @@ export class GameScene extends Phaser.Scene {
         object.setVisible(!this.ghostService.isGhostMode());
         return object;
       });
+    } else {
+      this.realWorldObjects = [];
     }
   }
 
@@ -228,5 +219,33 @@ export class GameScene extends Phaser.Scene {
         this.realWorldObjects.forEach(el => el.update(time));
       }
     }
+  }
+
+  private updateMyFOV(delta: number) {
+    const pos = new Phaser.Math.Vector2({
+      x: this.levelMap.getTilemap().worldToTileX(this.player.getBody().x),
+      y: this.levelMap.getTilemap().worldToTileY(this.player.getBody().y)
+    });
+
+    const bounds = this.getCameraBounds(this.cameras.main);
+
+    this.myfov.update(pos, bounds, delta);
+  }
+
+  private updateCamera() {
+    if (this.cameraResizeNeeded) {
+      // Do this here rather than the resize callback as it limits
+      // how much we'll slow down the game
+      this.cameras.main.setSize(window.innerWidth, window.innerHeight);
+      this.cameraResizeNeeded = false;
+      this.game.canvas.width = window.innerWidth;
+      this.game.canvas.height = window.innerHeight;
+      this.game.scale.scaleMode = Phaser.Scale.RESIZE;
+      this.game.scale.refresh();
+    }
+  }
+
+  private updatePlayer(time: number) {
+    this.player.update(time);
   }
 }

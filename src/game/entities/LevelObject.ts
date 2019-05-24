@@ -31,7 +31,7 @@ export class LevelObject {
   }
 
   update(time: number) {
-    // time in miliseconds
+    // time in milliseconds
 
     if (this.options.isCollideable) {
       this.isCollided = this.scene.physics.collide(this.scene.getPlayer().getSprite(), this.sprite);

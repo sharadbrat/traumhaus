@@ -1,10 +1,21 @@
-import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/LevelMap';
+import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities';
 import { AssetManager } from '../AssetManager';
+import { DialogManager, GameDialogActor } from '../dialogs';
 
-export const LEVEL_1_TRIGGERS = {
+export const LEVEL_1_TRIGGER_ACTIONS = {
   ON_PROFESSOR_COLLIDE: 'ON_PROFESSOR_COLLIDE',
   ON_PROFESSOR_ACTION: 'ON_PROFESSOR_ACTION',
   ON_PROFESSOR_DIALOG_FINISHED: 'ON_PROFESSOR_DIALOG_FINISHED',
+};
+
+export const LEVEL_1_DIALOGS_IDS = {
+  PROFESSOR_DIALOG: 'PROFESSOR_DIALOG',
+};
+
+const professorActor: GameDialogActor = {
+  id: '1',
+  image: '/dialog/professor.png',
+  title: 'Professor'
 };
 
 export const LEVEL_1_DATA: LevelMapData = {
@@ -100,15 +111,18 @@ export const LEVEL_1_DATA: LevelMapData = {
         triggers: [
           {
             event: TriggerEvent.ON_COLLIDE,
-            action: LEVEL_1_TRIGGERS.ON_PROFESSOR_COLLIDE,
-            fixTime: 0,
+            action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_COLLIDE,
+            fixTime: 100,
           },
           {
             event: TriggerEvent.ON_ACTION,
-            action: LEVEL_1_TRIGGERS.ON_PROFESSOR_ACTION,
+            action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
             fixTime: 1000,
           },
         ],
+        meta: {
+          talkable: true,
+        }
       },
     ],
     doors: [
@@ -169,4 +183,43 @@ export const LEVEL_1_DATA: LevelMapData = {
     x: 10,
     y: 10,
   },
+
+  triggerActions: [
+    {
+      action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_COLLIDE,
+      callback: (scene, object, player) => {
+        console.log('collision happened!');
+      }
+    },
+    {
+      action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
+      callback: (scene, object, player) => {
+        DialogManager.runDialog(LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG);
+      }
+    },
+    {
+      action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_DIALOG_FINISHED,
+      callback: (scene, object, player) => {
+        console.log('Wow!');
+      }
+    },
+  ],
+  dialogs: [
+    {
+      id: LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG,
+      steps: [
+        {
+          actor: professorActor,
+          phrase: 'Are you okay, student?',
+          position: 'left',
+        },
+        {
+          actor: professorActor,
+          phrase: 'Go get some sleep!',
+          position: 'left',
+        },
+      ],
+      onDialogFinishedTrigger: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_DIALOG_FINISHED,
+    }
+  ]
 };

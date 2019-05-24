@@ -41,4 +41,13 @@ export class TriggerManager {
 
     TriggerManager.triggerMap[id](scene, object, player);
   }
+
+  /**
+   * Removes all the registered triggers from triggerMap
+   */
+  public static clear() {
+    if (TriggerManager.triggerMap) {
+      Object.keys(TriggerManager.triggerMap).forEach(key => delete TriggerManager.triggerMap[key]);
+    }
+  }
 }

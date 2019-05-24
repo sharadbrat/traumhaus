@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
-import { AssetManager, Animation, SpriteAsset } from '../AssetManager';
+import { AssetManager, SpriteAsset } from '../AssetManager';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service/GameGhostService';
+import { TriggerCallback } from '../TriggerManager';
+import { GameDialog } from '../dialogs';
 
 export type CollisionDetector = 0 | 1;
 
@@ -43,7 +45,6 @@ export interface World {
   lightSettings: LightSettings;
   doors?: Door[];
   objects?: LevelObjectData[];
-  triggers?: Trigger[];
 }
 
 export enum LevelObjectAnimation {
@@ -59,6 +60,8 @@ export enum LevelObjectAnimation {
 export enum TriggerEvent {
   ON_COLLIDE,
   ON_ACTION,
+  ON_IN_AREA,
+  ON_IN_NEAR_AREA,
 }
 
 export interface Trigger {
@@ -91,6 +94,12 @@ export interface LevelObjectData {
   graphics: LevelObjectGraphicData;
 
   triggers?: Trigger[];
+
+  meta?: LevelObjectMeta;
+}
+
+export interface LevelObjectMeta {
+  talkable?: boolean;
 }
 
 export interface LevelMapData {
@@ -100,6 +109,13 @@ export interface LevelMapData {
   realWorld?: World;
   ghostWorld?: World;
   startPosition?: MapPosition;
+  triggerActions?: TriggerAction[];
+  dialogs?: GameDialog[]
+}
+
+export interface TriggerAction {
+  action: string;
+  callback: TriggerCallback;
 }
 
 export interface LevelMapConstructorOptions {
@@ -154,6 +170,7 @@ export class LevelMap {
       for (let i = 0; i < options.data.realWorld.backgroundGraphicLayers.length; i++) {
         const layerData = options.data.realWorld.backgroundGraphicLayers[i];
         this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
+        // this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId, undefined, undefined, undefined, undefined, 1));
         const layer = this.createGraphicLayer(`${LevelMap.REAL_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
         layer.setDepth(LevelMap.BACKGROUND_LAYER_DEPTH);
         this.realBackgroundGraphicLayers.push(layer);
@@ -170,6 +187,7 @@ export class LevelMap {
       for (let i = 0; i < options.data.ghostWorld.backgroundGraphicLayers.length; i++) {
         const layerData = options.data.ghostWorld.backgroundGraphicLayers[i];
         this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
+        // this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId, undefined, undefined, undefined, undefined, 1));
         const layer = this.createGraphicLayer(`${LevelMap.GHOST_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
         layer.setDepth(LevelMap.BACKGROUND_LAYER_DEPTH);
         this.ghostBackgroundGraphicLayers.push(layer);

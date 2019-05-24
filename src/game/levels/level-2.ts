@@ -61,12 +61,12 @@ export const LEVEL_2_DATA: LevelMapData = {
     //     triggers: [
     //       {
     //         event: TriggerEvent.ON_COLLIDE,
-    //         action: LEVEL_1_TRIGGERS.ON_PROFESSOR_COLLIDE,
+    //         action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_COLLIDE,
     //         fixTime: 0,
     //       },
     //       {
     //         event: TriggerEvent.ON_ACTION,
-    //         action: LEVEL_1_TRIGGERS.ON_PROFESSOR_ACTION,
+    //         action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
     //         fixTime: 1000,
     //       },
     //     ],

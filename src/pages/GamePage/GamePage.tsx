@@ -4,9 +4,7 @@ import './_GamePage.scss';
 import { GameManager, GameManagerOptions } from '../../game';
 import { GameMenuService } from '../../service';
 import { TriggerManager } from '../../game/TriggerManager';
-import { LEVEL_1_TRIGGERS } from '../../game/levels';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
-import { LEVEL_1_DIALOGS, LEVEL_1_DIALOGS_IDS } from '../../game/dialogs/dialogs-level-1';
 import { Dialog } from '../../components';
 import { Menu } from '../../components';
 
@@ -41,24 +39,17 @@ export class GamePage extends React.Component<any, GamePageState> {
     super(props);
 
     DialogManager.initialize(this.onDialogStart);
-
-    DialogManager.registerDialogs(LEVEL_1_DIALOGS);
   }
 
   componentDidMount(): void {
     const canvas: HTMLCanvasElement = document.getElementById(this.GAME_CANVAS_ID) as HTMLCanvasElement;
 
-    const options: GameManagerOptions = {
-      canvas,
-      onGamePause: () => this.setState({ pause: true })
-    };
+    const options: GameManagerOptions = {canvas};
 
     this.gameManager = new GameManager(options);
     this.gameManager.run();
 
     GameMenuService.getInstance().setOnMenuToggleListener(() => this.onMenuToggle());
-
-    registerTriggers();
 
   }
 
@@ -126,19 +117,4 @@ export class GamePage extends React.Component<any, GamePageState> {
     );
   }
 
-}
-
-function registerTriggers() {
-  TriggerManager.add(LEVEL_1_TRIGGERS.ON_PROFESSOR_COLLIDE, ((scene, object, player) => {
-    console.log('collision happened!');
-  }));
-
-  TriggerManager.add(LEVEL_1_TRIGGERS.ON_PROFESSOR_ACTION, ((scene, object, player) => {
-    console.log('action!');
-    DialogManager.runDialog(LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG);
-  }));
-
-  TriggerManager.add(LEVEL_1_TRIGGERS.ON_PROFESSOR_DIALOG_FINISHED, ((scene, object, player) => {
-    console.log('Wow!');
-  }))
 }

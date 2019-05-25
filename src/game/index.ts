@@ -1,2 +1,2 @@
 export * from './GameManager';
-export * from './AssetManager';
+export * from './assets/AssetManager';

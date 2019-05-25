@@ -1,7 +1,8 @@
-import { AssetManager, SoundAsset } from '../game';
+import { AssetManager } from '../game';
+import { SoundAsset } from '../game/assets';
 
 interface SoundObject {
-  sound: Phaser.Sound.BaseSound;
+  sound: Phaser.Sound.WebAudioSound;
   id: string;
   asset: SoundAsset;
 }
@@ -10,6 +11,9 @@ export class GameSoundService {
   private static instance: GameSoundService;
   private game: Phaser.Game;
   private sounds: SoundObject[];
+  private themes: SoundObject[];
+  private currentTheme: SoundObject;
+  private currentAmbients: SoundObject[];
 
   private constructor() {
   }
@@ -34,13 +38,52 @@ export class GameSoundService {
     this.sounds = AssetManager.sounds.map(el => {
       return {
         id: el.name,
-        sound: game.sound.add(el.name, el.soundConfig),
+        sound: this.game.sound.add(el.name, el.soundConfig) as Phaser.Sound.WebAudioSound,
         asset: el,
       };
     });
+
+    this.themes = AssetManager.musicThemes.map(el => {
+      return {
+        id: el.name,
+        sound: this.game.sound.add(el.name, el.soundConfig) as Phaser.Sound.WebAudioSound,
+        asset: el,
+      };
+    })
   }
 
-  public playSound(id: string, config?: SoundConfig) {
+  public setTheme(id: string | null) {
+    const soundObject = this.themes.find(el => el.id === id);
+    if (!soundObject) {
+      throw new ReferenceError(`Theme with id "${id}" is not registered`);
+    }
+
+    if (id) {
+      if (this.currentTheme) {
+        if (this.currentTheme.id !== id) {
+          this.currentTheme.sound.setVolume(0);
+
+          this.currentTheme = soundObject;
+
+          this.currentTheme.sound.setVolume(1);
+          if (!this.currentTheme.sound.isPlaying) {
+            this.currentTheme.sound.play(undefined, { loop: true });
+          }
+        }
+      } else {
+        this.currentTheme = soundObject;
+        this.currentTheme.sound.setVolume(1);
+        if (!this.currentTheme.sound.isPlaying) {
+          this.currentTheme.sound.play(undefined, { loop: true });
+        }
+      }
+    } else {
+      this.currentTheme.sound.setVolume(0);
+      this.currentTheme = null;
+    }
+  }
+
+  public playSfx(id: string, config?: SoundConfig) {
 
     if (!this.game) {
       throw new ReferenceError('GameSoundService is not initialized!');

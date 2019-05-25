@@ -8,7 +8,7 @@ import {
   MapObjectFactory,
   Player
 } from '../entities';
-import { AssetManager } from '../AssetManager';
+import { AssetManager } from '../assets/AssetManager';
 import { SceneIdentifier } from './SceneManager';
 import { LEVEL_1_DATA } from '../levels';
 import { GameDataService, GameMenuService } from '../../service';
@@ -48,7 +48,12 @@ export class GameScene extends Phaser.Scene {
     this.dataService = GameDataService.getInstance();
   }
 
+  preload(): void {
+    AssetManager.loadAssets(this);
+  }
+
   create(): void {
+    this.initializeSounds();
     AssetManager.loadAnimations(this);
     this.setupLevelMap();
 
@@ -73,6 +78,7 @@ export class GameScene extends Phaser.Scene {
       this.playerCollider.destroy();
       this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
 
+      this.setupMusicTheme(this.getCurrentLevel());
     });
 
     this.input.keyboard.on('keydown_ESC', () => {
@@ -81,7 +87,7 @@ export class GameScene extends Phaser.Scene {
 
     // const mainTheme = this.game.sound.add(AssetManager.soundAssets.main.name);
 
-    GameSoundService.getInstance().playSound(AssetManager.soundAssets.main.name);
+    // GameSoundService.getInstance().playSfx(AssetManager.soundAssets.main.name);
   }
 
   update(time: number, delta: number) {
@@ -181,6 +187,8 @@ export class GameScene extends Phaser.Scene {
     this.setupDialogs(currentLevel);
 
     this.setupTriggers(currentLevel);
+
+    this.setupMusicTheme(currentLevel);
   }
 
   private createLevelObjects(currentLevel: LevelMapData) {
@@ -270,5 +278,19 @@ export class GameScene extends Phaser.Scene {
     if (currentLevel.dialogs) {
       DialogManager.registerDialogs(currentLevel.dialogs);
     }
+  }
+
+  private setupMusicTheme(currentLevel: LevelMapData) {
+    if (this.ghostService.isGhostMode()) {
+      this.soundService.setTheme(currentLevel.ghostWorld.themeId);
+    } else {
+      this.soundService.setTheme(currentLevel.realWorld.themeId);
+    }
+  }
+
+  private initializeSounds() {
+    const soundService = GameSoundService.getInstance();
+    soundService.initialize(this.game);
+    soundService.addSoundsToGame(this.game);
   }
 }

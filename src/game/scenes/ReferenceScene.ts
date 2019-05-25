@@ -1,5 +1,5 @@
-import Phaser from "phaser";
-import { AssetManager } from '../AssetManager';
+import Phaser from 'phaser';
+import { AssetManager } from '../assets/AssetManager';
 import { SceneIdentifier } from './SceneManager';
 
 export default class ReferenceScene extends Phaser.Scene {

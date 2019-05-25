@@ -2,6 +2,7 @@ import { Asset } from './AssetManager';
 
 export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
 export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
+export const GHOST_THEME_AUDIO_ID = 'GHOST_THEME_AUDIO';
 export const FOREST_AMBIENT_AUDIO_ID = 'FOREST_AMBIENT_AUDIO';
 export const CITY_AMBIENT_AUDIO_ID = 'CITY_AMBIENT_AUDIO';
 
@@ -11,13 +12,18 @@ export interface SoundAsset extends Asset {
 
 export const mainThemeAudioAsset: SoundAsset = {
   name: MAIN_THEME_AUDIO_ID,
-  file: '/sounds/main_theme.mp3',
+  file: '/sounds/theme_main.mp3',
+};
+
+export const ghostThemeAudioAsset: SoundAsset = {
+  name: GHOST_THEME_AUDIO_ID,
+  file: '/sounds/theme_ghost.mp3',
 };
 
 export const dashSoundAsset: SoundAsset = {
   name: DASH_SOUND_ASSET_ID,
   file: '/sounds/dash.mp3',
-  soundConfig: { loop: false, volume: 0.05 },
+  soundConfig: { loop: false, volume: 0.3 },
 };
 
 export const forestAmbientAudioAsset: SoundAsset = {

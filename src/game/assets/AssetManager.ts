@@ -2,7 +2,7 @@ import { LevelObjectAnimation } from '../entities/LevelMap';
 import {
   cityAmbientAudioAsset,
   dashSoundAsset,
-  forestAmbientAudioAsset,
+  forestAmbientAudioAsset, ghostThemeAudioAsset,
   mainThemeAudioAsset,
   SoundAsset
 } from './sound-assets';
@@ -218,6 +218,7 @@ export class AssetManager {
 
   public static readonly musicThemes: SoundAsset[] = [
     mainThemeAudioAsset,
+    ghostThemeAudioAsset,
     forestAmbientAudioAsset,
     cityAmbientAudioAsset
   ];

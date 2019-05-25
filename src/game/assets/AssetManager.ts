@@ -1,27 +1,25 @@
-import { LevelObjectAnimation } from './entities/LevelMap';
-import { GameScene } from './scenes/GameScene';
+import { LevelObjectAnimation } from '../entities/LevelMap';
+import {
+  cityAmbientAudioAsset,
+  dashSoundAsset,
+  forestAmbientAudioAsset,
+  mainThemeAudioAsset,
+  SoundAsset
+} from './sound-assets';
 
 export const ENVIRONMENT_GRAPHICAL_ASSET_ID = 'ENVIRONMENT_GRAPHICAL_ASSET';
 export const GHOST_ENVIRONMENT_GRAPHICAL_ASSET_ID = 'GHOST_ENVIRONMENT_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
-export const ITEMS_GRAPHICAL_ASSET_ID = 'ITEMS_GRAPHICAL_ASSET';
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
-export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
-
-export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
 
 export type Animation = Phaser.Animations.Types.GenerateFrameNumbers & {name: string, frameRate: number, repeat: boolean};
 
 export interface Asset {
   name: string;
   file: string;
-}
-
-export interface SoundAsset extends Asset {
-  soundConfig?: SoundConfig;
 }
 
 export interface GraphicalAsset extends Asset {
@@ -39,18 +37,6 @@ export type AnimationMap = {
 export interface SpriteAsset extends GraphicalAsset {
   animations: AnimationMap;
 }
-
-const mainThemeAudioAsset: SoundAsset = {
-  name: MAIN_THEME_AUDIO_ID,
-  file: '/sounds/main_theme.mp3',
-};
-
-const dashSoundAsset: SoundAsset = {
-  name: DASH_SOUND_ASSET_ID,
-  file: '/sounds/dash.mp3',
-  soundConfig: { loop: false, volume: 0.05 },
-};
-
 const environmentGraphicalAsset: GraphicalAsset = {
   name: ENVIRONMENT_GRAPHICAL_ASSET_ID,
   width: 16,
@@ -227,8 +213,13 @@ export class AssetManager {
   ];
 
   public static readonly sounds: SoundAsset[] = [
-    dashSoundAsset,
-    mainThemeAudioAsset
+    dashSoundAsset
+  ];
+
+  public static readonly musicThemes: SoundAsset[] = [
+    mainThemeAudioAsset,
+    forestAmbientAudioAsset,
+    cityAmbientAudioAsset
   ];
 
   public static readonly graphicalAssets: { [id: string]: GraphicalAsset } = {
@@ -265,6 +256,7 @@ export class AssetManager {
     AssetManager.sprites.forEach(el => AssetManager.loadSprite(scene, el));
 
     AssetManager.sounds.forEach(el => scene.load.audio(el.name, el.file));
+    AssetManager.musicThemes.forEach(el => scene.load.audio(el.name, el.file));
   }
 
   public static getSpriteAssetByKey(key: string): SpriteAsset {

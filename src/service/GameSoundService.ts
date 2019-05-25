@@ -59,22 +59,24 @@ export class GameSoundService {
     }
 
     if (id) {
+      const desiredVolume = soundObject.asset.soundConfig && soundObject.asset.soundConfig.volume ? soundObject.asset.soundConfig.volume : 1;
+
       if (this.currentTheme) {
         if (this.currentTheme.id !== id) {
           this.currentTheme.sound.setVolume(0);
 
           this.currentTheme = soundObject;
 
-          this.currentTheme.sound.setVolume(1);
+          this.currentTheme.sound.setVolume(desiredVolume);
           if (!this.currentTheme.sound.isPlaying) {
-            this.currentTheme.sound.play(undefined, { loop: true });
+            this.currentTheme.sound.play(undefined, {loop: true});
           }
         }
       } else {
         this.currentTheme = soundObject;
-        this.currentTheme.sound.setVolume(1);
+        this.currentTheme.sound.setVolume(desiredVolume);
         if (!this.currentTheme.sound.isPlaying) {
-          this.currentTheme.sound.play(undefined, { loop: true });
+          this.currentTheme.sound.play(undefined, {loop: true});
         }
       }
     } else {

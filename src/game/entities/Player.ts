@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetManager, SpriteAsset } from '../AssetManager';
+import { AssetManager, SpriteAsset } from '../assets/AssetManager';
 import { GameSoundService } from '../../service/GameSoundService';
 import { GameGhostService } from '../../service/GameGhostService';
 import { LevelMap, LevelObjectAnimation } from './LevelMap';
@@ -146,7 +146,7 @@ export class Player {
       this.body.velocity.length() > 0 &&
       this.ghostService.isGhostMode()
     ) {
-      GameSoundService.getInstance().playSound(AssetManager.soundAssets.dash.name);
+      GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
       this.attackUntil = time + attackDuration;
       this.attackLockedUntil = time + attackDuration + attackCooldown;
       this.body.velocity.normalize().scale(attackSpeed);

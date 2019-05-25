@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetManager } from '../AssetManager';
+import { AssetManager } from '../assets/AssetManager';
 import { LevelMap, LevelMapData, LightSettings, LightSource, MapPosition } from './LevelMap';
 import { GameGhostService } from '../../service/GameGhostService';
 

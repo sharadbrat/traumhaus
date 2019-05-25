@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AssetManager, SpriteAsset } from '../AssetManager';
+import { AssetManager, SpriteAsset } from '../assets/AssetManager';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service/GameGhostService';
 import { TriggerCallback } from '../TriggerManager';
@@ -45,6 +45,7 @@ export interface World {
   lightSettings: LightSettings;
   doors?: Door[];
   objects?: LevelObjectData[];
+  themeId: string;
 }
 
 export enum LevelObjectAnimation {
@@ -110,7 +111,7 @@ export interface LevelMapData {
   ghostWorld?: World;
   startPosition?: MapPosition;
   triggerActions?: TriggerAction[];
-  dialogs?: GameDialog[]
+  dialogs?: GameDialog[];
 }
 
 export interface TriggerAction {

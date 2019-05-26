@@ -198,7 +198,7 @@ export const LEVEL_1_DATA: LevelMapData = {
     {
       action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
       callback: (content: TriggerContents) => {
-        DialogManager.runDialog(LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG);
+        content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG);
       }
     },
     {

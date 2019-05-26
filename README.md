@@ -37,7 +37,7 @@ Your app is ready to be deployed!
 
 Florian Batze - Graphics
 Jacob Januar - Music
-Georgii Sharadze - coding
+Georgii Sharadze - Coding
 
 ### Things to do
 - Rotate level map + 
@@ -50,12 +50,16 @@ Georgii Sharadze - coding
 - Game pausing +
 - Several graphical layers (Background and foreground layers) + 
 - Change to free assets +
-- Trigger system
-- Dialogs and cut scenes
+- Trigger system +
+- Dialogs + 
+- Action mechanics +
+- Refactoring +
+- Sound manager +
+- Game state system +
+- Game saving / loading +
+- Ambient sounds
+- Controls manager
 - HUD
-- Action mechanics
 - Shooting mechanics
-- Change of collision for jumping/crouching objects layer
-- Game saving / loading
 - Enemies
 - Netlify toml

@@ -14,8 +14,7 @@ export class HomePage extends React.Component<HomePageProps> {
   private progress: GameProgress;
 
   componentWillMount(): void {
-    // this.progress = GameProgressService.getInstance().getProgressFromLocalStorage();
-    this.progress = {};
+    this.progress = GameProgressService.getInstance().getProgressFromLocalStorage();
   }
 
   onContinueClick = (event: React.MouseEvent) => {

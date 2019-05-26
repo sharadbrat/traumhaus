@@ -8,12 +8,10 @@ import {
   MapObjectFactory,
   Player
 } from '../entities';
-import { AssetManager } from '../assets/AssetManager';
+import { AssetManager } from '../assets';
 import { SceneIdentifier } from './SceneManager';
 import { LEVEL_1_DATA } from '../levels';
-import { GameProgressService, GameMenuService } from '../../service';
-import { GameSoundService } from '../../service/GameSoundService';
-import { GameGhostService } from '../../service/GameGhostService';
+import { GameProgressService, GameMenuService, GameGhostService, GameSoundService } from '../../service';
 import { TriggerManager } from '../TriggerManager';
 import { DialogManager } from '../dialogs';
 
@@ -31,7 +29,7 @@ export class GameScene extends Phaser.Scene {
   private ghostService: GameGhostService;
   private menuService: GameMenuService;
   private soundService: GameSoundService;
-  private dataService: GameProgressService;
+  private progressService: GameProgressService;
 
   private realWorldObjects: LevelObject[];
   private ghostWorldObjects: LevelObject[];
@@ -45,7 +43,7 @@ export class GameScene extends Phaser.Scene {
     this.menuService = GameMenuService.getInstance();
     this.ghostService = GameGhostService.getInstance();
     this.soundService = GameSoundService.getInstance();
-    this.dataService = GameProgressService.getInstance();
+    this.progressService = GameProgressService.getInstance();
   }
 
   preload(): void {
@@ -67,18 +65,20 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.input.keyboard.on('keydown_Q', () => {
-      const mode = !this.ghostService.isGhostMode();
+      if (this.progressService.getProgress().canBecomeGhost) {
+        const mode = !this.ghostService.isGhostMode();
 
-      this.ghostService.setGhostMode(mode);
-      this.lightLayer.setGhostMode(mode);
-      this.levelMap.setGhostMode(mode);
-      this.player.setGhostMode(mode);
-      this.setObjectsGhostMode(mode);
+        this.ghostService.setGhostMode(mode);
+        this.lightLayer.setGhostMode(mode);
+        this.levelMap.setGhostMode(mode);
+        this.player.setGhostMode(mode);
+        this.setObjectsGhostMode(mode);
 
-      this.playerCollider.destroy();
-      this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
+        this.playerCollider.destroy();
+        this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
 
-      this.setupMusicTheme(this.getCurrentLevel());
+        this.setupMusicTheme(this.getCurrentLevel());
+      }
     });
 
     this.input.keyboard.on('keydown_ESC', () => {
@@ -118,15 +118,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createCollider() {
-    // todo: move collider creation here;
+    this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
   }
 
   private getCurrentLevel(): LevelMapData {
-    let level = this.dataService.getCurrentLevel();
+    let level = this.progressService.getCurrentLevel();
 
     if (!level) {
       level = LEVEL_1_DATA;
-      this.dataService.setCurrentLevel(level);
+      this.progressService.setCurrentLevel(level);
     }
 
     return level;
@@ -134,12 +134,12 @@ export class GameScene extends Phaser.Scene {
 
   private createPlayer(): Player {
     let pos;
-    let lastDoor = this.dataService.getLastDoor();
+    let lastDoor = this.progressService.getLastDoor();
 
     if (lastDoor) {
       pos = lastDoor.toPosition;
     } else {
-      pos = this.dataService.getCurrentLevel().startPosition;
+      pos = this.progressService.getCurrentLevel().startPosition;
     }
 
     return new Player(
@@ -179,8 +179,10 @@ export class GameScene extends Phaser.Scene {
     this.createLevelObjects(currentLevel);
 
     this.player = this.createPlayer();
+
     this.createCamera(this.levelMap);
-    this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
+
+    this.createCollider();
 
     this.lightLayer = new LightLayer(this.levelMap);
 

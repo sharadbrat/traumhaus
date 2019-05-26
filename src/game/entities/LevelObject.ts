@@ -1,6 +1,12 @@
 import { LevelMap, LevelObjectData, MapPosition, Trigger, TriggerEvent } from './LevelMap';
 import { GameScene } from '../scenes/GameScene';
-import { TriggerManager } from '../TriggerManager';
+import { TriggerContents, TriggerManager } from '../TriggerManager';
+import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
+import { DialogManager } from '../dialogs';
+import { GameManager } from '../GameManager';
+import { AssetManager } from '../assets';
+import { SceneManager } from '../scenes/SceneManager';
+import { LevelManager } from '../levels';
 
 export type CheckedTrigger = Trigger & { lastCheckedOn: number };
 
@@ -93,18 +99,16 @@ export class LevelObject {
     const player = this.scene.getPlayer();
 
     if (this.isCollided) {
-      TriggerManager.fire(trigger.action, this.scene, this, player);
+      TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }
   }
 
   protected checkActionTrigger(trigger: CheckedTrigger, time: number) {
-    const player = this.scene.getPlayer();
+    const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
 
-    const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
-
-    if (player.getKeys().u.isDown && distance < 20) {
-      TriggerManager.fire(trigger.action, this.scene, this, player);
+    if (this.scene.getPlayer().getKeys().u.isDown && distance < 20) {
+      TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }
   }
@@ -114,17 +118,38 @@ export class LevelObject {
   }
 
   protected checkInNearAreaTrigger(trigger: CheckedTrigger, time: number) {
-    const player = this.scene.getPlayer();
 
-    const distance = this.getDistance(this.sprite.body.center, player.getBody().center);
+    const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
 
     if (distance < 20) {
-      TriggerManager.fire(trigger.action, this.scene, this, player);
+      TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }
   }
 
   protected getDistance(obj1: Phaser.Math.Vector2, obj2: Phaser.Math.Vector2): number {
     return obj1.distance(obj2);
+  }
+
+  protected getTriggerContentObject(): TriggerContents {
+    return {
+      scene: this.scene,
+      player: this.scene.getPlayer(),
+      object: this,
+      services: {
+        progress: GameProgressService.getInstance(),
+        ghost: GameGhostService.getInstance(),
+        sound: GameSoundService.getInstance(),
+        menu: GameMenuService.getInstance(),
+      },
+      managers: {
+        dialog: DialogManager,
+        trigger: TriggerManager,
+        game: GameManager,
+        asset: AssetManager,
+        scene: SceneManager,
+        level: LevelManager,
+      }
+    };
   }
 }

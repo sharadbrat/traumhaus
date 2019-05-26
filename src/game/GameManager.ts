@@ -14,16 +14,13 @@ export class GameManager {
 
   constructor(options: GameManagerOptions) {
     this.canvas = options.canvas;
-    window.addEventListener('resize', () => {
-      // this.game.canvas.width = window.innerWidth;
-      // this.game.canvas.height = window.innerHeight;
-      // this.game.resize(window.innerWidth, window.innerHeight);
-    });
   }
 
+  public getGame(): Game {
+    return this.game;
+  }
 
-  // todo: add impl of running a game from data, which is basically a loading of progress feature
-  public run(data?: any) {
+  public run() {
     this.game = new Game(this.canvas);
   }
 

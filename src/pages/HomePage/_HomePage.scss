@@ -27,4 +27,14 @@
 
 .home__link {
   @include PageLink();
+
+  &.home__link_inactive {
+    color: lighten($color-dark-text-primary, 40);
+
+    cursor: not-allowed;
+
+    &:before {
+      display: none;
+    }
+  }
 }

@@ -1,12 +1,15 @@
 import * as React from 'react';
 
 import './_GamePage.scss';
-import { GameManager, GameManagerOptions } from '../../game';
-import { GameMenuService } from '../../service';
-import { TriggerManager } from '../../game/TriggerManager';
+import { AssetManager, GameManager, GameManagerOptions } from '../../game';
+import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
+import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
 import { Dialog } from '../../components';
 import { Menu } from '../../components';
+import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
+import { LevelManager } from '../../game/levels';
+import { GameScene } from '../../game/scenes/GameScene';
 
 interface GamePageProps {
   history: History;
@@ -93,7 +96,7 @@ export class GamePage extends React.Component<any, GamePageState> {
             window.removeEventListener('keydown', keydownListener);
             this.setState({dialogStep: null, isDialogActive: false});
             if (dialog.onDialogFinishedTrigger) {
-              TriggerManager.fire(dialog.onDialogFinishedTrigger, null, null, null);
+              TriggerManager.fire(dialog.onDialogFinishedTrigger, this.getTriggerContentObject());
             }
           }
         }
@@ -117,6 +120,29 @@ export class GamePage extends React.Component<any, GamePageState> {
         </div>
       </section>
     );
+  }
+
+  private getTriggerContentObject(): TriggerContents {
+    const game = this.gameManager.getGame();
+    const scene = game.scene.getScene(SceneIdentifier.GAME_SCENE) as GameScene;
+    return {
+      scene: scene,
+      player: scene.getPlayer(),
+      services: {
+        progress: GameProgressService.getInstance(),
+        ghost: GameGhostService.getInstance(),
+        sound: GameSoundService.getInstance(),
+        menu: GameMenuService.getInstance(),
+      },
+      managers: {
+        dialog: DialogManager,
+        trigger: TriggerManager,
+        game: GameManager,
+        asset: AssetManager,
+        scene: SceneManager,
+        level: LevelManager,
+      }
+    }
   }
 
 }

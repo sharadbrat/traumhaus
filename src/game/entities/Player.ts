@@ -1,9 +1,8 @@
 import Phaser from 'phaser';
-import { AssetManager, SpriteAsset } from '../assets/AssetManager';
-import { GameSoundService } from '../../service/GameSoundService';
-import { GameGhostService } from '../../service/GameGhostService';
+import { AssetManager, SpriteAsset } from '../assets';
+import { GameGhostService, GameSoundService } from '../../service';
 import { LevelMap, LevelObjectAnimation } from './LevelMap';
-import { TriggerManager } from '../TriggerManager';
+import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
 import { GameScene } from '../scenes/GameScene';
 import { LevelObject } from './LevelObject';
@@ -87,7 +86,7 @@ export class Player {
 
     this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
 
-    TriggerManager.add(NPC_TRIGGERS_ACTIONS.ON_IN_NEAR_AREA, (scene: GameScene, object: LevelObject, player: Player) => {
+    TriggerManager.add(NPC_TRIGGERS_ACTIONS.ON_IN_NEAR_AREA, (content: TriggerContents) => {
       // todo: add glowing implementation
       console.log('near');
     });

@@ -2,6 +2,7 @@ import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities';
 import { AssetManager } from '../assets/AssetManager';
 import { DialogManager, GameDialogActor } from '../dialogs';
 import { CITY_AMBIENT_AUDIO_ID, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
+import { TriggerContents } from '../TriggerManager';
 
 export const LEVEL_1_TRIGGER_ACTIONS = {
   ON_PROFESSOR_COLLIDE: 'ON_PROFESSOR_COLLIDE',
@@ -190,20 +191,20 @@ export const LEVEL_1_DATA: LevelMapData = {
   triggerActions: [
     {
       action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_COLLIDE,
-      callback: (scene, object, player) => {
+      callback: (content: TriggerContents) => {
         console.log('collision happened!');
       }
     },
     {
       action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
-      callback: (scene, object, player) => {
+      callback: (content: TriggerContents) => {
         DialogManager.runDialog(LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG);
       }
     },
     {
       action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_DIALOG_FINISHED,
-      callback: (scene, object, player) => {
-        console.log('Wow!');
+      callback: (content: TriggerContents) => {
+        content.services.progress.getProgress().canBecomeGhost = true;
       }
     },
   ],

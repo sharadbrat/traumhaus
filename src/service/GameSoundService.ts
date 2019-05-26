@@ -8,6 +8,8 @@ interface SoundObject {
 }
 
 export class GameSoundService {
+  private static readonly THEME_FADE_TIME = 400;
+
   private static instance: GameSoundService;
   private game: Phaser.Game;
   private sounds: SoundObject[];
@@ -52,7 +54,7 @@ export class GameSoundService {
     })
   }
 
-  public setTheme(id: string | null) {
+  public setTheme(id: string | null, scene: Phaser.Scene) {
     const soundObject = this.themes.find(el => el.id === id);
     if (!soundObject) {
       throw new ReferenceError(`Theme with id "${id}" is not registered`);
@@ -63,18 +65,20 @@ export class GameSoundService {
 
       if (this.currentTheme) {
         if (this.currentTheme.id !== id) {
-          this.currentTheme.sound.setVolume(0);
+          // this.currentTheme.sound.setVolume(0);
+          this.fadeSound(this.currentTheme.sound, scene, 0);
 
           this.currentTheme = soundObject;
 
-          this.currentTheme.sound.setVolume(desiredVolume);
+          this.fadeSound(soundObject.sound, scene, desiredVolume);
           if (!this.currentTheme.sound.isPlaying) {
             this.currentTheme.sound.play(undefined, {loop: true});
           }
         }
       } else {
         this.currentTheme = soundObject;
-        this.currentTheme.sound.setVolume(desiredVolume);
+        // this.currentTheme.sound.setVolume(desiredVolume);
+        this.fadeSound(soundObject.sound, scene, desiredVolume);
         if (!this.currentTheme.sound.isPlaying) {
           this.currentTheme.sound.play(undefined, {loop: true});
         }
@@ -106,5 +110,14 @@ export class GameSoundService {
 
     // todo: add implementation
 
+  }
+
+  private fadeSound(sound: Phaser.Sound.WebAudioSound, scene: Phaser.Scene, volume: number) {
+    scene.tweens.add({
+      targets: this.currentTheme.sound,
+      volume: volume,
+      ease: 'Linear',
+      duration: GameSoundService.THEME_FADE_TIME,
+    });
   }
 }

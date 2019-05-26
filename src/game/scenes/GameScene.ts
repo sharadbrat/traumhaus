@@ -11,7 +11,7 @@ import {
 import { AssetManager } from '../assets/AssetManager';
 import { SceneIdentifier } from './SceneManager';
 import { LEVEL_1_DATA } from '../levels';
-import { GameDataService, GameMenuService } from '../../service';
+import { GameProgressService, GameMenuService } from '../../service';
 import { GameSoundService } from '../../service/GameSoundService';
 import { GameGhostService } from '../../service/GameGhostService';
 import { TriggerManager } from '../TriggerManager';
@@ -31,7 +31,7 @@ export class GameScene extends Phaser.Scene {
   private ghostService: GameGhostService;
   private menuService: GameMenuService;
   private soundService: GameSoundService;
-  private dataService: GameDataService;
+  private dataService: GameProgressService;
 
   private realWorldObjects: LevelObject[];
   private ghostWorldObjects: LevelObject[];
@@ -45,7 +45,7 @@ export class GameScene extends Phaser.Scene {
     this.menuService = GameMenuService.getInstance();
     this.ghostService = GameGhostService.getInstance();
     this.soundService = GameSoundService.getInstance();
-    this.dataService = GameDataService.getInstance();
+    this.dataService = GameProgressService.getInstance();
   }
 
   preload(): void {
@@ -94,8 +94,8 @@ export class GameScene extends Phaser.Scene {
     const door = this.levelMap.checkPlayerDoorCollision(this.player.getBody());
 
     if (door) {
-      GameDataService.getInstance().changeLevel(door.toId);
-      GameDataService.getInstance().setLastDoor(door);
+      GameProgressService.getInstance().changeLevel(door.toId);
+      GameProgressService.getInstance().setLastDoor(door);
       this.scene.start(SceneIdentifier.GAME_SCENE);
       return;
     } else {
@@ -121,7 +121,7 @@ export class GameScene extends Phaser.Scene {
     // todo: move collider creation here;
   }
 
-  private getCurrentLevel() {
+  private getCurrentLevel(): LevelMapData {
     let level = this.dataService.getCurrentLevel();
 
     if (!level) {
@@ -282,9 +282,9 @@ export class GameScene extends Phaser.Scene {
 
   private setupMusicTheme(currentLevel: LevelMapData) {
     if (this.ghostService.isGhostMode()) {
-      this.soundService.setTheme(currentLevel.ghostWorld.themeId);
+      this.soundService.setTheme(currentLevel.ghostWorld.themeId, this);
     } else {
-      this.soundService.setTheme(currentLevel.realWorld.themeId);
+      this.soundService.setTheme(currentLevel.realWorld.themeId, this);
     }
   }
 

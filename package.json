@@ -5,6 +5,7 @@
   "author": "Georgii Sharadze, Florian Batze, Jacob Januar",
   "dependencies": {
     "node-sass": "4.11.0",
+    "pathfinding": "0.4.18",
     "phaser": "3.16.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",

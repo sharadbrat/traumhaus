@@ -1,7 +1,8 @@
-import { Door, LevelMapData } from '../game/entities';
 import { LevelManager } from '../game/levels';
+import { Door, LevelMapData } from '../game/entities/model';
 
 export interface GameProgress {
+  isVulnerable?: boolean;
   canBecomeGhost?: boolean;
   currentLevel?: LevelMapData;
 }
@@ -16,7 +17,9 @@ export class GameProgressService {
   private lastDoor: Door;
 
   private constructor() {
-    this.gameProgress = {};
+    this.gameProgress = {
+      isVulnerable: true,
+    };
   }
 
   public static getInstance(): GameProgressService {

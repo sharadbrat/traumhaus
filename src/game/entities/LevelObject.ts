@@ -1,4 +1,3 @@
-import { LevelMap, LevelObjectData, MapPosition, Trigger, TriggerEvent } from './LevelMap';
 import { GameScene } from '../scenes/GameScene';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
@@ -7,6 +6,8 @@ import { GameManager } from '../GameManager';
 import { AssetManager } from '../assets';
 import { SceneManager } from '../scenes/SceneManager';
 import { LevelManager } from '../levels';
+import { LevelObjectData, MapPosition, Trigger, TriggerEvent } from './model';
+import { LevelMap } from './LevelMap';
 
 export type CheckedTrigger = Trigger & { lastCheckedOn: number };
 
@@ -21,6 +22,7 @@ export class LevelObject {
   protected tilemap: Phaser.Tilemaps.Tilemap;
   protected triggers: CheckedTrigger[];
   protected isCollided: boolean;
+  protected isInGhostWorld: boolean;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     this.scene = scene;
@@ -34,10 +36,18 @@ export class LevelObject {
     }
 
     this.isCollided = false;
+
+    if (GameGhostService.getInstance().isGhostMode()) {
+      this.isInGhostWorld = true;
+    } else {
+      this.isInGhostWorld = false;
+    }
   }
 
   update(time: number) {
-    // time in milliseconds
+    if (this.isInDifferentWorld()) {
+      return;
+    }
 
     if (this.options.isCollideable) {
       this.isCollided = this.scene.physics.collide(this.scene.getPlayer().getSprite(), this.sprite);
@@ -48,9 +58,23 @@ export class LevelObject {
     }
   }
 
+  public isInDifferentWorld() {
+    if (this.isInGhostWorld && !GameGhostService.getInstance().isGhostMode()) {
+      return true;
+    }
+
+    if (!this.isInGhostWorld && GameGhostService.getInstance().isGhostMode()) {
+      return true;
+    }
+  }
+
   public setVisible(val: boolean) {
     this.isVisible = val;
     this.sprite.setVisible(this.isVisible);
+  }
+
+  public getPosition(): MapPosition {
+    return this.sprite.body.position;
   }
 
   protected setupSprite(options: LevelObjectData) {

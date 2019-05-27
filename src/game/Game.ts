@@ -13,7 +13,13 @@ export class Game extends Phaser.Game {
       render: {pixelArt: true},
       canvas: canvas,
       autoFocus: true,
-      physics: {default: 'arcade', arcade: {debug: false, gravity: {y: 0}}},
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: process.env.NODE_ENV === 'development',
+          gravity: {y: 0}
+        }
+      },
     };
     super(gameConfig);
 

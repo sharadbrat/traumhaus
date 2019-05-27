@@ -1,128 +1,8 @@
 import Phaser from 'phaser';
-import { AssetManager, SpriteAsset } from '../assets/AssetManager';
-import { GameScene } from '../scenes/GameScene';
-import { GameGhostService } from '../../service/GameGhostService';
-import { TriggerCallback } from '../TriggerManager';
-import { GameDialog } from '../dialogs';
 
-export type CollisionDetector = 0 | 1;
-
-export interface MapPosition {
-  x: number;
-  y: number;
-}
-
-export interface Door {
-  fromPosition: MapPosition;
-  toPosition: MapPosition;
-  toId: string;
-}
-
-export interface LightSource {
-  id: string,
-  radius: number;
-  rolloff: number;
-  position: MapPosition;
-}
-
-export interface LightSettings {
-  playerLightRadius: number;
-  playerLightRolloff: number;
-  fogAlpha: number;
-  sources?: LightSource[];
-  fogColor?: number;
-}
-
-export interface GraphicLayer {
-  tileMapId: string;
-  tileMap: number[][];
-}
-
-export interface World {
-  collisionMap: CollisionDetector[][];
-  backgroundGraphicLayers: GraphicLayer[];
-  foregroundGraphicLayers?: GraphicLayer[];
-  lightSettings: LightSettings;
-  doors?: Door[];
-  objects?: LevelObjectData[];
-  themeId: string;
-}
-
-export enum LevelObjectAnimation {
-  IDLE = 'idle',
-  WALK = 'walk',
-  WALK_BACK = 'walk_back',
-  SLASH = 'slash',
-  SLASH_DOWN = 'slash_down',
-  SLASH_UP = 'slash_up',
-  HIT = 'hit',
-}
-
-export enum TriggerEvent {
-  ON_COLLIDE,
-  ON_ACTION,
-  ON_IN_AREA,
-  ON_IN_NEAR_AREA,
-}
-
-export interface Trigger {
-  event: TriggerEvent;
-  action: string;
-  fixTime: number;
-}
-
-export enum LevelObjectType {
-  STATIC,
-  NPC,
-  ENEMY
-}
-
-export interface LevelObjectGraphicData {
-  asset: SpriteAsset;
-  offsetX: number;
-  offsetY: number;
-}
-
-export interface LevelObjectData {
-  id: string;
-  type: LevelObjectType;
-  isCollideable: boolean;
-
-  position: MapPosition;
-  width: number;
-  height: number;
-
-  graphics: LevelObjectGraphicData;
-
-  triggers?: Trigger[];
-
-  meta?: LevelObjectMeta;
-}
-
-export interface LevelObjectMeta {
-  talkable?: boolean;
-}
-
-export interface LevelMapData {
-  id: string;
-  width: number;
-  height: number;
-  realWorld?: World;
-  ghostWorld?: World;
-  startPosition?: MapPosition;
-  triggerActions?: TriggerAction[];
-  dialogs?: GameDialog[];
-}
-
-export interface TriggerAction {
-  action: string;
-  callback: TriggerCallback;
-}
-
-export interface LevelMapConstructorOptions {
-  data: LevelMapData;
-  scene: GameScene;
-}
+import { AssetManager } from '../assets';
+import { GameGhostService } from '../../service';
+import { CollisionDetector, Door, LevelMapConstructorOptions, LevelMapData } from './model';
 
 export class LevelMap {
   static readonly REAL_BACKGROUND_GRAPHIC_LAYER_ID = 'REAL_BACKGROUND_GRAPHIC';
@@ -162,7 +42,7 @@ export class LevelMap {
 
     this.tilemap = this.createTilemap(options.scene, options.data.width, options.data.height);
 
-    this.utilTiles = this.tilemap.addTilesetImage(AssetManager.util.name);
+    this.utilTiles = this.tilemap.addTilesetImage(AssetManager.graphicalAssets.util.name);
 
     if (options.data.realWorld) {
       this.realBackgroundGraphicLayers = [];
@@ -299,12 +179,12 @@ export class LevelMap {
 
   private createTilemap(scene: Phaser.Scene, width: number, height: number): Phaser.Tilemaps.Tilemap {
     const tilemap = scene.make.tilemap({
-      tileWidth: AssetManager.environment.width,
-      tileHeight: AssetManager.environment.height,
+      tileWidth: AssetManager.TILE_SIZE,
+      tileHeight: AssetManager.TILE_SIZE,
       width: width,
       height: height,
     });
-    tilemap.setBaseTileSize(AssetManager.environment.width, AssetManager.environment.height);
+    tilemap.setBaseTileSize(AssetManager.TILE_SIZE, AssetManager.TILE_SIZE);
     return tilemap;
   }
 
@@ -322,7 +202,7 @@ export class LevelMap {
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
         if (collisionMap[y][x] === 1) {
-          collisionLayer.putTileAt(AssetManager.util.indices.transparent, x, y);
+          collisionLayer.putTileAt(AssetManager.graphicalAssets.util.indices.transparent, x, y);
         }
       }
     }

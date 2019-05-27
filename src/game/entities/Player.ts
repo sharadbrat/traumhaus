@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
 import { AssetManager, SpriteAsset } from '../assets';
 import { GameGhostService, GameSoundService } from '../../service';
-import { LevelMap, LevelObjectAnimation } from './LevelMap';
+import { LevelMap } from './LevelMap';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
-import { GameScene } from '../scenes/GameScene';
-import { LevelObject } from './LevelObject';
+import { ENEMY_TRIGGERS_ACTIONS } from './EnemyLevelObject';
+import { LevelObjectAnimation, MapPosition } from './model';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -26,6 +26,8 @@ interface Keys {
 }
 
 export class Player {
+  private static readonly INVULNERABLE_TIME = 3000;
+
 
   private sprite: Phaser.Physics.Arcade.Sprite;
   private ghostSprite: Phaser.Physics.Arcade.Sprite;
@@ -89,6 +91,12 @@ export class Player {
     TriggerManager.add(NPC_TRIGGERS_ACTIONS.ON_IN_NEAR_AREA, (content: TriggerContents) => {
       // todo: add glowing implementation
       console.log('near');
+    });
+
+    TriggerManager.add(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, (content: TriggerContents) => {
+      if (content.services.progress.getProgress().isVulnerable) {
+        this.onPlayerHit(content);
+      }
     });
   }
 
@@ -180,6 +188,10 @@ export class Player {
     return this.keys;
   }
 
+  public getPosition(): MapPosition {
+    return this.sprite.body.position;
+  }
+
   private setupSprite(x: number, y: number, asset: SpriteAsset) {
     const offsetX = 12;
     const offsetY = 20;
@@ -194,5 +206,40 @@ export class Player {
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
 
     return sprite;
+  }
+
+  private onPlayerHit(content: TriggerContents) {
+    const enemyPos = content.object.getPosition();
+    const playerPos = content.player.getPosition();
+
+    const force = {
+      x: playerPos.x - enemyPos.x,
+      y: playerPos.y - enemyPos.y,
+    };
+
+    // todo: add movement lock
+    content.services.progress.getProgress().isVulnerable = false;
+    this.sprite.setAcceleration(force.x * 3000, force.y * 3000);
+    this.sprite.setAlpha(0.5);
+    this.sprite.setTint(0xFFAAAA);
+
+    content.scene.getCamera().shake(100, 0.0007);
+
+    setTimeout(() => {
+      content.scene.getCamera().flash(Player.INVULNERABLE_TIME * 2/3, 128, 32, 32);
+    }, 70);
+
+    setTimeout(() => {
+      // todo: add movement unlock
+      this.sprite.setAcceleration(0);
+    }, 200);
+
+    setTimeout(() => {
+      this.sprite.setAlpha(1);
+      this.sprite.setTint(0xFFFFFF);
+      content.services.progress.getProgress().isVulnerable = true;
+    }, Player.INVULNERABLE_TIME);
+
+    content.services.sound.playSfx(AssetManager.soundAssets.hit.name);
   }
 }

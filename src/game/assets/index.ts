@@ -1,2 +1,3 @@
 export * from './AssetManager';
-export * from './sound-assets';
+export * from './SoundAssets';
+export * from './GraphicalAssets';

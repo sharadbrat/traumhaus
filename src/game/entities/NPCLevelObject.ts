@@ -1,6 +1,6 @@
 import { CheckedTrigger, LevelObject } from './LevelObject';
 import { GameScene } from '../scenes/GameScene';
-import { LevelObjectData, TriggerEvent } from './LevelMap';
+import { LevelObjectData, TriggerEvent } from './model';
 
 export const NPC_TRIGGERS_ACTIONS = {
   ON_IN_NEAR_AREA: 'ON_NPC_IN_NEAR_AREA',
@@ -30,6 +30,10 @@ export class NPCLevelObject extends LevelObject {
 
   public update(time: number) {
     super.update(time);
+
+    if (this.isInDifferentWorld()) {
+      return;
+    }
 
     if (this.options.meta && this.options.meta.talkable) {
       if (time > this.npcTriggers.inNearArea.fixTime + this.npcTriggers.inNearArea.lastCheckedOn) {

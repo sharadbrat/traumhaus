@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
-import { AssetManager } from '../assets/AssetManager';
-import { LevelMap, LevelMapData, LightSettings, LightSource, MapPosition } from './LevelMap';
-import { GameGhostService } from '../../service/GameGhostService';
+
+import { AssetManager } from '../assets';
+import { GameGhostService } from '../../service';
+import { LevelMapData, LightSettings, LightSource, MapPosition } from './model';
+import { LevelMap } from './LevelMap';
 
 interface LightSourceSetup {
   id: string,
@@ -31,13 +33,13 @@ export class LightLayer {
   private currentLightSettings: LightSetup;
 
   constructor(map: LevelMap) {
-    const utilTiles = map.getTilemap().addTilesetImage(AssetManager.util.name);
+    const utilTiles = map.getTilemap().addTilesetImage(AssetManager.graphicalAssets.util.name);
 
     this.layer = map.getTilemap()
       .createBlankDynamicLayer(LevelMap.LIGHT_LAYER_ID, utilTiles, 0, 0)
-      .fill(AssetManager.util.indices.black);
+      .fill(AssetManager.graphicalAssets.util.indices.black);
 
-    this.lastPos = new Phaser.Math.Vector2({ x: -1, y: -1 });
+    this.lastPos = new Phaser.Math.Vector2({x: -1, y: -1});
     this.map = map;
 
     this.layer.setDepth(LevelMap.LIGHT_LAYER_DEPTH);

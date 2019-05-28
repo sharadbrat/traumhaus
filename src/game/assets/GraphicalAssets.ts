@@ -34,7 +34,7 @@ export const stage1realGraphicalAsset: GraphicalAsset = {
   name: STAGE_1_REAL_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/Stage1_Tiles-1.png',
+  file: '/tiles/tiles-stage-1.png',
 };
 
 export const stage1ghostGraphicalAsset: GraphicalAsset = {

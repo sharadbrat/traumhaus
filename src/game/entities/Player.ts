@@ -217,9 +217,14 @@ export class Player {
       y: playerPos.y - enemyPos.y,
     };
 
+    // normalize
+    const sum = Math.abs(force.x + force.y);
+    force.x = force.x / sum;
+    force.y = force.y / sum;
+
     // todo: add movement lock
     content.services.progress.getProgress().isVulnerable = false;
-    this.sprite.setAcceleration(force.x * 3000, force.y * 3000);
+    this.sprite.setAcceleration(force.x * 10000, force.y * 10000);
     this.sprite.setAlpha(0.5);
     this.sprite.setTint(0xFFAAAA);
 

@@ -5,7 +5,7 @@ import { LevelMap } from './LevelMap';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
 import { ENEMY_TRIGGERS_ACTIONS } from './EnemyLevelObject';
-import { LevelObjectAnimation, MapPosition } from './model';
+import { LevelObjectAnimation } from './model';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -28,16 +28,13 @@ interface Keys {
 export class Player {
   private static readonly INVULNERABLE_TIME = 3000;
 
-
-  private sprite: Phaser.Physics.Arcade.Sprite;
-  private ghostSprite: Phaser.Physics.Arcade.Sprite;
-
-  private keys: Keys;
+  private readonly sprite: Phaser.Physics.Arcade.Sprite;
+  private readonly body: Phaser.Physics.Arcade.Body;
+  private readonly keys: Keys;
 
   private attackUntil: number;
   private attackLockedUntil: number;
   private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
-  private body: Phaser.Physics.Arcade.Body;
   private scene: Phaser.Scene;
   private currentAnimationAsset: SpriteAsset;
 

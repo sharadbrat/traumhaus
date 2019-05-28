@@ -6,10 +6,10 @@ export class GameGhostService {
   }
 
   public static getInstance(): GameGhostService {
-    if (!this.instance) {
-      this.instance = new GameGhostService();
+    if (!GameGhostService.instance) {
+      GameGhostService.instance = new GameGhostService();
     }
-    return this.instance;
+    return GameGhostService.instance;
   }
 
   public isGhostMode(): boolean {

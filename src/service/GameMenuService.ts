@@ -7,10 +7,10 @@ export class GameMenuService {
   }
 
   public static getInstance(): GameMenuService {
-    if (!this.instance) {
-      this.instance = new GameMenuService();
+    if (!GameMenuService.instance) {
+      GameMenuService.instance = new GameMenuService();
     }
-    return this.instance
+    return GameMenuService.instance
   }
 
   public setOnMenuToggleListener(callback: () => void) {

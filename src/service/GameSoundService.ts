@@ -21,10 +21,10 @@ export class GameSoundService {
   }
 
   public static getInstance(): GameSoundService {
-    if (!this.instance) {
-      this.instance = new GameSoundService();
+    if (!GameSoundService.instance) {
+      GameSoundService.instance = new GameSoundService();
     }
-    return this.instance;
+    return GameSoundService.instance;
   }
 
   // should be called in game constructor

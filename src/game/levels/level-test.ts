@@ -22,6 +22,29 @@ const enemy1: EnemyLevelObjectData = {
       delay: 0,
     }
   },
+  inGhostWorld: true,
+};
+
+const enemy2: EnemyLevelObjectData = {
+  id: 'Enemy 2',
+  type: LevelObjectType.ENEMY,
+  isCollideable: true,
+  position: {x: 4, y: 14},
+  width: 12,
+  height: 8,
+  graphics: {
+    asset: AssetManager.spriteAssets.professor,
+    offsetX: 8,
+    offsetY: 20,
+  },
+  meta: {
+    enemyType: EnemyLevelObjectType.CHASING,
+    chase: {
+      speed: 30,
+      radius: 5,
+    }
+  },
+  inGhostWorld: true,
 };
 
 export const LEVEL_TEST_DATA: LevelMapData = {
@@ -45,9 +68,6 @@ export const LEVEL_TEST_DATA: LevelMapData = {
       playerLightRolloff: 0,
       fogAlpha: 0.2,
     },
-    objects: [
-      enemy1
-    ],
     themeId: MAIN_THEME_AUDIO_ID,
   },
   ghostWorld: {
@@ -67,7 +87,10 @@ export const LEVEL_TEST_DATA: LevelMapData = {
       playerLightRolloff: 0,
       fogAlpha: 0,
     },
-
+    objects: [
+      enemy1,
+      enemy2,
+    ],
     themeId: GHOST_THEME_AUDIO_ID,
   },
   startPosition: {

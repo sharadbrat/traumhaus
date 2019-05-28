@@ -188,7 +188,7 @@ export class Player {
     return this.keys;
   }
 
-  public getPosition(): MapPosition {
+  public getPosition(): Phaser.Math.Vector2 {
     return this.sprite.body.position;
   }
 

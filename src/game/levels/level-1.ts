@@ -133,7 +133,8 @@ export const LEVEL_1_DATA: LevelMapData = {
         ],
         meta: {
           talkable: true,
-        }
+        },
+        inGhostWorld: false,
       },
     ],
     doors: [

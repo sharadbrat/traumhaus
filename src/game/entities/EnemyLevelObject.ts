@@ -1,10 +1,11 @@
 import * as Pathfinding from 'pathfinding';
 
-import { CheckedTrigger, LevelObject } from './LevelObject';
+import { LevelObject } from './LevelObject';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service';
 import { TriggerManager } from '../TriggerManager';
 import { CollisionDetector, EnemyLevelObjectData, EnemyLevelObjectType, MapPosition } from './model';
+import { AssetManager } from '../assets';
 
 export const ENEMY_TRIGGERS_ACTIONS = {
   ON_PLAYER_HIT: 'ON_ENEMY_PLAYER_HIT',
@@ -12,29 +13,23 @@ export const ENEMY_TRIGGERS_ACTIONS = {
 
 export class EnemyLevelObject extends LevelObject {
   private static readonly EPSILON = 1;
+  private static readonly UPDATE_COOLDOWN = 100;
 
   protected options: EnemyLevelObjectData;
 
   private ghostService: GameGhostService;
 
   private collision?: CollisionDetector[][];
-
-  private direction?: MapPosition;
-  private oppDirection?: MapPosition;
-
   private prevPathCalculation = 0;
 
-  private enemyTriggers: {
-    [id: string]: CheckedTrigger,
-  };
+  // CHASING
+  private direction?: MapPosition;
+  private oppDirection?: MapPosition;
 
   constructor(scene: GameScene, options: EnemyLevelObjectData) {
     super(scene, options);
 
     this.options = options;
-
-    // this.sprite.setMass(10);
-    // this.sprite.setFriction(1000000);
 
     this.ghostService = GameGhostService.getInstance();
 
@@ -63,6 +58,11 @@ export class EnemyLevelObject extends LevelObject {
   update(time: number) {
     super.update(time);
 
+    if (this.isInDifferentWorld()) {
+      this.sprite.setVelocity(0, 0);
+      return;
+    }
+
     switch (this.options.meta.enemyType) {
       case EnemyLevelObjectType.DASHING:
         this.updateDashingEnemy(time);
@@ -81,7 +81,20 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   private updateChasingEnemy(time: number) {
-// todo: Add impl
+    const distance = this.scene.getPlayer().getPosition().distance(this.sprite.body.position);
+
+    if (distance < this.options.meta.chase.radius * AssetManager.TILE_SIZE) {
+      if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_COOLDOWN) {
+        this.prevPathCalculation = time;
+        this.makeChase();
+      }
+    } else {
+      this.sprite.setVelocity(0, 0);
+    }
+
+    if (this.isCollidingWithPlayer()) {
+      TriggerManager.fire(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, this.getTriggerContentObject());
+    }
   }
 
   private updateDashingEnemy(time: number) {
@@ -89,12 +102,8 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   private updatePatrolingEnemy(time: number) {
-    if (this.isInDifferentWorld()) {
-      this.sprite.setVelocity(0, 0);
-      return;
-    }
 
-    if (time - this.prevPathCalculation > 100) {
+    if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_COOLDOWN) {
       this.prevPathCalculation = time;
       this.makePatrol();
     }
@@ -118,7 +127,7 @@ export class EnemyLevelObject extends LevelObject {
     }
 
     let world;
-    if (this.ghostService.isGhostMode()) {
+    if (this.options.inGhostWorld) {
       world = this.scene.getLevelMap().getMapData().ghostWorld;
     } else {
       world = this.scene.getLevelMap().getMapData().realWorld;
@@ -128,9 +137,6 @@ export class EnemyLevelObject extends LevelObject {
 
     this.direction = this.options.meta.patrol.to;
     this.oppDirection = this.options.meta.patrol.from;
-
-    this.sprite.debugShowBody = true;
-    this.sprite.debugBodyColor = 0xFF0000;
   }
 
   private initShootingEnemy() {
@@ -138,7 +144,18 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   private initChasingEnemy() {
-    // todo: Add impl
+    if (!this.options.meta || !this.options.meta.chase) {
+      throw new Error('Can not initialize chasing enemy. Specified incorrect meta.');
+    }
+
+    let world;
+    if (this.options.inGhostWorld) {
+      world = this.scene.getLevelMap().getMapData().ghostWorld;
+    } else {
+      world = this.scene.getLevelMap().getMapData().realWorld;
+    }
+
+    this.collision = world.collisionMap;
   }
 
   private calcDistanceBetweenTiles(from: MapPosition, to: MapPosition): number {
@@ -218,6 +235,49 @@ export class EnemyLevelObject extends LevelObject {
       const temp = this.direction;
       this.direction = this.oppDirection;
       this.oppDirection = temp;
+    }
+  }
+
+  private makeChase() {
+    const worldX = this.sprite.body.position.x + this.sprite.body.halfWidth;
+    const worldY = this.sprite.body.position.y + this.sprite.body.halfHeight;
+
+    const tilemap = this.scene.getLevelMap().getTilemap();
+
+    const {x, y} = this.scene.getPlayer().getPosition();
+    const to = tilemap.worldToTileXY(x, y);
+    const from = tilemap.worldToTileXY(worldX, worldY);
+
+    const path = this.findPath(from, to);
+
+    if (path.length > 1) {
+      const step = {x: path[1][0], y: path[1][1]};
+
+      let directionX;
+      const number = tilemap.tileToWorldX(step.x) + 8;
+      if (worldX - number < - EnemyLevelObject.EPSILON) {
+        directionX = 1;
+      } else if (worldX - number > EnemyLevelObject.EPSILON) {
+        directionX = -1;
+      } else {
+        directionX = 0
+      }
+
+      let directionY;
+      const number1 = tilemap.tileToWorldY(step.y) + 8;
+
+      if (worldY - number1 < - EnemyLevelObject.EPSILON) {
+        directionY = 1;
+      } else if (worldY - number1 > EnemyLevelObject.EPSILON) {
+        directionY = -1;
+      } else {
+        directionY = 0
+      }
+
+      const velocityX = this.options.meta.chase.speed * directionX;
+      const velocityY = this.options.meta.chase.speed * directionY;
+
+      this.sprite.setVelocity(velocityX, velocityY);
     }
   }
 }

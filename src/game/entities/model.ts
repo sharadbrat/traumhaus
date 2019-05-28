@@ -102,6 +102,7 @@ export interface LevelObjectData {
   triggers?: Trigger[];
 
   meta?: LevelObjectMeta;
+  inGhostWorld: boolean;
 }
 
 export interface EnemyLevelObjectData extends LevelObjectData {
@@ -113,7 +114,16 @@ export interface LevelObjectMeta {
 }
 
 export interface EnemyLevelObjectMeta extends LevelObjectMeta {
-  patrol?: {to: MapPosition, from: MapPosition, speed: number, delay: number},
+  patrol?: {
+    to: MapPosition;
+    from: MapPosition;
+    speed: number;
+    delay: number;
+  };
+  chase?: {
+    speed: number;
+    radius: number;
+  };
   enemyType: EnemyLevelObjectType;
 }
 

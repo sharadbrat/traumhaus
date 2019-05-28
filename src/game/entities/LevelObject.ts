@@ -22,7 +22,6 @@ export class LevelObject {
   protected tilemap: Phaser.Tilemaps.Tilemap;
   protected triggers: CheckedTrigger[];
   protected isCollided: boolean;
-  protected isInGhostWorld: boolean;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     this.scene = scene;
@@ -36,12 +35,6 @@ export class LevelObject {
     }
 
     this.isCollided = false;
-
-    if (GameGhostService.getInstance().isGhostMode()) {
-      this.isInGhostWorld = true;
-    } else {
-      this.isInGhostWorld = false;
-    }
   }
 
   update(time: number) {
@@ -59,11 +52,11 @@ export class LevelObject {
   }
 
   public isInDifferentWorld() {
-    if (this.isInGhostWorld && !GameGhostService.getInstance().isGhostMode()) {
+    if (this.options.inGhostWorld && !GameGhostService.getInstance().isGhostMode()) {
       return true;
     }
 
-    if (!this.isInGhostWorld && GameGhostService.getInstance().isGhostMode()) {
+    if (!this.options.inGhostWorld && GameGhostService.getInstance().isGhostMode()) {
       return true;
     }
   }

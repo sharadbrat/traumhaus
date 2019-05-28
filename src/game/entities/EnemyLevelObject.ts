@@ -13,8 +13,7 @@ export const ENEMY_TRIGGERS_ACTIONS = {
 
 export class EnemyLevelObject extends LevelObject {
   private static readonly EPSILON = 1;
-  private static readonly UPDATE_PATROL_COOLDOWN = 100;
-  private static readonly UPDATE_CHASING_COOLDOWN = 100;
+  private static readonly UPDATE_COOLDOWN = 100;
 
   protected options: EnemyLevelObjectData;
 
@@ -65,7 +64,13 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   update(time: number) {
-    super.update(time);
+    if (this.isInDifferentWorld()) {
+      return;
+    }
+
+    if (this.options.triggers) {
+      this.checkTriggers(time);
+    }
 
     if (this.isInDifferentWorld()) {
       this.sprite.setVelocity(0, 0);
@@ -92,8 +97,11 @@ export class EnemyLevelObject extends LevelObject {
   private updateChasingEnemy(time: number) {
     const distance = this.scene.getPlayer().getPosition().distance(this.sprite.body.position);
 
+    const speed = this.options.meta.chase.speed === 0 ? 1 : this.options.meta.chase.speed;
+    const cooldown = (EnemyLevelObject.UPDATE_COOLDOWN / speed) * 10;
+
     if (distance < this.options.meta.chase.radius * AssetManager.TILE_SIZE) {
-      if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_CHASING_COOLDOWN) {
+      if (time - this.prevPathCalculation > cooldown) {
         this.prevPathCalculation = time;
         this.makeChase();
       }
@@ -112,7 +120,10 @@ export class EnemyLevelObject extends LevelObject {
 
   private updatePatrolingEnemy(time: number) {
 
-    if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_PATROL_COOLDOWN) {
+    const speed = this.options.meta.patrol.speed === 0 ? 1 : this.options.meta.patrol.speed;
+    const cooldown = (EnemyLevelObject.UPDATE_COOLDOWN / speed) * 10;
+
+    if (time - this.prevPathCalculation > cooldown) {
       this.prevPathCalculation = time;
       this.makePatrol();
     }

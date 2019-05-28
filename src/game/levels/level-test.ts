@@ -4,7 +4,7 @@ import { EnemyLevelObjectData, EnemyLevelObjectType, LevelMapData, LevelObjectTy
 const enemy1: EnemyLevelObjectData = {
   id: 'Enemy 1',
   type: LevelObjectType.ENEMY,
-  isCollideable: true,
+  isCollideable: false,
   position: {x: 5, y: 5},
   width: 12,
   height: 8,
@@ -18,7 +18,7 @@ const enemy1: EnemyLevelObjectData = {
     patrol: {
       from: {x: 3, y: 3},
       to: {x: 11, y: 3},
-      speed: 20,
+      speed: 50,
       delay: 0,
     }
   },
@@ -28,7 +28,7 @@ const enemy1: EnemyLevelObjectData = {
 const enemy2: EnemyLevelObjectData = {
   id: 'Enemy 2',
   type: LevelObjectType.ENEMY,
-  isCollideable: true,
+  isCollideable: false,
   position: {x: 4, y: 14},
   width: 12,
   height: 8,
@@ -40,8 +40,8 @@ const enemy2: EnemyLevelObjectData = {
   meta: {
     enemyType: EnemyLevelObjectType.CHASING,
     chase: {
-      speed: 30,
-      radius: 5,
+      speed: 100,
+      radius: 10,
     }
   },
   inGhostWorld: true,

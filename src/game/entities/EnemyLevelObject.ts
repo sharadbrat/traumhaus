@@ -13,7 +13,8 @@ export const ENEMY_TRIGGERS_ACTIONS = {
 
 export class EnemyLevelObject extends LevelObject {
   private static readonly EPSILON = 1;
-  private static readonly UPDATE_COOLDOWN = 100;
+  private static readonly UPDATE_PATROL_COOLDOWN = 100;
+  private static readonly UPDATE_CHASING_COOLDOWN = 100;
 
   protected options: EnemyLevelObjectData;
 
@@ -21,11 +22,11 @@ export class EnemyLevelObject extends LevelObject {
 
   private collision?: CollisionDetector[][];
   private prevPathCalculation = 0;
+  private collider: Phaser.Physics.Arcade.Collider;
 
-  // CHASING
+  // PATROLING
   private direction?: MapPosition;
   private oppDirection?: MapPosition;
-  private collider: Phaser.Physics.Arcade.Collider;
 
   constructor(scene: GameScene, options: EnemyLevelObjectData) {
     super(scene, options);
@@ -92,7 +93,7 @@ export class EnemyLevelObject extends LevelObject {
     const distance = this.scene.getPlayer().getPosition().distance(this.sprite.body.position);
 
     if (distance < this.options.meta.chase.radius * AssetManager.TILE_SIZE) {
-      if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_COOLDOWN) {
+      if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_CHASING_COOLDOWN) {
         this.prevPathCalculation = time;
         this.makeChase();
       }
@@ -111,7 +112,7 @@ export class EnemyLevelObject extends LevelObject {
 
   private updatePatrolingEnemy(time: number) {
 
-    if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_COOLDOWN) {
+    if (time - this.prevPathCalculation > EnemyLevelObject.UPDATE_PATROL_COOLDOWN) {
       this.prevPathCalculation = time;
       this.makePatrol();
     }
@@ -210,36 +211,20 @@ export class EnemyLevelObject extends LevelObject {
     if (path.length > 1) {
       const step = {x: path[1][0], y: path[1][1]};
 
-      let directionX;
-      const number = tilemap.tileToWorldX(step.x) + 8;
-      if (worldX - number < - EnemyLevelObject.EPSILON) {
-        directionX = 1;
-      } else if (worldX - number > EnemyLevelObject.EPSILON) {
-        directionX = -1;
-      } else {
-        directionX = 0
-      }
+      const directionX = this.getDirection(worldX, step.x);
+      const directionY = this.getDirection(worldY, step.y);
 
-      let directionY;
-      const number1 = tilemap.tileToWorldY(step.y) + 8;
+      const norm = this.normalizeVector({x: directionX, y: directionY});
 
-      if (worldY - number1 < - EnemyLevelObject.EPSILON) {
-        directionY = 1;
-      } else if (worldY - number1 > EnemyLevelObject.EPSILON) {
-        directionY = -1;
-      } else {
-        directionY = 0
-      }
-
-      const velocityX = this.options.meta.patrol.speed * directionX;
-      const velocityY = this.options.meta.patrol.speed * directionY;
+      const velocityX = this.options.meta.patrol.speed * norm.x;
+      const velocityY = this.options.meta.patrol.speed * norm.y;
 
       this.sprite.setVelocity(velocityX, velocityY);
     }
 
     const distance = this.calcDistanceBetweenTiles(from, to);
 
-    if (distance < 20) {
+    if (distance < AssetManager.TILE_SIZE / 2) {
       const temp = this.direction;
       this.direction = this.oppDirection;
       this.oppDirection = temp;
@@ -258,34 +243,56 @@ export class EnemyLevelObject extends LevelObject {
 
     const path = this.findPath(from, to);
 
-    if (path.length > 1) {
+    if (path.length > 3) {
       const step = {x: path[1][0], y: path[1][1]};
 
-      let directionX;
-      const number = tilemap.tileToWorldX(step.x) + 8;
-      if (worldX - number < - EnemyLevelObject.EPSILON) {
-        directionX = 1;
-      } else if (worldX - number > EnemyLevelObject.EPSILON) {
-        directionX = -1;
-      } else {
-        directionX = 0
-      }
+      const directionX = this.getDirection(worldX, step.x);
+      const directionY = this.getDirection(worldY, step.y);
 
-      let directionY;
-      const number1 = tilemap.tileToWorldY(step.y) + 8;
+      const norm = this.normalizeVector({x: directionX, y: directionY});
 
-      if (worldY - number1 < - EnemyLevelObject.EPSILON) {
-        directionY = 1;
-      } else if (worldY - number1 > EnemyLevelObject.EPSILON) {
-        directionY = -1;
-      } else {
-        directionY = 0
-      }
-
-      const velocityX = this.options.meta.chase.speed * directionX;
-      const velocityY = this.options.meta.chase.speed * directionY;
+      const velocityX = this.options.meta.chase.speed * norm.x;
+      const velocityY = this.options.meta.chase.speed * norm.y;
 
       this.sprite.setVelocity(velocityX, velocityY);
+    } else if (!this.isCollidingWithPlayer()) {
+      const dir = this.scene.getPlayer().getPosition().subtract(this.sprite.body.position);
+
+      const norm = this.normalizeVector(dir);
+
+      const velocityX = this.options.meta.chase.speed * norm.x;
+      const velocityY = this.options.meta.chase.speed * norm.y;
+      this.sprite.setVelocity(velocityX, velocityY);
+    } else {
+      this.sprite.setVelocity(0);
     }
+  }
+
+  private normalizeVector(vec: MapPosition): MapPosition {
+
+    let norm = Math.abs(vec.x) + Math.abs(vec.y);
+    if (norm === 0) {
+      norm = 1;
+    }
+
+    const x = vec.x / norm;
+    const y = vec.y / norm;
+
+    return {x, y};
+  }
+
+  private getDirection(from: number, to: number): number {
+
+    let directionX;
+    const number = this.scene.getLevelMap().getTilemap().tileToWorldX(to) + (AssetManager.TILE_SIZE / 2);
+    if (from - number < - EnemyLevelObject.EPSILON) {
+      directionX = 1;
+    } else if (from - number > EnemyLevelObject.EPSILON) {
+      directionX = -1;
+    } else {
+      directionX = 0
+    }
+
+    return directionX;
   }
 }

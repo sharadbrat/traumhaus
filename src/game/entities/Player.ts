@@ -201,6 +201,7 @@ export class Player {
     sprite.setOffset(offsetX, offsetY);
     sprite.anims.play(`${asset.name}__${asset.animations.idle.name}`);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
+    sprite.setCollideWorldBounds(true);
 
     return sprite;
   }
@@ -215,9 +216,13 @@ export class Player {
     };
 
     // normalize
-    const sum = Math.abs(force.x + force.y);
-    force.x = force.x / sum;
-    force.y = force.y / sum;
+    let norm = Math.abs(force.x) + Math.abs(force.y);
+    if (norm === 0) {
+      norm = 1;
+    }
+
+    force.x = force.x / norm;
+    force.y = force.y / norm;
 
     // todo: add movement lock
     content.services.progress.getProgress().isVulnerable = false;

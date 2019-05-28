@@ -80,6 +80,7 @@ export class LevelObject {
     const key = `${asset.name}__${asset.animations.idle.name}`;
     sprite.anims.play(key);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
+    sprite.setCollideWorldBounds(true);
 
     return sprite;
   }

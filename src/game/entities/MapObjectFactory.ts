@@ -3,7 +3,7 @@ import { StaticLevelObject } from './StaticLevelObject';
 import { GameScene } from '../scenes/GameScene';
 import { NPCLevelObject } from './NPCLevelObject';
 import { EnemyLevelObject } from './EnemyLevelObject';
-import { EnemyLevelObjectData, LevelObjectData, LevelObjectType } from './model';
+import { EnemyLevelObjectData, EnemyLevelObjectType, LevelObjectData, LevelObjectType } from './model';
 
 export class MapObjectFactory {
   public static create(scene: GameScene, data: LevelObjectData): LevelObject {
@@ -16,3 +16,17 @@ export class MapObjectFactory {
     }
   }
 }
+
+// export class EnemyObjectDataFactory {
+//   public static get(type: EnemyLevelObjectType): EnemyLevelObjectData {
+//     if (type === EnemyLevelObjectType.PATROLING) {
+//
+//     } else if (type === EnemyLevelObjectType.DASHING) {
+//
+//     } else if (type === EnemyLevelObjectType.SHOOTING) {
+//
+//     } else {
+//
+//     }
+//   }
+// }

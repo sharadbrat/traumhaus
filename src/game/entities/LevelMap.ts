@@ -94,6 +94,14 @@ export class LevelMap {
     }
   }
 
+  getRealCollisionLayer(): Phaser.Tilemaps.StaticTilemapLayer {
+    return this.realCollisionLayer;
+  }
+
+  getGhostCollisionLayer(): Phaser.Tilemaps.StaticTilemapLayer {
+    return this.ghostCollisionLayer;
+  }
+
   getWidth(): number {
     return this.mapData.width;
   }

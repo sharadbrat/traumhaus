@@ -17,7 +17,8 @@ export class GameScene extends Phaser.Scene {
   lightLayer: LightLayer;
 
   private levelMap: LevelMap;
-  private playerCollider: Phaser.Physics.Arcade.Collider;
+  private playerRealCollider: Phaser.Physics.Arcade.Collider;
+  private playerGhostCollider: Phaser.Physics.Arcade.Collider;
 
   private ghostService: GameGhostService;
   private menuService: GameMenuService;
@@ -69,8 +70,8 @@ export class GameScene extends Phaser.Scene {
 
         this.getCamera().flash(1000, 255, 255, 255, true);
 
-        this.playerCollider.destroy();
-        this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
+        this.playerRealCollider.active = !this.ghostService.isGhostMode();
+        this.playerGhostCollider.active = this.ghostService.isGhostMode();
 
         this.setupMusicTheme(this.getCurrentLevel());
       }
@@ -116,8 +117,16 @@ export class GameScene extends Phaser.Scene {
     return this.cameras.main;
   }
 
-  private createCollider(): Phaser.Physics.Arcade.Collider {
-    return this.playerCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getCollisionLayer());
+  private createCollider() {
+    if (this.levelMap.getMapData().realWorld) {
+      this.playerRealCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getRealCollisionLayer());
+      this.playerRealCollider.active = !this.ghostService.isGhostMode();
+    }
+
+    if (this.levelMap.getMapData().realWorld) {
+      this.playerGhostCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getGhostCollisionLayer());
+      this.playerGhostCollider.active = this.ghostService.isGhostMode();
+    }
   }
 
   private getCurrentLevel(): LevelMapData {

@@ -226,7 +226,7 @@ export class Player {
     content.scene.getCamera().shake(100, 0.0007);
 
     setTimeout(() => {
-      content.scene.getCamera().flash(Player.INVULNERABLE_TIME * 2/3, 128, 32, 32);
+      content.scene.getCamera().flash(Player.INVULNERABLE_TIME * 2/3, 128, 32, 32, true);
     }, 70);
 
     setTimeout(() => {

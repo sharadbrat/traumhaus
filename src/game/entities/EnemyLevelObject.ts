@@ -25,6 +25,7 @@ export class EnemyLevelObject extends LevelObject {
   // CHASING
   private direction?: MapPosition;
   private oppDirection?: MapPosition;
+  private collider: Phaser.Physics.Arcade.Collider;
 
   constructor(scene: GameScene, options: EnemyLevelObjectData) {
     super(scene, options);
@@ -53,6 +54,13 @@ export class EnemyLevelObject extends LevelObject {
         this.initChasingEnemy();
         break;
     }
+
+    if (this.options.inGhostWorld) {
+      this.collider = this.scene.physics.add.collider(this.sprite, this.scene.getLevelMap().getGhostCollisionLayer());
+    } else {
+      this.collider = this.scene.physics.add.collider(this.sprite, this.scene.getLevelMap().getRealCollisionLayer());
+    }
+
   }
 
   update(time: number) {

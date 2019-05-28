@@ -17,7 +17,7 @@ const enemy1: EnemyLevelObjectData = {
     enemyType: EnemyLevelObjectType.PATROLING,
     patrol: {
       from: {x: 3, y: 3},
-      to: {x: 11, y: 3},
+      to: {x: 27, y: 3},
       speed: 50,
       delay: 0,
     }

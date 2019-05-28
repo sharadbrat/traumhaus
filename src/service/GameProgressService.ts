@@ -19,6 +19,7 @@ export class GameProgressService {
   private constructor() {
     this.gameProgress = {
       isVulnerable: true,
+      // canBecomeGhost: true,
     };
   }
 

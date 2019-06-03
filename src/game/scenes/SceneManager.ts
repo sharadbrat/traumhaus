@@ -1,14 +1,11 @@
 import Phaser from 'phaser';
-import ReferenceScene from './ReferenceScene';
+
 import { GameScene } from './GameScene';
+import { PreloaderScene } from './PreloaderScene';
 
 export enum SceneIdentifier {
   GAME_SCENE = 'GAME_SCENE',
-  TITLES_SCENE = 'TITLES_SCENE',
   PRELOADER_SCENE = 'PRELOADER_SCENE',
-  DUNGEON_SCENE = 'DUNGEON',
-  INFO_SCENE = 'INFO',
-  REFERENCE_SCENE = 'REFERENCE',
 }
 
 export interface SceneObject {
@@ -21,13 +18,13 @@ export class SceneManager {
   public static getScenes(): SceneObject[] {
     return [
       {
-        key: SceneIdentifier.REFERENCE_SCENE,
-        scene: ReferenceScene,
-      },
-      {
         key: SceneIdentifier.GAME_SCENE,
         scene: GameScene,
-      }
+      },
+      {
+        key: SceneIdentifier.PRELOADER_SCENE,
+        scene: PreloaderScene,
+      },
     ];
   }
 }

@@ -50,8 +50,7 @@ export class LevelMap {
 
       for (let i = 0; i < options.data.realWorld.backgroundGraphicLayers.length; i++) {
         const layerData = options.data.realWorld.backgroundGraphicLayers[i];
-        this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
-        // this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId, undefined, undefined, undefined, undefined, 1));
+        this.realWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId, null, 16, 16, 1, 2));
         const layer = this.createGraphicLayer(`${LevelMap.REAL_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
         layer.setDepth(LevelMap.BACKGROUND_LAYER_DEPTH);
         this.realBackgroundGraphicLayers.push(layer);
@@ -67,8 +66,7 @@ export class LevelMap {
 
       for (let i = 0; i < options.data.ghostWorld.backgroundGraphicLayers.length; i++) {
         const layerData = options.data.ghostWorld.backgroundGraphicLayers[i];
-        this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId));
-        // this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId, undefined, undefined, undefined, undefined, 1));
+        this.ghostWorldTiles.push(this.tilemap.addTilesetImage(layerData.tileMapId, null, 16, 16, 1, 2));
         const layer = this.createGraphicLayer(`${LevelMap.GHOST_BACKGROUND_GRAPHIC_LAYER_ID}_${i}`, layerData.tileMap, layerData.tileMapId);
         layer.setDepth(LevelMap.BACKGROUND_LAYER_DEPTH);
         this.ghostBackgroundGraphicLayers.push(layer);
@@ -191,6 +189,7 @@ export class LevelMap {
       tileHeight: AssetManager.TILE_SIZE,
       width: width,
       height: height,
+      insertNull: true,
     });
     tilemap.setBaseTileSize(AssetManager.TILE_SIZE, AssetManager.TILE_SIZE);
     return tilemap;

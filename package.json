@@ -19,7 +19,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "extrude": "tile-extruder --tileWidth 16 --tileHeight 16 --margin 0 --spacing 0",
+    "transform": "node ./tiled-map-to-our.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,6 +40,7 @@
     "@types/react-router-dom": "4.3.1",
     "@types/react-transition-group": "2.8.0",
     "phaser3-docs": "github:photonstorm/phaser3-docs",
+    "tile-extruder": "^1.1.0",
     "typescript": "3.4.2"
   }
 }

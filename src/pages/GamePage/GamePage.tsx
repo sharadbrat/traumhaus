@@ -10,6 +10,7 @@ import { Menu } from '../../components';
 import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
 import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
+import { Load } from '../../components/Load';
 
 interface GamePageProps {
   history: History;
@@ -19,6 +20,7 @@ interface GamePageState {
   pause: boolean;
   dialogStep: GameDialogStep | undefined;
   isDialogActive: boolean;
+  loadingProgress: number;
 }
 
 const ACTION_BUTTON_CODE = ' ';
@@ -36,6 +38,7 @@ export class GamePage extends React.Component<any, GamePageState> {
 
     // @ts-ignore
     dialogStep: undefined,
+    loadingProgress: 0
   };
 
   constructor(props: GamePageProps) {
@@ -53,12 +56,16 @@ export class GamePage extends React.Component<any, GamePageState> {
     this.gameManager.run();
 
     GameMenuService.getInstance().setOnMenuToggleListener(() => this.onMenuToggle());
-
+    GameMenuService.getInstance().setOnUpdateLoadingListener((val: number) => this.onLoadingProgressUpdate(val));
   }
 
   onMenuToggle() {
     this.gameManager.pause();
     this.setState({pause: true});
+  }
+
+  private onLoadingProgressUpdate(val: number) {
+    this.setState({loadingProgress: val});
   }
 
   onMenuContinueClick = () => {
@@ -109,6 +116,7 @@ export class GamePage extends React.Component<any, GamePageState> {
   render() {
     return (
       <section className="game">
+        <Load progress={this.state.loadingProgress}/>
         <div className="game__container">
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
           <Menu heading="Pause" isActive={this.state.pause}>
@@ -144,5 +152,4 @@ export class GamePage extends React.Component<any, GamePageState> {
       }
     }
   }
-
 }

@@ -20,6 +20,10 @@ export class Game extends Phaser.Game {
           gravity: {y: 0}
         }
       },
+      scale: {
+        width: '100%',
+        height: '100%',
+      },
     };
     super(gameConfig);
 
@@ -29,6 +33,6 @@ export class Game extends Phaser.Game {
   private initializeScenes() {
     this.scenes = SceneManager.getScenes();
     this.scenes.forEach(el => this.scene.add(el.key, el.scene));
-    this.scene.start(SceneIdentifier.GAME_SCENE);
+    this.scene.start(SceneIdentifier.PRELOADER_SCENE);
   }
 }

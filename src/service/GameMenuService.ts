@@ -2,6 +2,7 @@ export class GameMenuService {
   private static instance: GameMenuService;
 
   private menuToggleListener: () => void;
+  private updateLoadingListener: (val: number) => void;
 
   private constructor() {
   }
@@ -17,7 +18,15 @@ export class GameMenuService {
     this.menuToggleListener = () => callback();
   }
 
+  public setOnUpdateLoadingListener(callback: (val: number) => void) {
+    this.updateLoadingListener = (val: number) => callback(val);
+  }
+
   public triggerOnMenuToggle() {
     this.menuToggleListener();
+  }
+
+  public updateLoadingProgress(val: number) {
+    this.updateLoadingListener(val);
   }
 }

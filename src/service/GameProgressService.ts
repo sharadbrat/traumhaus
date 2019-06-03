@@ -5,6 +5,7 @@ export interface GameProgress {
   isVulnerable?: boolean;
   canBecomeGhost?: boolean;
   currentLevel?: LevelMapData;
+  isControllable: boolean;
 }
 
 export class GameProgressService {
@@ -19,6 +20,7 @@ export class GameProgressService {
   private constructor() {
     this.gameProgress = {
       isVulnerable: true,
+      isControllable: false,
       // canBecomeGhost: true,
     };
   }
@@ -72,5 +74,9 @@ export class GameProgressService {
 
   public loadProgress(progress: GameProgress) {
     this.gameProgress = progress;
+  }
+
+  public setControllable(val: boolean) {
+    this.gameProgress.isControllable = val;
   }
 }

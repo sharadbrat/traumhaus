@@ -1,12 +1,15 @@
 import Phaser from 'phaser';
+
 import { LevelMap, LevelObject, LightLayer, MapObjectFactory, Player } from '../entities';
 import { AssetManager } from '../assets';
-import { SceneIdentifier } from './SceneManager';
-import { LevelManager } from '../levels';
+import { SceneIdentifier, SceneManager } from './SceneManager';
+import { LEVEL_1_TRIGGER_ACTIONS, LevelManager } from '../levels';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
-import { TriggerManager } from '../TriggerManager';
+import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { DialogManager } from '../dialogs';
 import { LevelMapData, LevelObjectData } from '../entities/model';
+import { GameManager } from '../GameManager';
+import { ControlsType, GameControlsService } from '../../service/GameControlsService';
 
 export class GameScene extends Phaser.Scene {
   private lastX: number;
@@ -24,9 +27,11 @@ export class GameScene extends Phaser.Scene {
   private menuService: GameMenuService;
   private soundService: GameSoundService;
   private progressService: GameProgressService;
+  private controlsService: GameControlsService;
 
   private realWorldObjects: LevelObject[];
   private ghostWorldObjects: LevelObject[];
+  private isNewGame: boolean = false;
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
@@ -38,10 +43,7 @@ export class GameScene extends Phaser.Scene {
     this.ghostService = GameGhostService.getInstance();
     this.soundService = GameSoundService.getInstance();
     this.progressService = GameProgressService.getInstance();
-  }
-
-  preload(): void {
-    AssetManager.loadAssets(this);
+    this.controlsService = GameControlsService.getInstance();
   }
 
   create(): void {
@@ -51,11 +53,6 @@ export class GameScene extends Phaser.Scene {
 
     window.addEventListener('resize', () => {
       this.cameraResizeNeeded = true;
-    });
-
-    this.input.keyboard.on('keydown_R', () => {
-      this.scene.stop(SceneIdentifier.INFO_SCENE);
-      this.scene.start(SceneIdentifier.REFERENCE_SCENE);
     });
 
     this.input.keyboard.on('keydown_Q', () => {
@@ -133,8 +130,10 @@ export class GameScene extends Phaser.Scene {
     let level = this.progressService.getCurrentLevel();
 
     if (!level) {
+      // new game
       level = LevelManager.getFirstLevel();
       this.progressService.setCurrentLevel(level);
+      this.isNewGame = true;
     }
 
     return level;
@@ -159,7 +158,13 @@ export class GameScene extends Phaser.Scene {
 
   private createCamera(levelMap: LevelMap) {
     this.cameras.main.setRoundPixels(true);
-    this.cameras.main.setZoom(4);
+
+    const wanted = 9 * AssetManager.TILE_SIZE;
+    const zoomX = wanted / window.innerWidth;
+    const zoomY = wanted / window.innerHeight;
+
+    this.cameras.main.zoom = Math.min(1 / zoomX, 1 / zoomY);
+
     this.cameras.main.setBounds(
       0,
       0,
@@ -199,6 +204,14 @@ export class GameScene extends Phaser.Scene {
     this.setupTriggers(currentLevel);
 
     this.setupMusicTheme(currentLevel);
+
+    if (this.isNewGame) {
+      this.setupNewGame();
+    }
+
+    if (this.controlsService.getMode() === ControlsType.ON_SCREEN) {
+
+    }
   }
 
   private createLevelObjects(currentLevel: LevelMapData) {
@@ -267,6 +280,12 @@ export class GameScene extends Phaser.Scene {
       this.game.canvas.width = window.innerWidth;
       this.game.canvas.height = window.innerHeight;
       this.game.scale.scaleMode = Phaser.Scale.RESIZE;
+
+      const wanted = 9 * AssetManager.TILE_SIZE;
+      const zoomX = wanted / window.innerWidth;
+      const zoomY = wanted / window.innerHeight;
+
+      this.getCamera().zoom = Math.min(1 / zoomX, 1 / zoomY);
       this.game.scale.refresh();
     }
   }
@@ -300,5 +319,35 @@ export class GameScene extends Phaser.Scene {
     const soundService = GameSoundService.getInstance();
     soundService.initialize(this.game);
     soundService.addSoundsToGame(this.game);
+  }
+
+  private setupNewGame() {
+    const time = 5000;
+    this.getCamera().fadeFrom(time, 0, 0, 0, true);
+    setTimeout(() => {
+      TriggerManager.fire(LEVEL_1_TRIGGER_ACTIONS.ON_NEW_GAME, this.constructTriggerContents());
+    }, time);
+    this.isNewGame = false;
+  }
+
+  private constructTriggerContents(): TriggerContents {
+    return {
+      scene: this,
+      player: this.getPlayer(),
+      services: {
+        progress: this.progressService,
+        ghost: this.ghostService,
+        sound: this.soundService,
+        menu: this.menuService,
+      },
+      managers: {
+        dialog: DialogManager,
+        trigger: TriggerManager,
+        game: GameManager,
+        asset: AssetManager,
+        scene: SceneManager,
+        level: LevelManager,
+      },
+    };
   }
 }

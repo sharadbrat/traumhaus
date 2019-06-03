@@ -6,24 +6,12 @@ import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
 import { ENEMY_TRIGGERS_ACTIONS } from './EnemyLevelObject';
 import { LevelObjectAnimation } from './model';
+import { GameControlsService, KeyControls, Keys } from '../../service/GameControlsService';
 
 const speed = 125;
 const attackSpeed = 500;
 const attackDuration = 165;
 const attackCooldown = attackDuration * 2;
-
-interface Keys {
-  up: Phaser.Input.Keyboard.Key;
-  down: Phaser.Input.Keyboard.Key;
-  left: Phaser.Input.Keyboard.Key;
-  right: Phaser.Input.Keyboard.Key;
-  space: Phaser.Input.Keyboard.Key;
-  w: Phaser.Input.Keyboard.Key;
-  a: Phaser.Input.Keyboard.Key;
-  s: Phaser.Input.Keyboard.Key;
-  d: Phaser.Input.Keyboard.Key;
-  u: Phaser.Input.Keyboard.Key;
-}
 
 export class Player {
   private static readonly INVULNERABLE_TIME = 3000;
@@ -53,18 +41,7 @@ export class Player {
       this.currentAnimationAsset = AssetManager.spriteAssets.player
     }
 
-    this.keys = scene.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.UP,
-      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-      w: 'w',
-      a: 'a',
-      s: 's',
-      d: 'd',
-      u: 'u',
-    }) as Keys;
+    this.keys = scene.input.keyboard.addKeys(GameControlsService.getInstance().getKeyboardControls()) as Keys;
 
     this.attackUntil = 0;
     this.attackLockedUntil = 0;
@@ -107,10 +84,10 @@ export class Player {
     }
     this.body.setVelocity(0);
 
-    const left = keys.left.isDown || keys.a.isDown;
-    const right = keys.right.isDown || keys.d.isDown;
-    const up = keys.up.isDown || keys.w.isDown;
-    const down = keys.down.isDown || keys.s.isDown;
+    const left = keys.left.isDown;
+    const right = keys.right.isDown;
+    const up = keys.up.isDown;
+    const down = keys.down.isDown;
 
     if (!this.body.blocked.left && left) {
       this.body.setVelocityX(-speed);
@@ -125,7 +102,6 @@ export class Player {
     } else if (!this.body.blocked.down && down) {
       this.body.setVelocityY(speed);
     }
-
 
     const animationPrefix = this.currentAnimationAsset.name;
 
@@ -142,10 +118,8 @@ export class Player {
       moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.IDLE].name}`;
     }
 
-    //
-
     if (
-      keys.space!.isDown &&
+      this.keys.dash.isDown &&
       time > this.attackLockedUntil &&
       this.body.velocity.length() > 0 &&
       this.ghostService.isGhostMode()
@@ -201,6 +175,7 @@ export class Player {
     sprite.setOffset(offsetX, offsetY);
     sprite.anims.play(`${asset.name}__${asset.animations.idle.name}`);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
+    // I had to comment this because it leaded to bugs when mobile version is played 0_0
     // sprite.setCollideWorldBounds(true);
 
     return sprite;

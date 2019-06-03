@@ -22,14 +22,19 @@ export class Dialog extends React.PureComponent<DialogProps> {
         backgroundImage: `url(${actor.image})`,
       };
 
+      const position = this.props.step.position;
+
       return (
         <section className={dialogClass}>
-          <div className="dialog__container">
+          <div className={`dialog__container dialog__container_${position}`}>
             <div className="dialog__group">
               <div className="dialog__title">{actor.title}</div>
               <div className="dialog__portrait" style={portraitStyle}/>
             </div>
-            <div className="dialog__phrase">{this.props.step.phrase}</div>
+            <div className="dialog__group">
+              <div className="dialog__title"/>
+              <div className="dialog__phrase">{this.props.step.phrase}</div>
+            </div>
           </div>
         </section>
       );

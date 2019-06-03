@@ -201,7 +201,7 @@ export class Player {
     sprite.setOffset(offsetX, offsetY);
     sprite.anims.play(`${asset.name}__${asset.animations.idle.name}`);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
-    sprite.setCollideWorldBounds(true);
+    // sprite.setCollideWorldBounds(true);
 
     return sprite;
   }

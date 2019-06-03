@@ -80,7 +80,8 @@ export class LevelObject {
     const key = `${asset.name}__${asset.animations.idle.name}`;
     sprite.anims.play(key);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
-    sprite.setCollideWorldBounds(true);
+    // I had to comment this because it leaded to bugs when mobile version is played 0_0
+    // sprite.setCollideWorldBounds(true);
 
     return sprite;
   }
@@ -125,7 +126,7 @@ export class LevelObject {
   protected checkActionTrigger(trigger: CheckedTrigger, time: number) {
     const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
 
-    if (this.scene.getPlayer().getKeys().u.isDown && distance < 20) {
+    if (this.scene.getPlayer().getKeys().interact.isDown && distance < 20) {
       TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }

@@ -8,6 +8,7 @@ import { SceneManager } from '../scenes/SceneManager';
 import { LevelManager } from '../levels';
 import { LevelObjectData, MapPosition, Trigger, TriggerEvent } from './model';
 import { LevelMap } from './LevelMap';
+import { ControlsType, GameControlsService } from '../../service/GameControlsService';
 
 export type CheckedTrigger = Trigger & { lastCheckedOn: number };
 
@@ -126,7 +127,15 @@ export class LevelObject {
   protected checkActionTrigger(trigger: CheckedTrigger, time: number) {
     const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
 
-    if (this.scene.getPlayer().getKeys().interact.isDown && distance < 20) {
+    let interaction = false;
+
+    if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
+      interaction = this.scene.getPlayer().getJoystickKeys().interact;
+    } else {
+      interaction = this.scene.getPlayer().getKeys().interact.isDown;
+    }
+
+    if (interaction && distance < 20) {
       TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }

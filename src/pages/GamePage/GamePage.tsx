@@ -5,12 +5,12 @@ import { AssetManager, GameManager, GameManagerOptions } from '../../game';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
-import { Dialog } from '../../components';
-import { Menu } from '../../components';
+import { Dialog, Menu } from '../../components';
 import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
 import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
 import { Load } from '../../components/Load';
+import { ControlsType, GameControlsService } from '../../service/GameControlsService';
 
 interface GamePageProps {
   history: History;
@@ -21,6 +21,7 @@ interface GamePageState {
   dialogStep: GameDialogStep | undefined;
   isDialogActive: boolean;
   loadingProgress: number;
+  virtualJoystickEnabled: boolean;
 }
 
 const ACTION_BUTTON_CODE = ' ';
@@ -38,7 +39,8 @@ export class GamePage extends React.Component<any, GamePageState> {
 
     // @ts-ignore
     dialogStep: undefined,
-    loadingProgress: 0
+    loadingProgress: 0,
+    virtualJoystickEnabled: false,
   };
 
   constructor(props: GamePageProps) {
@@ -48,15 +50,24 @@ export class GamePage extends React.Component<any, GamePageState> {
   }
 
   componentDidMount(): void {
-    const canvas: HTMLCanvasElement = document.getElementById(this.GAME_CANVAS_ID) as HTMLCanvasElement;
+    if (!GameControlsService.getInstance().getMode()) {
+      this.props.history.push('/');
+      return;
+    } else {
+      if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
+        this.setState({virtualJoystickEnabled: true});
+      }
 
-    const options: GameManagerOptions = {canvas};
+      const canvas: HTMLCanvasElement = document.getElementById(this.GAME_CANVAS_ID) as HTMLCanvasElement;
 
-    this.gameManager = new GameManager(options);
-    this.gameManager.run();
+      const options: GameManagerOptions = {canvas};
 
-    GameMenuService.getInstance().setOnMenuToggleListener(() => this.onMenuToggle());
-    GameMenuService.getInstance().setOnUpdateLoadingListener((val: number) => this.onLoadingProgressUpdate(val));
+      this.gameManager = new GameManager(options);
+      this.gameManager.run();
+
+      GameMenuService.getInstance().setOnMenuToggleListener(() => this.onMenuToggle());
+      GameMenuService.getInstance().setOnUpdateLoadingListener((val: number) => this.onLoadingProgressUpdate(val));
+    }
   }
 
   onMenuToggle() {
@@ -83,6 +94,20 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   onDialogStart = (dialog: GameDialog) => {
+    const dialogStep = (step: number, listener: (evt: any) => void) => {
+      if (dialog.steps[step]) {
+        this.setState({dialogStep: dialog.steps[step]});
+      } else {
+        this.gameManager.resume();
+        window.removeEventListener('keydown', listener);
+        window.removeEventListener('pointerdown', listener);
+        this.setState({dialogStep: null, isDialogActive: false});
+        if (dialog.onDialogFinishedTrigger) {
+          TriggerManager.fire(dialog.onDialogFinishedTrigger, this.getTriggerContentObject());
+        }
+      }
+    };
+
     if (!this.state.isDialogActive) {
       this.gameManager.pause();
 
@@ -90,35 +115,50 @@ export class GamePage extends React.Component<any, GamePageState> {
 
       this.setState({isDialogActive: true, dialogStep: dialog.steps[currentStep]});
 
-      const keydownListener = (event: KeyboardEvent) => {
-        event.stopPropagation();
-
-        if (event.key === ACTION_BUTTON_CODE) {
+      if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
+        const clickListener = (event: PointerEvent) => {
+          event.stopPropagation();
           currentStep++;
+          dialogStep(currentStep, clickListener);
+        };
+        window.addEventListener('pointerdown', clickListener, false);
+      } else {
+        const keydownListener = (event: KeyboardEvent) => {
+          event.stopPropagation();
 
-          if (dialog.steps[currentStep]) {
-            this.setState({dialogStep: dialog.steps[currentStep]});
-          } else {
-            this.gameManager.resume();
-            window.removeEventListener('keydown', keydownListener);
-            this.setState({dialogStep: null, isDialogActive: false});
-            if (dialog.onDialogFinishedTrigger) {
-              TriggerManager.fire(dialog.onDialogFinishedTrigger, this.getTriggerContentObject());
-            }
+          if (event.key === ACTION_BUTTON_CODE) {
+            currentStep++;
+            dialogStep(currentStep, keydownListener);
           }
-        }
-      };
-
-      window.addEventListener('keydown', keydownListener, false);
+        };
+        window.addEventListener('keydown', keydownListener, false);
+      }
     }
   };
 
   render() {
+    let virtualControls;
+    if (this.state.virtualJoystickEnabled) {
+      virtualControls = (
+        <div className="game__virtual-controls">
+          <div id="joystick" className="game__virtual-joystick-area"/>
+          <div className="game__virtual-buttons">
+            <button className="game__virtual-button" id="button-dash"/>
+            <button className="game__virtual-button" id="button-interact"/>
+            <br/>
+            <button className="game__virtual-button" id="button-switch"/>
+            <button className="game__virtual-button" id="button-shoot"/>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <section className="game">
         <Load progress={this.state.loadingProgress}/>
         <div className="game__container">
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
+          {virtualControls}
           <Menu heading="Pause" isActive={this.state.pause}>
             <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>
             <button className="game__menu-option" onClick={this.onMenuSettingsClick}>Settings</button>

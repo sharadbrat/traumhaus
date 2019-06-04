@@ -19,6 +19,81 @@
   image-rendering: pixelated;
 }
 
+.game__virtual-controls {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 50;
+  left: 0;
+  bottom: 0;
+  height: 100px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+.game__virtual-joystick-area {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.game__virtual-buttons {
+}
+
+.game__virtual-button {
+  $size: 40px;
+  height: $size;
+  width: $size;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  border-radius: $size;
+
+  user-select: none;
+  transition: background-color ease-in-out 50ms;
+  will-change: background-color;
+}
+
+.game__virtual-button:active {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.game__virtual-button:nth-child(1) {
+  margin-left: -20px;
+}
+
+#button-dash {
+  background-image: url('/image/dash.svg');
+  background-size: 26px;
+}
+
+#button-interact {
+  background-image: url('/image/interact.svg');
+  background-size: 27px;
+}
+
+#button-switch {
+  background-image: url('/image/switch.svg');
+  background-size: 30px;
+}
+
+#button-shoot {
+  background-image: url('/image/shoot.svg');
+  background-size: 28px;
+}
+
+
 .game__menu-option {
   @include PageLink();
 

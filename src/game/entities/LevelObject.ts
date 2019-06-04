@@ -135,7 +135,7 @@ export class LevelObject {
       interaction = this.scene.getPlayer().getKeys().interact.isDown;
     }
 
-    if (interaction && distance < 20) {
+    if (GameProgressService.getInstance().getProgress().isControllable && interaction && distance < 20) {
       TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }

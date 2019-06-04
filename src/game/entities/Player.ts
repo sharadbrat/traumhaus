@@ -194,7 +194,8 @@ export class Player {
         this.keys.dash.isDown &&
         time > this.attackLockedUntil &&
         this.body.velocity.length() > 0 &&
-        this.ghostService.isGhostMode()
+        this.ghostService.isGhostMode() &&
+        GameProgressService.getInstance().getProgress().isControllable
       ) {
         GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
         this.attackUntil = time + attackDuration;
@@ -276,8 +277,8 @@ export class Player {
     force.x = force.x / norm;
     force.y = force.y / norm;
 
-    // todo: add movement lock
     content.services.progress.getProgress().isVulnerable = false;
+    GameProgressService.getInstance().setControllable(false);
     this.sprite.setAcceleration(force.x * 10000, force.y * 10000);
     this.sprite.setAlpha(0.5);
     this.sprite.setTint(0xFFAAAA);
@@ -289,7 +290,7 @@ export class Player {
     }, 70);
 
     setTimeout(() => {
-      // todo: add movement unlock
+      GameProgressService.getInstance().setControllable(true);
       this.sprite.setAcceleration(0);
     }, 200);
 
@@ -335,34 +336,58 @@ export class Player {
       });
 
       document.getElementById('button-dash').addEventListener('pointerdown', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.dash = true;
       });
 
       document.getElementById('button-dash').addEventListener('pointerleave', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.dash = false;
       });
 
       document.getElementById('button-interact').addEventListener('pointerdown', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.interact = true;
       });
 
       document.getElementById('button-interact').addEventListener('pointerleave', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.interact = false;
       });
 
       document.getElementById('button-switch').addEventListener('pointerdown', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.switch = true;
       });
 
       document.getElementById('button-switch').addEventListener('pointerleave', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.switch = false;
       });
 
       document.getElementById('button-shoot').addEventListener('pointerdown', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.shoot = true;
       });
 
       document.getElementById('button-shoot').addEventListener('pointerleave', (ev) => {
+        if (!GameProgressService.getInstance().getProgress().isControllable) {
+          return;
+        }
         this.joystickKeys.shoot = false;
       });
     } else if (this.controlsMode === ControlsType.GAMEPAD) {

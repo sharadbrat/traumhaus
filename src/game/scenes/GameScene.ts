@@ -53,24 +53,11 @@ export class GameScene extends Phaser.Scene {
 
     this.setupResizeEvents();
 
-    this.input.keyboard.on('keydown_Q', () => {
-      if (this.progressService.getProgress().canBecomeGhost) {
-        const mode = !this.ghostService.isGhostMode();
-
-        this.ghostService.setGhostMode(mode);
-        this.lightLayer.setGhostMode(mode);
-        this.levelMap.setGhostMode(mode);
-        this.player.setGhostMode(mode);
-        this.setObjectsGhostMode(mode);
-
-        this.getCamera().flash(1000, 255, 255, 255, true);
-
-        this.playerRealCollider.active = !this.ghostService.isGhostMode();
-        this.playerGhostCollider.active = this.ghostService.isGhostMode();
-
-        this.setupMusicTheme(this.getCurrentLevel());
-      }
-    });
+    if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
+      document.getElementById('button-switch').addEventListener('pointerdown', () => this.onGhostButton());
+    } else {
+      this.player.getKeys().ghost.on('down', () => this.onGhostButton());
+    }
 
     this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
@@ -110,6 +97,25 @@ export class GameScene extends Phaser.Scene {
 
   getCamera(): Phaser.Cameras.Scene2D.Camera {
     return this.cameras.main;
+  }
+
+  private onGhostButton() {
+    if (this.progressService.getProgress().canBecomeGhost && this.progressService.getProgress().isControllable) {
+      const mode = !this.ghostService.isGhostMode();
+
+      this.ghostService.setGhostMode(mode);
+      this.lightLayer.setGhostMode(mode);
+      this.levelMap.setGhostMode(mode);
+      this.player.setGhostMode(mode);
+      this.setObjectsGhostMode(mode);
+
+      this.getCamera().flash(1000, 255, 255, 255, true);
+
+      this.playerRealCollider.active = !this.ghostService.isGhostMode();
+      this.playerGhostCollider.active = this.ghostService.isGhostMode();
+
+      this.setupMusicTheme(this.getCurrentLevel());
+    }
   }
 
   private createCollider() {

@@ -248,32 +248,36 @@ export class EnemyLevelObject extends LevelObject {
     const to = tilemap.worldToTileXY(x, y);
     const from = tilemap.worldToTileXY(worldX, worldY);
 
-    const path = this.findPath(from, to);
+    try {
+      const path = this.findPath(from, to);
 
-    if (path.length < this.options.meta.chase.radius * 3) {
-      if (path.length > 3) {
-        const step = {x: path[1][0], y: path[1][1]};
+      if (path.length < this.options.meta.chase.radius * 3) {
+        if (path.length > 3) {
+          const step = {x: path[1][0], y: path[1][1]};
 
-        const directionX = this.getDirection(worldX, step.x);
-        const directionY = this.getDirection(worldY, step.y);
+          const directionX = this.getDirection(worldX, step.x);
+          const directionY = this.getDirection(worldY, step.y);
 
-        const norm = this.normalizeVector({x: directionX, y: directionY});
+          const norm = this.normalizeVector({x: directionX, y: directionY});
 
-        const velocityX = this.options.meta.chase.speed * norm.x;
-        const velocityY = this.options.meta.chase.speed * norm.y;
+          const velocityX = this.options.meta.chase.speed * norm.x;
+          const velocityY = this.options.meta.chase.speed * norm.y;
 
-        this.sprite.setVelocity(velocityX, velocityY);
-      } else if (!this.isCollidingWithPlayer()) {
-        const dir = this.scene.getPlayer().getPosition().subtract(this.sprite.body.position);
+          this.sprite.setVelocity(velocityX, velocityY);
+        } else if (!this.isCollidingWithPlayer()) {
+          const dir = this.scene.getPlayer().getPosition().subtract(this.sprite.body.position);
 
-        const norm = this.normalizeVector(dir);
+          const norm = this.normalizeVector(dir);
 
-        const velocityX = this.options.meta.chase.speed * norm.x;
-        const velocityY = this.options.meta.chase.speed * norm.y;
-        this.sprite.setVelocity(velocityX, velocityY);
-      } else {
-        this.sprite.setVelocity(0);
+          const velocityX = this.options.meta.chase.speed * norm.x;
+          const velocityY = this.options.meta.chase.speed * norm.y;
+          this.sprite.setVelocity(velocityX, velocityY);
+        } else {
+          this.sprite.setVelocity(0);
+        }
       }
+    } catch (e) {
+      console.error('Couldn\'t calculate path for chasing enemy, do nothing');
     }
   }
 

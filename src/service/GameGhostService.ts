@@ -18,5 +18,11 @@ export class GameGhostService {
 
   public setGhostMode(value: boolean) {
     this.ghostMode = value;
+    if (value) {
+      document.getElementById('hearts').className = "game__hud-hearts game__hud-hearts_enabled";
+    } else {
+      document.getElementById('hearts').className = "game__hud-hearts";
+    }
+
   }
 }

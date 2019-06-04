@@ -2,6 +2,7 @@ import { LevelManager } from '../game/levels';
 import { Door, LevelMapData } from '../game/entities/model';
 
 export interface GameProgress {
+  health: number;
   isVulnerable?: boolean;
   canBecomeGhost?: boolean;
   currentLevel?: LevelMapData;
@@ -19,6 +20,7 @@ export class GameProgressService {
 
   private constructor() {
     this.gameProgress = {
+      health: 3,
       isVulnerable: true,
       isControllable: false,
       // debugging purposes only
@@ -86,5 +88,30 @@ export class GameProgressService {
   private saveProgressToLocalStorage() {
     // todo: add position save
     localStorage.setItem(GameProgressService.GAME_PROGRESS_ID, JSON.stringify(this.gameProgress));
+  }
+
+  public decreaseHealth() {
+    const health = --this.getProgress().health;
+    if (health === 3) {
+      document.getElementById('health-1').className = 'game__hud-heart';
+      document.getElementById('health-2').className = 'game__hud-heart';
+      document.getElementById('health-3').className = 'game__hud-heart';
+    } else if (health === 2) {
+      document.getElementById('health-1').className = 'game__hud-heart';
+      document.getElementById('health-2').className = 'game__hud-heart';
+      document.getElementById('health-3').className = 'game__hud-heart game__hud-heart_damaged';
+    } else if (health === 1) {
+      document.getElementById('health-1').className = 'game__hud-heart';
+      document.getElementById('health-2').className = 'game__hud-heart game__hud-heart_damaged';
+      document.getElementById('health-3').className = 'game__hud-heart game__hud-heart_damaged';
+    } else {
+      document.getElementById('health-1').className = 'game__hud-heart game__hud-heart_damaged';
+      document.getElementById('health-2').className = 'game__hud-heart game__hud-heart_damaged';
+      document.getElementById('health-3').className = 'game__hud-heart game__hud-heart_damaged';
+    }
+
+    if (health === 0) {
+      console.log('lost the game');
+    }
   }
 }

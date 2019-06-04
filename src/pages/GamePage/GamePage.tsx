@@ -73,13 +73,20 @@ export class GamePage extends React.Component<any, GamePageState> {
         evt.stopPropagation();
         GameMenuService.getInstance().triggerOnMenuToggle();
       });
+
+      window.addEventListener("hashchange", (e) => {
+        if(e.oldURL.length > e.newURL.length) {
+          this.gameManager.saveProgress();
+          this.gameManager.shutdown();
+        }
+      });
     }
   }
 
-  onMenuToggle() {
+  onMenuToggle = () => {
     this.gameManager.pause();
     this.setState({pause: true});
-  }
+  };
 
   private onLoadingProgressUpdate(val: number) {
     this.setState({loadingProgress: val});
@@ -91,11 +98,14 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   onMenuSettingsClick = () => {
+    this.gameManager.resume();
     this.setState({pause: false});
   };
 
   onMenuExitClick = () => {
     this.props.history.push('/');
+    this.gameManager.saveProgress();
+    this.gameManager.shutdown();
     this.setState({pause: false});
   };
 
@@ -159,12 +169,24 @@ export class GamePage extends React.Component<any, GamePageState> {
       );
     }
 
+    const HUD = (
+      <div className="game__hud-container">
+        <button className="game__hud-back" aria-label="Menu" onClick={this.onMenuToggle}/>
+        <div className={GameGhostService.getInstance().isGhostMode() ? 'game__hud-hearts game__hud-hearts_enabled' : 'game__hud-hearts'} id="hearts">
+          <div className="game__hud-heart" id="health-1"/>
+          <div className="game__hud-heart" id="health-2"/>
+          <div className="game__hud-heart" id="health-3"/>
+        </div>
+      </div>
+    );
+
     return (
       <section className="game">
         <Load progress={this.state.loadingProgress}/>
         <div className="game__container">
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
           {virtualControls}
+          {HUD}
           <Menu heading="Pause" isActive={this.state.pause}>
             <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>
             <button className="game__menu-option" onClick={this.onMenuSettingsClick}>Settings</button>

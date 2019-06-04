@@ -54,9 +54,11 @@ export class GameScene extends Phaser.Scene {
     this.setupResizeEvents();
 
     if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
-      document.getElementById('button-switch').addEventListener('pointerdown', () => this.onGhostButton());
+      document.getElementById('button-switch').removeEventListener('pointerdown', this.onGhostButton);
+      document.getElementById('button-switch').addEventListener('pointerdown', this.onGhostButton);
     } else {
-      this.player.getKeys().ghost.on('down', () => this.onGhostButton());
+      this.player.getKeys().ghost.removeListener('down', this.onGhostButton);
+      this.player.getKeys().ghost.on('down', this.onGhostButton);
     }
 
     this.input.keyboard.on('keydown_ESC', () => {
@@ -99,7 +101,8 @@ export class GameScene extends Phaser.Scene {
     return this.cameras.main;
   }
 
-  private onGhostButton() {
+  private onGhostButton = () => {
+    debugger
     if (this.progressService.getProgress().canBecomeGhost && this.progressService.getProgress().isControllable) {
       const mode = !this.ghostService.isGhostMode();
 

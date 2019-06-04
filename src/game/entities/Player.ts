@@ -301,6 +301,8 @@ export class Player {
     }, Player.INVULNERABLE_TIME);
 
     content.services.sound.playSfx(AssetManager.soundAssets.hit.name);
+
+    GameProgressService.getInstance().decreaseHealth();
   }
 
   private setupControls() {

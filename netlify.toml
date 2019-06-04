@@ -1,5 +1,14 @@
 [[redirects]]
-  from = "/*"
+  from = "/game"
   to = "/"
-  status = 200
+  force = true
+
+[[redirects]]
+  from = "/about"
+  to = "/"
+  force = true
+
+[[redirects]]
+  from = "/settings"
+  to = "/"
   force = true

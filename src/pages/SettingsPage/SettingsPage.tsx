@@ -15,7 +15,7 @@ export class SettingsPage extends React.Component<any, any> {
 
   private onFullscreenButtonClick() {
     const root = document.getElementById('root');
-    if (root){
+    if (root) {
       root.requestFullscreen().catch((e: Error) => {
         alert(`Could not start fullscreen mode!\nError message: ${e.message}`);
       });

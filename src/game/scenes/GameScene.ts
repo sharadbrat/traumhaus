@@ -51,9 +51,7 @@ export class GameScene extends Phaser.Scene {
     AssetManager.loadAnimations(this);
     this.setupLevelMap();
 
-    window.addEventListener('resize', () => {
-      this.cameraResizeNeeded = true;
-    });
+    this.setupResizeEvents();
 
     this.input.keyboard.on('keydown_Q', () => {
       if (this.progressService.getProgress().canBecomeGhost) {
@@ -349,5 +347,39 @@ export class GameScene extends Phaser.Scene {
         level: LevelManager,
       },
     };
+  }
+
+  private setupResizeEvents() {
+    window.addEventListener('resize', () => {
+      this.cameraResizeNeeded = true;
+    });
+
+    window.addEventListener('orientationchange', () => {
+      this.cameraResizeNeeded = true;
+    });
+
+    window.addEventListener('fullscreenchange', () => {
+      this.cameraResizeNeeded = true;
+    });
+
+    /* Standard syntax */
+    window.addEventListener("fullscreenchange", () => {
+      this.cameraResizeNeeded = true;
+    });
+
+    /* Firefox */
+    window.addEventListener("mozfullscreenchange", () => {
+      this.cameraResizeNeeded = true;
+    });
+
+    /* Chrome, Safari and Opera */
+    window.addEventListener("webkitfullscreenchange", () => {
+      this.cameraResizeNeeded = true;
+    });
+
+    /* IE / Edge */
+    window.addEventListener("msfullscreenchange", () => {
+      this.cameraResizeNeeded = true;
+    });
   }
 }

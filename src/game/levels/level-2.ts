@@ -1,4 +1,4 @@
-import { AssetManager, FOREST_AMBIENT_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
+import { AssetManager, FOREST_AMBIENT_AUDIO_ID, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData } from '../entities/model';
 
 export const LEVEL_2_DATA: LevelMapData = {
@@ -56,8 +56,18 @@ export const LEVEL_2_DATA: LevelMapData = {
         toPosition: {x: 8, y: 11},
         toId: '01',
       },
+      {
+        fromPosition: {x: 2, y: 14},
+        toPosition: {x: 13, y: 5},
+        toId: '03',
+      },
+      {
+        fromPosition: {x: 3, y: 14},
+        toPosition: {x: 14, y: 5},
+        toId: '03',
+      },
     ],
-    themeId: FOREST_AMBIENT_AUDIO_ID,
+    themeId: MAIN_THEME_AUDIO_ID,
   },
   ghostWorld: {
     collisionMap: [[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,1],[1,0,0,1,1,1,0,0,0,1],[1,0,0,0,0,1,1,1,1,1],[1,0,0,0,0,1,1,1,1,1],[1,0,0,0,0,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,1],[1,1,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1]],
@@ -94,6 +104,6 @@ export const LEVEL_2_DATA: LevelMapData = {
       playerLightRolloff: 0,
       fogAlpha: 0,
     },
-    themeId: MAIN_THEME_AUDIO_ID,
+    themeId: GHOST_THEME_AUDIO_ID,
   },
 };

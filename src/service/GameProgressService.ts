@@ -21,7 +21,8 @@ export class GameProgressService {
     this.gameProgress = {
       isVulnerable: true,
       isControllable: false,
-      // canBecomeGhost: true,
+      // debugging purposes only
+      canBecomeGhost: true,
     };
   }
 
@@ -34,6 +35,7 @@ export class GameProgressService {
 
   public changeLevel(id: string) {
     this.gameProgress.currentLevel = LevelManager.getLevelById(id);
+    // this.saveProgressToLocalStorage();
   }
 
   public getCurrentLevel(): LevelMapData {
@@ -42,6 +44,7 @@ export class GameProgressService {
 
   public setCurrentLevel(level: LevelMapData) {
     this.gameProgress.currentLevel = level;
+    // this.saveProgressToLocalStorage();
   }
 
   public getLastDoor(): Door {
@@ -78,5 +81,10 @@ export class GameProgressService {
 
   public setControllable(val: boolean) {
     this.gameProgress.isControllable = val;
+  }
+
+  private saveProgressToLocalStorage() {
+    // todo: add position save
+    localStorage.setItem(GameProgressService.GAME_PROGRESS_ID, JSON.stringify(this.gameProgress));
   }
 }

@@ -34,7 +34,6 @@ export class GameManager {
   }
 
   public pause() {
-    // todo: add controller class which would manage this
     const scene = this.game.scene.getScene(SceneIdentifier.GAME_SCENE) as GameScene;
     if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
       const joystickKeys = scene.getPlayer().getJoystickKeys();
@@ -54,5 +53,10 @@ export class GameManager {
   public resume() {
     this.game.input.keyboard.enabled = true;
     SceneManager.getScenes().forEach(el => this.game.scene.resume(el.key));
+  }
+
+  public shutdown() {
+    // todo: add reset of services
+    this.game.destroy(false);
   }
 }

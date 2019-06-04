@@ -20,10 +20,6 @@ export class Game extends Phaser.Game {
           gravity: {y: 0}
         }
       },
-      scale: {
-        width: '100%',
-        height: '100%',
-      },
     };
     super(gameConfig);
 

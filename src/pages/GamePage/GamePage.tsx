@@ -67,6 +67,10 @@ export class GamePage extends React.Component<any, GamePageState> {
 
       GameMenuService.getInstance().setOnMenuToggleListener(() => this.onMenuToggle());
       GameMenuService.getInstance().setOnUpdateLoadingListener((val: number) => this.onLoadingProgressUpdate(val));
+
+      document.addEventListener('backbutton', () => {
+        GameMenuService.getInstance().triggerOnMenuToggle();
+      });
     }
   }
 
@@ -143,10 +147,10 @@ export class GamePage extends React.Component<any, GamePageState> {
         <div className="game__virtual-controls">
           <div id="joystick" className="game__virtual-joystick-area"/>
           <div className="game__virtual-buttons">
-            <button className="game__virtual-button" id="button-dash"/>
             <button className="game__virtual-button" id="button-interact"/>
-            <br/>
             <button className="game__virtual-button" id="button-switch"/>
+            <br/>
+            <button className="game__virtual-button" id="button-dash"/>
             <button className="game__virtual-button" id="button-shoot"/>
           </div>
         </div>

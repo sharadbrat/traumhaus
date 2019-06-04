@@ -11,9 +11,6 @@ export class PreloaderScene extends Phaser.Scene {
 
   preload() {
     AssetManager.loadAssets(this);
-    // load virtualjoystick plugin
-    this.load.plugin('rexvirtualjoystickplugin', '/js/rexvirtualjoystickplugin.js', true);
-
     this.load.on('progress', (value: number) => {
       GameMenuService.getInstance().updateLoadingProgress(value);
     });

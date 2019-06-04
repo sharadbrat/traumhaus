@@ -41,9 +41,11 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
   };
 
   onControlsModeSelect = (mode: ControlsType) => {
+    this.enableFullscreen();
+
     this.setState({isControlsMenuActive: false});
     GameControlsService.getInstance().setMode(mode);
-    this.props.history.push('/game');
+    setTimeout(() => this.props.history.push('/game'), 100)
   };
 
   render() {
@@ -61,6 +63,15 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
         <ControlsMenu isActive={this.state.isControlsMenuActive} onControlsModeSelect={this.onControlsModeSelect}/>
       </section>
     );
+  }
+
+  private enableFullscreen() {
+    const root = document.getElementById('root');
+    if (root) {
+      root.requestFullscreen().catch((e: Error) => {
+        alert(`Could not start fullscreen mode!\nError message: ${e.message}`);
+      });
+    }
   }
 
 }

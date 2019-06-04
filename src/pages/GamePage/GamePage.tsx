@@ -68,7 +68,9 @@ export class GamePage extends React.Component<any, GamePageState> {
       GameMenuService.getInstance().setOnMenuToggleListener(() => this.onMenuToggle());
       GameMenuService.getInstance().setOnUpdateLoadingListener((val: number) => this.onLoadingProgressUpdate(val));
 
-      document.addEventListener('backbutton', () => {
+      document.addEventListener('backbutton', (evt: any) => {
+        evt.preventDefault();
+        evt.stopPropagation();
         GameMenuService.getInstance().triggerOnMenuToggle();
       });
     }

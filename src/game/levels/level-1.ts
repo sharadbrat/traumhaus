@@ -1,4 +1,3 @@
-import { GameDialogActor } from '../dialogs';
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { TriggerContents } from '../TriggerManager';
 import { LEVEL_TEST_DATA } from './level-test';
@@ -204,6 +203,28 @@ export const LEVEL_1_DATA: LevelMapData = {
       fogAlpha: 0,
     },
     themeId: GHOST_THEME_AUDIO_ID,
+    doors: [
+      {
+        fromPosition: {x: 5, y: 10},
+        toPosition: {x: 5, y: 6},
+        toId: '02',
+      },
+      {
+        fromPosition: {x: 5, y: 9},
+        toPosition: {x: 5, y: 5},
+        toId: '02',
+      },
+      {
+        fromPosition: {x: 5, y: 8},
+        toPosition: {x: 5, y: 4},
+        toId: '02',
+      },
+      {
+        fromPosition: {x: 1, y: 8},
+        toPosition: {x: 3, y: 3},
+        toId: LEVEL_TEST_DATA.id,
+      },
+    ],
   },
   startPosition: {
     x: 20,

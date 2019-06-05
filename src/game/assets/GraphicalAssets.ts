@@ -7,6 +7,8 @@ export const STAGE_1_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_1_GHOST_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR_GRAPHICAL_ASSET';
+export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
+export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
 
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
@@ -34,14 +36,14 @@ export const stage1realGraphicalAsset: GraphicalAsset = {
   name: STAGE_1_REAL_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/Stage1_Tiles_NEW-extruuuded.png',
+  file: '/tiles/stage-1.png',
 };
 
 export const stage1ghostGraphicalAsset: GraphicalAsset = {
   name: STAGE_1_GHOST_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/Stage1_Tiles_Ghostworld.png',
+  file: '/tiles/stage-1-ghost.png',
 };
 
 // SPRITE ASSETS
@@ -113,6 +115,38 @@ export const professorGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.IDLE,
       start: 0x00,
       end: 0x02,
+      frameRate: 6,
+      repeat: true
+    }
+  }
+};
+
+export const invisibleGraphicalAsset: SpriteAsset = {
+  name: INVISIBLE_GRAPHICAL_ASSET_ID,
+  width: 10,
+  height: 10,
+  file: '/tiles/sprite-invisible.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      start: 0x00,
+      end: 0x00,
+      frameRate: 6,
+      repeat: true
+    }
+  }
+};
+
+export const studentCardGraphicalAsset: SpriteAsset = {
+  name: STUDENT_CARD_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/sprite-student-card.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      start: 0x00,
+      end: 0x03,
       frameRate: 6,
       repeat: true
     }

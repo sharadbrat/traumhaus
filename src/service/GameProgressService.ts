@@ -7,6 +7,10 @@ export interface GameProgress {
   canBecomeGhost?: boolean;
   currentLevel?: LevelMapData;
   isControllable: boolean;
+  stage1: {
+    gateDialogFinished: boolean;
+    doorDialogFinished: boolean;
+  };
 }
 
 export class GameProgressService {
@@ -25,6 +29,10 @@ export class GameProgressService {
       isControllable: false,
       // debugging purposes only
       canBecomeGhost: true,
+      stage1: {
+        gateDialogFinished: false,
+        doorDialogFinished: false,
+      },
     };
   }
 

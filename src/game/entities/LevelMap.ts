@@ -42,7 +42,7 @@ export class LevelMap {
 
     this.tilemap = this.createTilemap(options.scene, options.data.width, options.data.height);
 
-    this.utilTiles = this.tilemap.addTilesetImage(AssetManager.graphicalAssets.util.name);
+    this.utilTiles = this.tilemap.addTilesetImage(AssetManager.graphicalAssets.util.name, null, 16, 16, 1, 2);
 
     if (options.data.realWorld) {
       this.realBackgroundGraphicLayers = [];

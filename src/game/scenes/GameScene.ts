@@ -44,14 +44,14 @@ export class GameScene extends Phaser.Scene {
     this.soundService = GameSoundService.getInstance();
     this.progressService = GameProgressService.getInstance();
     this.controlsService = GameControlsService.getInstance();
+
+    this.setupResizeEvents();
   }
 
   create(): void {
     this.initializeSounds();
     AssetManager.loadAnimations(this);
     this.setupLevelMap();
-
-    this.setupResizeEvents();
 
     if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
       document.getElementById('button-switch').removeEventListener('pointerdown', this.onGhostButton);
@@ -102,7 +102,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onGhostButton = () => {
-    debugger
     if (this.progressService.getProgress().canBecomeGhost && this.progressService.getProgress().isControllable) {
       const mode = !this.ghostService.isGhostMode();
 
@@ -368,11 +367,6 @@ export class GameScene extends Phaser.Scene {
     });
 
     window.addEventListener('fullscreenchange', () => {
-      this.cameraResizeNeeded = true;
-    });
-
-    /* Standard syntax */
-    window.addEventListener("fullscreenchange", () => {
       this.cameraResizeNeeded = true;
     });
 

@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import './_GamePage.scss';
 import { AssetManager, GameManager, GameManagerOptions } from '../../game';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
@@ -11,6 +10,8 @@ import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
 import { Load } from '../../components/Load';
 import { ControlsType, GameControlsService } from '../../service/GameControlsService';
+
+import './_GamePage.scss';
 
 interface GamePageProps {
   history: History;

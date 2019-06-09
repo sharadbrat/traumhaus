@@ -8,7 +8,7 @@ import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
 import { ENEMY_TRIGGERS_ACTIONS } from './EnemyLevelObject';
 import { LevelObjectAnimation } from './model';
-import { ControlsType, GameControlsService, Keys } from '../../service/GameControlsService';
+import { ControlsType, GameControlsService, JoystickKeys, Keys } from '../../service/GameControlsService';
 
 const speed = 125;
 const attackSpeed = 500;
@@ -31,13 +31,13 @@ export class Player {
   private ghostService: GameGhostService;
   private controlsMode: ControlsType;
   private joystick: JoystickManager;
-  private joystickKeys: {
-    horizontal: number,
-    vertical: number,
-    dash: boolean,
-    interact: boolean,
-    switch: boolean,
-    shoot: boolean,
+  private joystickKeys: JoystickKeys = {
+    horizontal: 0,
+    vertical: 0,
+    dash: false,
+    interact: false,
+    switch: false,
+    shoot: false,
   };
 
   constructor(x: number, y: number, scene: Phaser.Scene) {
@@ -309,89 +309,7 @@ export class Player {
     this.controlsMode = GameControlsService.getInstance().getMode();
 
     if (this.controlsMode === ControlsType.ON_SCREEN) {
-      this.joystick = nipplejs.create({
-        zone: document.getElementById('joystick'),
-        mode: 'static',
-        position: {left: '50%', top: '50%'},
-      });
-
-      this.joystickKeys = {
-        horizontal: 0,
-        vertical: 0,
-        dash: false,
-        interact: false,
-        switch: false,
-        shoot: false,
-      };
-
-      this.joystick.on('move', (evt, data) => {
-        const force = Math.min(data.force, 1);
-        // cos for horizontal
-        this.joystickKeys.horizontal = Math.cos(data.angle.radian) * force;
-        // sin for vertical
-        this.joystickKeys.vertical = -Math.sin(data.angle.radian) * force;
-      });
-
-      this.joystick.on('end', () => {
-        this.joystickKeys.horizontal = 0;
-        this.joystickKeys.vertical = 0;
-      });
-
-      document.getElementById('button-dash').addEventListener('pointerdown', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.dash = true;
-      });
-
-      document.getElementById('button-dash').addEventListener('pointerleave', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.dash = false;
-      });
-
-      document.getElementById('button-interact').addEventListener('pointerdown', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.interact = true;
-      });
-
-      document.getElementById('button-interact').addEventListener('pointerleave', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.interact = false;
-      });
-
-      document.getElementById('button-switch').addEventListener('pointerdown', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.switch = true;
-      });
-
-      document.getElementById('button-switch').addEventListener('pointerleave', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.switch = false;
-      });
-
-      document.getElementById('button-shoot').addEventListener('pointerdown', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.shoot = true;
-      });
-
-      document.getElementById('button-shoot').addEventListener('pointerleave', (ev) => {
-        if (!GameProgressService.getInstance().getProgress().isControllable) {
-          return;
-        }
-        this.joystickKeys.shoot = false;
-      });
+      this.joystick = GameControlsService.getInstance().getJoystick(this.joystickKeys);
     } else if (this.controlsMode === ControlsType.GAMEPAD) {
       this.keys = this.scene.input.keyboard.addKeys(GameControlsService.getInstance().getGamepadControls()) as Keys;
     } else {

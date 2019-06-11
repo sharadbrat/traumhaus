@@ -147,7 +147,7 @@ export const studentCardGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.IDLE,
       start: 0x00,
       end: 0x03,
-      frameRate: 6,
+      frameRate: 3,
       repeat: true
     }
   }

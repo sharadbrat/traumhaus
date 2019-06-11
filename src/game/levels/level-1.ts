@@ -5,16 +5,16 @@ import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { playerActor, professorActor } from './actors';
 
 export const LEVEL_1_TRIGGER_ACTIONS = {
-  ON_PROFESSOR_COLLIDE: 'ON_PROFESSOR_COLLIDE',
   ON_PROFESSOR_ACTION: 'ON_PROFESSOR_ACTION',
-  ON_PROFESSOR_DIALOG_FINISHED: 'ON_PROFESSOR_DIALOG_FINISHED',
   ON_WAKE_UP_DIALOG_FINISHED: 'ON_WAKE_UP_DIALOG_FINISHED',
   ON_NEW_GAME: 'ON_NEW_GAME',
+  ON_THOSKA_ACTION: 'ON_THOSKA_ACTION',
 };
 
 export const LEVEL_1_DIALOGS_IDS = {
   WAKE_UP_DIALOG: 'WAKE_UP_DIALOG',
   PROFESSOR_DIALOG: 'PROFESSOR_DIALOG',
+  STUDENT_CARD_RETRIEVE_DIALOG: 'STUDENT_CARD_RETREIVE_DIALOG',
 };
 
 
@@ -118,11 +118,6 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
         triggers: [
           {
-            event: TriggerEvent.ON_COLLIDE,
-            action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_COLLIDE,
-            fixTime: 100,
-          },
-          {
             event: TriggerEvent.ON_ACTION,
             action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
             fixTime: 1000,
@@ -225,6 +220,29 @@ export const LEVEL_1_DATA: LevelMapData = {
         toId: LEVEL_TEST_DATA.id,
       },
     ],
+    objects: [
+      {
+        id: 'thoska',
+        type: LevelObjectType.STATIC,
+        isCollideable: false,
+        width: 16,
+        height: 16,
+        position: {x: 21, y: 7, offsetY: 8},
+        graphics: {
+          asset: AssetManager.spriteAssets.studentCard,
+          offsetX: 0,
+          offsetY: 0,
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_ACTION,
+            action: LEVEL_1_TRIGGER_ACTIONS.ON_THOSKA_ACTION,
+            fixTime: 1000,
+          },
+        ],
+        inGhostWorld: true,
+      },
+    ],
   },
   startPosition: {
     x: 20,
@@ -233,21 +251,19 @@ export const LEVEL_1_DATA: LevelMapData = {
 
   triggerActions: [
     {
-      action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_COLLIDE,
+      action: LEVEL_1_TRIGGER_ACTIONS.ON_THOSKA_ACTION,
       callback: (content: TriggerContents) => {
-        console.log('collision happened!');
+        if (!content.services.progress.getProgress().stage1.isStudentCardRetrieved) {
+          content.object.setVisible(false);
+          content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.STUDENT_CARD_RETRIEVE_DIALOG);
+          content.services.progress.getProgress().stage1.isStudentCardRetrieved = true;
+        }
       }
     },
     {
       action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_ACTION,
       callback: (content: TriggerContents) => {
         content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.PROFESSOR_DIALOG);
-      }
-    },
-    {
-      action: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_DIALOG_FINISHED,
-      callback: (content: TriggerContents) => {
-        // content.services.progress.getProgress().canBecomeGhost = true;
       }
     },
     {
@@ -275,7 +291,7 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
         {
           actor: playerActor,
-          phrase: '"This is not the first time that happens. Probably I should see doctor..."',
+          phrase: '"Probably I should see doctor..."',
           position: 'right',
         },
         {
@@ -285,22 +301,22 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
         {
           actor: professorActor,
-          phrase: 'Sleeping again? You will not get good grades on my subject, student!',
+          phrase: 'Sleeping again?',
+          position: 'left',
+        },
+        {
+          actor: professorActor,
+          phrase: 'You will not get good grades on my subject, student!',
           position: 'left',
         },
         {
           actor: playerActor,
-          phrase: '"LOL, what\'s the subject? I should say sorry for this nap, he is getting angry..."',
-          position: 'right',
-        },
-        {
-          actor: playerActor,
-          phrase: 'I\'m sorry, professor. I don\'t feel very well, the studies are so intense, I barely can handle this.',
+          phrase: 'I\'m sorry, professor. I don\'t feel very well.',
           position: 'right',
         },
         {
           actor: professorActor,
-          phrase: 'You should pay more attention to your studies. If you want to become good at my subject, you should put more efforts in it!',
+          phrase: 'If you want to become good at my subject, you should put more efforts in it!',
           position: 'left',
         },
         {
@@ -330,7 +346,26 @@ export const LEVEL_1_DATA: LevelMapData = {
           position: 'left',
         },
       ],
-      onDialogFinishedTrigger: LEVEL_1_TRIGGER_ACTIONS.ON_PROFESSOR_DIALOG_FINISHED,
-    }
+    },
+    {
+      id: LEVEL_1_DIALOGS_IDS.STUDENT_CARD_RETRIEVE_DIALOG,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '"Here it is!"',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Now I can finally get back home ..."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Firstly I have to find my body!"',
+          position: 'right',
+        },
+      ]
+    },
   ],
 };

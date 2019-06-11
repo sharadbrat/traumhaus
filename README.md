@@ -57,14 +57,15 @@ Georgii Sharadze - Coding
 - Sound manager +
 - Game state system +
 - Game saving / loading +
-- Ambient sounds
-- Footsteps sounds
-- Controls manager +
-- Gamepad controls
 - HUD +
 - Enemies +
+- Netlify toml +
+- Controls manager +
+- Gamepad controls
+- Ambient sounds
+- Footsteps sounds
 - Shooting Enemies
 - Dashing Enemies
 - Shooting mechanics
 - All settings and menus and dialog windows
-- Netlify toml +
+- Bugfixing

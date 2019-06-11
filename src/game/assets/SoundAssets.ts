@@ -38,7 +38,7 @@ export const ghostThemeAudioAsset: SoundAsset = {
 export const dashSoundAsset: SoundAsset = {
   name: DASH_SOUND_ASSET_ID,
   file: '/sounds/dash.mp3',
-  soundConfig: { loop: false, volume: 0.3 },
+  soundConfig: { loop: false, volume: 0.1 },
 };
 
 export const shootSoundAsset: SoundAsset = {

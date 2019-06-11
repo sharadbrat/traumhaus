@@ -75,7 +75,10 @@ export class LevelObject {
     const {asset, offsetX, offsetY} = options.graphics;
     const {x, y} = this.getWorldPositionFromTilePosition(this.scene, options.position);
 
-    const sprite = this.scene.physics.add.sprite(x + options.width / 2, y, asset.name, 0);
+    const physicalOffsetX = options.position.offsetX || 0;
+    const physicalOffsetY = options.position.offsetY || 0;
+
+    const sprite = this.scene.physics.add.sprite(x + options.width / 2 + physicalOffsetX, y + physicalOffsetY, asset.name, 0);
     sprite.setSize(options.width, options.height);
     sprite.setOffset(offsetX, offsetY);
     const key = `${asset.name}__${asset.animations.idle.name}`;

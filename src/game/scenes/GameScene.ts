@@ -7,7 +7,7 @@ import { LEVEL_1_TRIGGER_ACTIONS, LevelManager } from '../levels';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { DialogManager } from '../dialogs';
-import { LevelMapData, LevelObjectData } from '../entities/model';
+import { Door, LevelMapData, LevelObjectData } from '../entities/model';
 import { GameManager } from '../GameManager';
 import { ControlsType, GameControlsService } from '../../service/GameControlsService';
 
@@ -74,9 +74,7 @@ export class GameScene extends Phaser.Scene {
     const door = this.levelMap.checkPlayerDoorCollision(this.player.getBody());
 
     if (door) {
-      GameProgressService.getInstance().changeLevel(door.toId);
-      GameProgressService.getInstance().setLastDoor(door);
-      this.scene.start(SceneIdentifier.GAME_SCENE);
+      this.changeLevel(door);
       return;
     } else {
       this.updatePlayer(time);
@@ -101,24 +99,28 @@ export class GameScene extends Phaser.Scene {
     return this.cameras.main;
   }
 
+  setGhostMode(mode: boolean) {
+    this.ghostService.setGhostMode(mode);
+    this.lightLayer.setGhostMode(mode);
+    this.levelMap.setGhostMode(mode);
+    this.player.setGhostMode(mode);
+    this.setObjectsGhostMode(mode);
+
+    this.getCamera().flash(1000, 255, 255, 255, true);
+
+    this.playerRealCollider.active = !this.ghostService.isGhostMode();
+    this.playerGhostCollider.active = this.ghostService.isGhostMode();
+
+    this.setupMusicTheme(this.getCurrentLevel());
+  }
+
   private onGhostButton = () => {
     if (this.progressService.getProgress().canBecomeGhost && this.progressService.getProgress().isControllable) {
       const mode = !this.ghostService.isGhostMode();
 
-      this.ghostService.setGhostMode(mode);
-      this.lightLayer.setGhostMode(mode);
-      this.levelMap.setGhostMode(mode);
-      this.player.setGhostMode(mode);
-      this.setObjectsGhostMode(mode);
-
-      this.getCamera().flash(1000, 255, 255, 255, true);
-
-      this.playerRealCollider.active = !this.ghostService.isGhostMode();
-      this.playerGhostCollider.active = this.ghostService.isGhostMode();
-
-      this.setupMusicTheme(this.getCurrentLevel());
+      this.setGhostMode(mode);
     }
-  }
+  };
 
   private createCollider() {
     if (this.levelMap.getMapData().realWorld) {
@@ -384,5 +386,11 @@ export class GameScene extends Phaser.Scene {
     window.addEventListener("msfullscreenchange", () => {
       this.cameraResizeNeeded = true;
     });
+  }
+
+  changeLevel(door: Door) {
+    GameProgressService.getInstance().changeLevel(door.toId);
+    GameProgressService.getInstance().setLastDoor(door);
+    this.scene.start(SceneIdentifier.GAME_SCENE);
   }
 }

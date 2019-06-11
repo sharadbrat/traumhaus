@@ -10,7 +10,17 @@ export interface GameProgress {
   stage1: {
     gateDialogFinished: boolean;
     doorDialogFinished: boolean;
+    benchDialogFinished: boolean;
+    benchGhostDialogFinished: boolean;
+    isStudentCardRetrieved: boolean;
+    isMensaGateOpened: boolean;
   };
+  controls: {
+    dash: boolean;
+    switch: boolean;
+    shoot: boolean;
+  };
+  showGhostHud: boolean;
 }
 
 export class GameProgressService {
@@ -27,12 +37,21 @@ export class GameProgressService {
       health: 3,
       isVulnerable: true,
       isControllable: false,
-      // debugging purposes only
       canBecomeGhost: true,
       stage1: {
         gateDialogFinished: false,
         doorDialogFinished: false,
+        isStudentCardRetrieved: false,
+        benchDialogFinished: false,
+        benchGhostDialogFinished: false,
+        isMensaGateOpened: false
       },
+      controls: {
+        dash: false,
+        switch: false,
+        shoot: false,
+      },
+      showGhostHud: false,
     };
   }
 

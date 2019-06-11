@@ -93,7 +93,7 @@ export interface LevelObjectData {
   type: LevelObjectType;
   isCollideable: boolean;
 
-  position: MapPosition;
+  position: {x: number, y: number, offsetX?: number, offsetY?: number};
   width: number;
   height: number;
 

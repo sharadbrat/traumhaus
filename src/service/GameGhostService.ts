@@ -1,3 +1,5 @@
+import { GameProgressService } from './GameProgressService';
+
 export class GameGhostService {
   private static instance: GameGhostService;
   private ghostMode: boolean;
@@ -18,7 +20,7 @@ export class GameGhostService {
 
   public setGhostMode(value: boolean) {
     this.ghostMode = value;
-    if (value) {
+    if (value && GameProgressService.getInstance().getProgress().showGhostHud) {
       document.getElementById('hearts').className = "game__hud-hearts game__hud-hearts_enabled";
     } else {
       document.getElementById('hearts').className = "game__hud-hearts";

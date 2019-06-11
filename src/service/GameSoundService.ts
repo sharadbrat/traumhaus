@@ -68,9 +68,18 @@ export class GameSoundService {
           // this.currentTheme.sound.setVolume(0);
           this.fadeSound(this.currentTheme.sound, scene, 0);
 
+          const prevSound = this.currentTheme.sound;
+          const currSound = soundObject.sound;
+
+          setTimeout(() => {
+            prevSound.setVolume(0);
+            currSound.setVolume(1);
+          }, GameSoundService.THEME_FADE_TIME);
+
           this.currentTheme = soundObject;
 
           this.fadeSound(soundObject.sound, scene, desiredVolume);
+
           if (!this.currentTheme.sound.isPlaying) {
             this.currentTheme.sound.play(undefined, {loop: true});
           }
@@ -78,6 +87,7 @@ export class GameSoundService {
       } else {
         this.currentTheme = soundObject;
         // this.currentTheme.sound.setVolume(desiredVolume);
+
         this.fadeSound(soundObject.sound, scene, desiredVolume);
         if (!this.currentTheme.sound.isPlaying) {
           this.currentTheme.sound.play(undefined, {loop: true});

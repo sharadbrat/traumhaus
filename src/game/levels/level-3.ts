@@ -1,5 +1,5 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
-import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
+import { LevelMapData, LevelObjectType, MapPosition, TriggerEvent } from '../entities/model';
 import { TriggerContents } from '../TriggerManager';
 import { playerActor } from './actors';
 
@@ -10,12 +10,16 @@ export const LEVEL_3_TRIGGER_ACTIONS = {
   ON_GATE_DIALOG_FINISHED: 'ON_GATE_DIALOG_FINISHED',
   ON_DOOR_DIALOG_FINISHED: 'ON_DOOR_DIALOG_FINISHED',
   ON_BENCH_DIALOG_FINISHED: 'ON_BENCH_DIALOG_FINISHED',
+  ON_BENCH_GHOST_DIALOG_FINISHED: 'ON_BENCH_GHOST_DIALOG_FINISHED',
+  ON_GATE_COLLIDE: 'ON_GATE_COLLIDE',
 };
 
 export const LEVEL_3_DIALOGS_IDS = {
   ON_GATE_NEAR_DIALOG: 'ON_GATE_NEAR_DIALOG',
   ON_DOOR_COLLIDE_DIALOG: 'ON_DOOR_COLLIDE_DIALOG',
   BENCH_DIALOG: 'BENCH_DIALOG',
+  BENCH_GHOST_DIALOG: 'BENCH_GHOST_DIALOG',
+  AFTER_BENCH_GHOST_DIALOG: 'AFTER_BENCH_GHOST_DIALOG',
 };
 
 export const LEVEL_3_DATA: LevelMapData = {
@@ -105,6 +109,11 @@ export const LEVEL_3_DATA: LevelMapData = {
             action: LEVEL_3_TRIGGER_ACTIONS.ON_GATE_NEAR,
             fixTime: 1000,
           },
+          {
+            event: TriggerEvent.ON_COLLIDE,
+            action: LEVEL_3_TRIGGER_ACTIONS.ON_GATE_COLLIDE,
+            fixTime: 1000,
+          },
         ],
         inGhostWorld: false,
       },
@@ -183,6 +192,29 @@ export const LEVEL_3_DATA: LevelMapData = {
       playerLightRolloff: 0,
       fogAlpha: 0,
     },
+    objects: [
+      {
+        id: 'bench-ghost',
+        type: LevelObjectType.STATIC,
+        isCollideable: true,
+        width: 32,
+        height: 16,
+        position: {x: 26, y: 8},
+        graphics: {
+          asset: AssetManager.spriteAssets.invisible,
+          offsetX: -10,
+          offsetY: -7,
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_ACTION,
+            action: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_ACTION,
+            fixTime: 1000,
+          },
+        ],
+        inGhostWorld: true,
+      },
+    ],
     doors: [
       {
         fromPosition: {x: 13, y: 4},
@@ -201,8 +233,20 @@ export const LEVEL_3_DATA: LevelMapData = {
     {
       action: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_ACTION,
       callback: (content: TriggerContents) => {
-        if (content.services.progress.getProgress().stage1.doorDialogFinished) {
-          content.managers.dialog.runDialog(LEVEL_3_DIALOGS_IDS.BENCH_DIALOG);
+        const progress = content.services.progress.getProgress();
+        if (progress.stage1.doorDialogFinished) {
+          if (!progress.stage1.benchDialogFinished) {
+            content.managers.dialog.runDialog(LEVEL_3_DIALOGS_IDS.BENCH_DIALOG);
+          } else if (!progress.stage1.benchGhostDialogFinished && progress.stage1.isStudentCardRetrieved) {
+            content.services.ghost.setGhostMode(false);
+            content.player.setGhostMode(false);
+            content.scene.setGhostMode(false);
+
+            setTimeout(() => {
+              content.managers.dialog.runDialog(LEVEL_3_DIALOGS_IDS.AFTER_BENCH_GHOST_DIALOG);
+              content.services.progress.getProgress().stage1.isMensaGateOpened = true;
+            }, 1000);
+          }
         }
       }
     },
@@ -224,6 +268,19 @@ export const LEVEL_3_DATA: LevelMapData = {
       }
     },
     {
+      action: LEVEL_3_TRIGGER_ACTIONS.ON_GATE_COLLIDE,
+      callback: (content: TriggerContents) => {
+        if (content.services.progress.getProgress().stage1.isMensaGateOpened) {
+          content.scene.changeLevel({
+            fromPosition: null,
+            toPosition: {x: 4, y: 3},
+            // todo
+            toId: '02',
+          });
+        }
+      }
+    },
+    {
       action: LEVEL_3_TRIGGER_ACTIONS.ON_GATE_DIALOG_FINISHED,
       callback: (content: TriggerContents) => {
         content.services.progress.getProgress().stage1.gateDialogFinished = true;
@@ -235,10 +292,19 @@ export const LEVEL_3_DATA: LevelMapData = {
         content.services.progress.getProgress().stage1.doorDialogFinished = true;
       }
     },
+
     {
       action: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_DIALOG_FINISHED,
       callback: (content: TriggerContents) => {
-        console.log('bench finished');
+        content.services.ghost.setGhostMode(true);
+        content.player.setGhostMode(true);
+        content.scene.setGhostMode(true);
+        content.services.progress.getProgress().stage1.benchDialogFinished = true;
+
+        setTimeout(() => {
+          content.managers.dialog.runDialog(LEVEL_3_DIALOGS_IDS.BENCH_GHOST_DIALOG);
+          content.services.progress.getProgress().isControllable = true;
+        }, 1000);
       }
     },
   ],
@@ -248,7 +314,7 @@ export const LEVEL_3_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Shiiiish, where is my thoshka?"',
+          phrase: '"Shiiiish, where is my Thoska?"',
           position: 'right',
         },
         {
@@ -274,7 +340,12 @@ export const LEVEL_3_DATA: LevelMapData = {
         },
         {
           actor: playerActor,
-          phrase: '"Im soo tired OMG, better find a bench and rest for a while"',
+          phrase: '"I\'m soo tired OMG."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Better find a bench and rest for a while."',
           position: 'right',
         },
       ],
@@ -288,13 +359,49 @@ export const LEVEL_3_DATA: LevelMapData = {
           phrase: '"This bench looks perfect!"',
           position: 'right',
         },
+      ],
+      onDialogFinishedTrigger: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_DIALOG_FINISHED,
+    },
+    {
+      id: LEVEL_3_DIALOGS_IDS.BENCH_GHOST_DIALOG,
+      steps: [
         {
           actor: playerActor,
-          phrase: '"I will sleep here for a loooooong time :)"',
+          phrase: '"Whoa! What is going on here?"',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Did I become a ghost?"',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Anyway, it will help me to get my Thoska back"',
           position: 'right',
         },
       ],
-      onDialogFinishedTrigger: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_DIALOG_FINISHED,
+      onDialogFinishedTrigger: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_GHOST_DIALOG_FINISHED
+    },
+    {
+      id: LEVEL_3_DIALOGS_IDS.AFTER_BENCH_GHOST_DIALOG,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '"Did I woke up? Weird dream ..."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"And I have my Thoska in my pocket!"',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Better head to home now ..."',
+          position: 'right',
+        },
+      ],
     },
   ],
 };

@@ -4,7 +4,7 @@
 
 Traumhaus - is an indie game, made specially for 8-bit of Bauhaus project in Bauhaus university, SS2019.<br>
 Development is still in progress for now, we are rapidly improving the game to make it marvelous!<br>
-Please, check out the [live demo](https://angry-benz-8001b6.netlify.com/)
+Please, check out the [live demo](https://traumhaus.netlify.com/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -59,9 +59,12 @@ Georgii Sharadze - Coding
 - Game saving / loading +
 - Ambient sounds
 - Footsteps sounds
-- Controls manager
-- HUD
+- Controls manager +
+- Gamepad controls
+- HUD +
+- Enemies +
+- Shooting Enemies
+- Dashing Enemies
 - Shooting mechanics
-- Enemies
 - All settings and menus and dialog windows
-- Netlify toml
+- Netlify toml +

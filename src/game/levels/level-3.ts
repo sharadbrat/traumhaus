@@ -1,5 +1,5 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
-import { LevelMapData, LevelObjectType, MapPosition, TriggerEvent } from '../entities/model';
+import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { TriggerContents } from '../TriggerManager';
 import { playerActor } from './actors';
 
@@ -10,7 +10,6 @@ export const LEVEL_3_TRIGGER_ACTIONS = {
   ON_GATE_DIALOG_FINISHED: 'ON_GATE_DIALOG_FINISHED',
   ON_DOOR_DIALOG_FINISHED: 'ON_DOOR_DIALOG_FINISHED',
   ON_BENCH_DIALOG_FINISHED: 'ON_BENCH_DIALOG_FINISHED',
-  ON_BENCH_GHOST_DIALOG_FINISHED: 'ON_BENCH_GHOST_DIALOG_FINISHED',
   ON_GATE_COLLIDE: 'ON_GATE_COLLIDE',
 };
 
@@ -20,6 +19,7 @@ export const LEVEL_3_DIALOGS_IDS = {
   BENCH_DIALOG: 'BENCH_DIALOG',
   BENCH_GHOST_DIALOG: 'BENCH_GHOST_DIALOG',
   AFTER_BENCH_GHOST_DIALOG: 'AFTER_BENCH_GHOST_DIALOG',
+  ON_LEVEL_4_ENTER_DIALOG: 'ON_LEVEL_4_ENTER_DIALOG',
 };
 
 export const LEVEL_3_DATA: LevelMapData = {
@@ -273,10 +273,11 @@ export const LEVEL_3_DATA: LevelMapData = {
         if (content.services.progress.getProgress().stage1.isMensaGateOpened) {
           content.scene.changeLevel({
             fromPosition: null,
-            toPosition: {x: 4, y: 3},
-            // todo
-            toId: '02',
+            toPosition: {x: 10, y: 8},
+            toId: '04',
           });
+
+          setTimeout(() => content.managers.dialog.runDialog(LEVEL_3_DIALOGS_IDS.ON_LEVEL_4_ENTER_DIALOG), 2000);
         }
       }
     },
@@ -381,7 +382,6 @@ export const LEVEL_3_DATA: LevelMapData = {
           position: 'right',
         },
       ],
-      onDialogFinishedTrigger: LEVEL_3_TRIGGER_ACTIONS.ON_BENCH_GHOST_DIALOG_FINISHED
     },
     {
       id: LEVEL_3_DIALOGS_IDS.AFTER_BENCH_GHOST_DIALOG,

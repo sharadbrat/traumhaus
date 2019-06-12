@@ -83,7 +83,7 @@ export class GameScene extends Phaser.Scene {
 
       this.updateGameObjects(time);
 
-      this.updateMyFOV(delta);
+      this.updateLightLayer(delta);
     }
   }
 
@@ -268,10 +268,10 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  private updateMyFOV(delta: number) {
+  private updateLightLayer(delta: number) {
     const pos = new Phaser.Math.Vector2({
-      x: this.levelMap.getTilemap().worldToTileX(this.player.getBody().x),
-      y: this.levelMap.getTilemap().worldToTileY(this.player.getBody().y)
+      x: this.levelMap.getTilemap().worldToTileX(this.player.getBody().center.x),
+      y: this.levelMap.getTilemap().worldToTileY(this.player.getBody().center.y)
     });
 
     const bounds = this.getCameraBounds(this.cameras.main);

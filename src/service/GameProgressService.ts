@@ -37,6 +37,7 @@ export class GameProgressService {
       health: 3,
       isVulnerable: true,
       isControllable: false,
+      // isControllable: true,
       // canBecomeGhost: true,
       stage1: {
         gateDialogFinished: false,

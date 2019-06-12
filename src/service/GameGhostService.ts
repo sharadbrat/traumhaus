@@ -20,6 +20,7 @@ export class GameGhostService {
 
   public setGhostMode(value: boolean) {
     this.ghostMode = value;
+    // todo: fix the issue with react. when I show the dialog, react recalculates the HUD and makes it shown
     if (value && GameProgressService.getInstance().getProgress().showGhostHud) {
       document.getElementById('hearts').className = "game__hud-hearts game__hud-hearts_enabled";
     } else {

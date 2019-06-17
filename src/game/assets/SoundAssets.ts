@@ -91,9 +91,11 @@ export const footStepStoneSoundAsset: SoundAsset = {
 export const forestAmbientAudioAsset: SoundAsset = {
   name: FOREST_AMBIENT_AUDIO_ID,
   file: '/sounds/ambient_forest.mp3',
+  soundConfig: { loop: false, volume: 0.2 },
 };
 
 export const cityAmbientAudioAsset: SoundAsset = {
   name: CITY_AMBIENT_AUDIO_ID,
   file: '/sounds/ambient_city.mp3',
+  soundConfig: { loop: false, volume: 0.3 },
 };

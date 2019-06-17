@@ -1,4 +1,10 @@
-import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
+import {
+  AssetManager,
+  CITY_AMBIENT_AUDIO_ID,
+  FOREST_AMBIENT_AUDIO_ID,
+  GHOST_THEME_AUDIO_ID,
+  MAIN_THEME_AUDIO_ID
+} from '../assets';
 import { LevelMapData } from '../entities/model';
 import { playerActor } from './actors';
 import { LEVEL_4_DIALOGS_IDS } from './level-4';
@@ -59,6 +65,10 @@ export const LEVEL_4_MOD_DATA: LevelMapData = {
       fogAlpha: 0.6,
     },
     themeId: MAIN_THEME_AUDIO_ID,
+    ambients: [
+      CITY_AMBIENT_AUDIO_ID,
+      FOREST_AMBIENT_AUDIO_ID
+    ],
     doors: [
       {
         fromPosition: {x: 26, y: 38},

@@ -44,6 +44,7 @@ export interface World {
   doors?: Door[];
   objects?: (LevelObjectData | EnemyLevelObjectData)[];
   themeId: string;
+  ambients?: string[];
 }
 
 export enum LevelObjectAnimation {

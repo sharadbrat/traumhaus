@@ -316,11 +316,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   private setupMusicTheme(currentLevel: LevelMapData) {
-    if (this.ghostService.isGhostMode()) {
-      this.soundService.setTheme(currentLevel.ghostWorld.themeId, this);
-    } else {
-      this.soundService.setTheme(currentLevel.realWorld.themeId, this);
-    }
+    const world = this.ghostService.isGhostMode() ? currentLevel.ghostWorld : currentLevel.realWorld;
+    this.soundService.setTheme(world.themeId, this);
+    this.soundService.setAmbients(world.ambients, this);
   }
 
   private initializeSounds() {

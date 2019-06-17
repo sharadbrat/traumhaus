@@ -1,7 +1,8 @@
 import { AssetManager } from '../game';
 import { SoundAsset } from '../game/assets';
+import { GameScene } from '../game/scenes/GameScene';
 
-interface SoundObject {
+export interface SoundObject {
   sound: Phaser.Sound.WebAudioSound;
   id: string;
   asset: SoundAsset;
@@ -15,7 +16,9 @@ export class GameSoundService {
   private sounds: SoundObject[];
   private themes: SoundObject[];
   private currentTheme: SoundObject;
-  private currentAmbients: SoundObject[];
+  private currentAmbients: SoundObject[] = [];
+
+  private ambients: SoundObject[];
 
   private constructor() {
   }
@@ -51,7 +54,7 @@ export class GameSoundService {
         sound: this.game.sound.add(el.name, el.soundConfig) as Phaser.Sound.WebAudioSound,
         asset: el,
       };
-    })
+    });
   }
 
   public setTheme(id: string | null, scene: Phaser.Scene) {
@@ -73,25 +76,25 @@ export class GameSoundService {
 
           setTimeout(() => {
             prevSound.setVolume(0);
-            currSound.setVolume(1);
+            currSound.setVolume(desiredVolume);
           }, GameSoundService.THEME_FADE_TIME);
 
           this.currentTheme = soundObject;
 
-          this.fadeSound(soundObject.sound, scene, desiredVolume);
-
           if (!this.currentTheme.sound.isPlaying) {
-            this.currentTheme.sound.play(undefined, {loop: true});
+            this.currentTheme.sound.play();
           }
+
+          this.fadeSound(soundObject.sound, scene, desiredVolume);
         }
       } else {
         this.currentTheme = soundObject;
         // this.currentTheme.sound.setVolume(desiredVolume);
 
-        this.fadeSound(soundObject.sound, scene, desiredVolume);
         if (!this.currentTheme.sound.isPlaying) {
-          this.currentTheme.sound.play(undefined, {loop: true});
+          this.currentTheme.sound.play();
         }
+        this.fadeSound(soundObject.sound, scene, desiredVolume);
       }
     } else {
       this.currentTheme.sound.setVolume(0);
@@ -124,10 +127,27 @@ export class GameSoundService {
 
   private fadeSound(sound: Phaser.Sound.WebAudioSound, scene: Phaser.Scene, volume: number) {
     scene.tweens.add({
-      targets: this.currentTheme.sound,
+      targets: sound,
       volume: volume,
       ease: 'Linear',
       duration: GameSoundService.THEME_FADE_TIME,
     });
+  }
+
+  public setAmbients(ambients: string[], scene: GameScene) {
+    this.currentAmbients.forEach(el => {
+      this.fadeSound(el.sound, scene, 0);
+      setTimeout(() => el.sound.setVolume(0), GameSoundService.THEME_FADE_TIME);
+    });
+
+    if (ambients && ambients.length > 0) {
+      this.currentAmbients = ambients.map(id => this.themes.find(elem => elem.id === id));
+      this.currentAmbients.forEach(el => {
+        this.fadeSound(el.sound, scene, 1);
+        if (!el.sound.isPlaying) {
+          el.sound.play();
+        }
+      });
+    }
   }
 }

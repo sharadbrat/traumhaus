@@ -1,5 +1,6 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData } from '../entities/model';
+import { getSpiderEnemyChasing } from './enemies';
 
 export const LEVEL_5_DATA: LevelMapData = {
   id: '05',
@@ -92,6 +93,13 @@ export const LEVEL_5_DATA: LevelMapData = {
       playerLightRolloff: 3,
       fogAlpha: 0.9,
     },
+
+    objects: [
+      getSpiderEnemyChasing({x: 10, y: 20}),
+      getSpiderEnemyChasing({x: 20, y: 20}),
+      getSpiderEnemyChasing({x: 30, y: 20}),
+    ],
+
     themeId: GHOST_THEME_AUDIO_ID,
   },
   triggerActions: [

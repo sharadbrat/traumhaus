@@ -6,6 +6,7 @@ export const STAGE_1_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_1_GHOST_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
+export const ENEMY_SPIDER_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR_GRAPHICAL_ASSET';
 export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
 export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
@@ -204,6 +205,40 @@ export const ghostPlayerGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.HIT,
       start: 0x30,
       end: 0x34,
+      frameRate: 24,
+      repeat: false
+    },
+  }
+};
+
+export const enemySpiderGraphicalAsset: SpriteAsset = {
+  name: ENEMY_SPIDER_GRAPHICAL_ASSET_ID,
+  width: 48,
+  height: 48,
+  file: '/tiles/Enemy_1_Spider.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0x00, 0x01, 0x02, 0x01],
+      frameRate: 6,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK]: {
+      name: LevelObjectAnimation.WALK,
+      frames: [0x06, 0x07, 0x08, 0x07],
+      frameRate: 10,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK_BACK]: {
+      name: LevelObjectAnimation.WALK_BACK,
+      frames: [0x03, 0x04, 0x05, 0x04],
+      frameRate: 10,
+      repeat: true
+    },
+    [LevelObjectAnimation.HIT]: {
+      name: LevelObjectAnimation.HIT,
+      start: 0x10,
+      end: 0x10,
       frameRate: 24,
       repeat: false
     },

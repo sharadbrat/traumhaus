@@ -62,7 +62,7 @@ Georgii Sharadze - Coding
 - Netlify toml +
 - Controls manager +
 - Gamepad controls
-- Ambient sounds
+- Ambient sounds +
 - Footsteps sounds
 - Shooting Enemies
 - Dashing Enemies

@@ -4,7 +4,13 @@ import { LevelObject } from './LevelObject';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service';
 import { TriggerManager } from '../TriggerManager';
-import { CollisionDetector, EnemyLevelObjectData, EnemyLevelObjectType, MapPosition } from './model';
+import {
+  CollisionDetector,
+  EnemyLevelObjectData,
+  EnemyLevelObjectType,
+  LevelObjectAnimation,
+  MapPosition
+} from './model';
 import { AssetManager } from '../assets';
 
 export const ENEMY_TRIGGERS_ACTIONS = {
@@ -215,6 +221,9 @@ export class EnemyLevelObject extends LevelObject {
 
     const path = this.findPath(from, to);
 
+    let velocityX = 0;
+    let velocityY = 0;
+
     if (path.length > 1) {
       const step = {x: path[1][0], y: path[1][1]};
 
@@ -223,11 +232,15 @@ export class EnemyLevelObject extends LevelObject {
 
       const norm = this.normalizeVector({x: directionX, y: directionY});
 
-      const velocityX = this.options.meta.patrol.speed * norm.x;
-      const velocityY = this.options.meta.patrol.speed * norm.y;
+      velocityX = this.options.meta.patrol.speed * norm.x;
+      velocityY = this.options.meta.patrol.speed * norm.y;
 
       this.sprite.setVelocity(velocityX, velocityY);
     }
+
+    const animName = this.getAnimationNameByVelocity(velocityX, velocityY);
+    this.sprite.anims.play(animName, true);
+    this.sprite.setFlipX(velocityX < 0);
 
     const distance = this.calcDistanceBetweenTiles(from, to);
 
@@ -251,6 +264,9 @@ export class EnemyLevelObject extends LevelObject {
     try {
       const path = this.findPath(from, to);
 
+      let velocityX = 0;
+      let velocityY = 0;
+
       if (path.length < this.options.meta.chase.radius * 3) {
         if (path.length > 3) {
           const step = {x: path[1][0], y: path[1][1]};
@@ -260,8 +276,8 @@ export class EnemyLevelObject extends LevelObject {
 
           const norm = this.normalizeVector({x: directionX, y: directionY});
 
-          const velocityX = this.options.meta.chase.speed * norm.x;
-          const velocityY = this.options.meta.chase.speed * norm.y;
+          velocityX = this.options.meta.chase.speed * norm.x;
+          velocityY = this.options.meta.chase.speed * norm.y;
 
           this.sprite.setVelocity(velocityX, velocityY);
         } else if (!this.isCollidingWithPlayer()) {
@@ -269,13 +285,16 @@ export class EnemyLevelObject extends LevelObject {
 
           const norm = this.normalizeVector(dir);
 
-          const velocityX = this.options.meta.chase.speed * norm.x;
-          const velocityY = this.options.meta.chase.speed * norm.y;
-          this.sprite.setVelocity(velocityX, velocityY);
-        } else {
-          this.sprite.setVelocity(0);
+          velocityX = this.options.meta.chase.speed * norm.x;
+          velocityY = this.options.meta.chase.speed * norm.y;
         }
+
+        this.sprite.setVelocity(velocityX, velocityY);
       }
+
+      const animName = this.getAnimationNameByVelocity(velocityX, velocityY);
+      this.sprite.anims.play(animName, true);
+      this.sprite.setFlipX(velocityX < 0);
     } catch (e) {
       console.error('Couldn\'t calculate path for chasing enemy, do nothing');
     }
@@ -307,5 +326,21 @@ export class EnemyLevelObject extends LevelObject {
     }
 
     return directionX;
+  }
+
+  private getAnimationNameByVelocity(velocityX: number, velocityY: number): string  {
+    let anim = '';
+
+    if (velocityY > 0) {
+      anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK].name}`;
+    } else if (velocityY < 0) {
+      anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK_BACK].name}`;
+    } else if (velocityX !== 0) {
+      anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK].name}`;
+    } else {
+      anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.IDLE].name}`;
+    }
+
+    return anim;
   }
 }

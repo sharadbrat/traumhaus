@@ -19,7 +19,7 @@ import {
   GraphicalAsset, playerGraphicalAsset, professorGraphicalAsset,
   SpriteAsset,
   utilGraphicalAsset,
-  Animation, invisibleGraphicalAsset, studentCardGraphicalAsset
+  Animation, invisibleGraphicalAsset, studentCardGraphicalAsset, enemySpiderGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -42,6 +42,7 @@ export class AssetManager {
     professorGraphicalAsset,
     invisibleGraphicalAsset,
     studentCardGraphicalAsset,
+    enemySpiderGraphicalAsset,
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -74,7 +75,8 @@ export class AssetManager {
     ghostPlayer: ghostPlayerGraphicalAsset,
     professor: professorGraphicalAsset,
     studentCard: studentCardGraphicalAsset,
-    invisible: invisibleGraphicalAsset
+    invisible: invisibleGraphicalAsset,
+    enemySpider: enemySpiderGraphicalAsset,
   };
 
   public static readonly soundAssets = {

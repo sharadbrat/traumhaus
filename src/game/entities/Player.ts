@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import nipplejs, { JoystickManager } from 'nipplejs';
+import { JoystickManager } from 'nipplejs';
 
 import { AssetManager, SpriteAsset } from '../assets';
 import { GameGhostService, GameProgressService, GameSoundService } from '../../service';
@@ -133,6 +133,8 @@ export class Player {
       speedY = (up + down) * speed;
       isDashing = this.keys.dash.isDown;
     }
+
+    GameSoundService.getInstance().setFootstepPlay(!!(speedY || speedX));
 
     this.sprite.setFlipX(speedX < 0);
 

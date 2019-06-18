@@ -1,6 +1,7 @@
 import { AssetManager } from '../game';
-import { SoundAsset } from '../game/assets';
+import { footStepGhostSoundAsset, footStepPlainSoundAsset, SoundAsset } from '../game/assets';
 import { GameScene } from '../game/scenes/GameScene';
+import { GameGhostService } from './GameGhostService';
 
 export interface SoundObject {
   sound: Phaser.Sound.WebAudioSound;
@@ -19,6 +20,8 @@ export class GameSoundService {
   private currentAmbients: SoundObject[] = [];
 
   private ambients: SoundObject[];
+  private footstep: Phaser.Sound.WebAudioSound;
+  private ghostFootstep: Phaser.Sound.WebAudioSound;
 
   private constructor() {
   }
@@ -55,6 +58,9 @@ export class GameSoundService {
         asset: el,
       };
     });
+
+    this.footstep = this.game.sound.add(footStepPlainSoundAsset.name, footStepPlainSoundAsset.soundConfig) as Phaser.Sound.WebAudioSound
+    this.ghostFootstep = this.game.sound.add(footStepGhostSoundAsset.name, footStepGhostSoundAsset.soundConfig) as Phaser.Sound.WebAudioSound
   }
 
   public setTheme(id: string | null, scene: Phaser.Scene) {
@@ -148,6 +154,25 @@ export class GameSoundService {
           el.sound.play();
         }
       });
+    }
+  }
+
+  public setFootstepPlay(flag: boolean) {
+    const ghost = GameGhostService.getInstance().isGhostMode();
+    if (ghost) {
+      this.footstep.setVolume(0);
+
+      if (flag && !this.ghostFootstep.isPlaying) {
+        this.ghostFootstep.play();
+      }
+      this.ghostFootstep.setVolume(flag ? footStepGhostSoundAsset.soundConfig.volume : 0);
+    } else {
+      this.ghostFootstep.setVolume(0);
+
+      if (flag && !this.footstep.isPlaying) {
+        this.footstep.play();
+      }
+      this.footstep.setVolume(flag ? footStepPlainSoundAsset.soundConfig.volume : 0);
     }
   }
 }

@@ -57,10 +57,7 @@ export class GameScene extends Phaser.Scene {
       document.getElementById('button-switch').removeEventListener('pointerdown', this.onGhostButton);
       document.getElementById('button-switch').addEventListener('pointerdown', this.onGhostButton);
     } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
-      const pad = GameControlsService.getInstance().getGamepad();
-      if (pad) {
         // could not find the correct listener, so handle it in update
-      }
     } else {
       this.player.getKeys().ghost.removeListener('down', this.onGhostButton);
       this.player.getKeys().ghost.on('down', this.onGhostButton);
@@ -84,6 +81,7 @@ export class GameScene extends Phaser.Scene {
     } else {
 
       // workaround for gamepad
+      // todo: multiple instances
       if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
         const pad = GameControlsService.getInstance().getGamepad();
         if (pad && pad.buttons[0].pressed) {

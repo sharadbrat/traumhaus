@@ -37,6 +37,10 @@ export const ghostThemeAudioAsset: SoundAsset = {
 export const caveThemeAudioAsset: SoundAsset = {
   name: CAVE_THEME_AUDIO_ID,
   file: '/sounds/theme_cave.mp3',
+  soundConfig: {
+    volume: 0.14,
+    loop: true,
+  }
 };
 
 // SFX
@@ -95,7 +99,7 @@ export const footStepPlainSoundAsset: SoundAsset = {
   file: '/sounds/FS.mp3',
   soundConfig: {
     loop: true,
-    volume: 1,
+    volume: 3,
     seek: 0,
     delay: 0
   },

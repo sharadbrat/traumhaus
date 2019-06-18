@@ -32,6 +32,7 @@ export class GameScene extends Phaser.Scene {
   private realWorldObjects: LevelObject[];
   private ghostWorldObjects: LevelObject[];
   private isNewGame: boolean = false;
+  private gamepadGhostFlag: boolean;
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
@@ -81,11 +82,13 @@ export class GameScene extends Phaser.Scene {
     } else {
 
       // workaround for gamepad
-      // todo: multiple instances
       if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
         const pad = GameControlsService.getInstance().getGamepad();
-        if (pad && pad.buttons[0].pressed) {
+        if (!this.gamepadGhostFlag && pad && pad.buttons[0].pressed) {
           this.onGhostButton();
+          this.gamepadGhostFlag = true;
+        } else if (this.gamepadGhostFlag && pad && !pad.buttons[0].pressed) {
+          this.gamepadGhostFlag = false
         }
       }
 
@@ -399,6 +402,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   changeLevel(door: Door) {
+    GameSoundService.getInstance().setFootstepPlay(false);
     GameProgressService.getInstance().changeLevel(door.toId);
     GameProgressService.getInstance().setLastDoor(door);
     this.scene.start(SceneIdentifier.GAME_SCENE);

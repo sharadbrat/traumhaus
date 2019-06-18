@@ -20,6 +20,10 @@ export class Game extends Phaser.Game {
           gravity: {y: 0}
         }
       },
+      input: {
+        gamepad: true,
+        keyboard: true,
+      }
     };
     super(gameConfig);
 

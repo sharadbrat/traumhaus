@@ -134,6 +134,8 @@ export class LevelObject {
 
     if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
       interaction = this.scene.getPlayer().getJoystickKeys().interact;
+    } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
+      // todo
     } else {
       interaction = this.scene.getPlayer().getKeys().interact.isDown;
     }

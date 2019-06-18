@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import nipplejs from 'nipplejs';
 import { GameProgressService } from './GameProgressService';
+import { GameScene } from '../game/scenes/GameScene';
 
 export enum ControlsType {
   KEYBOARD = 'KEYBOARD',
@@ -68,32 +69,6 @@ export class GameControlsService {
   }
 
   public getKeyboardControls(): KeyControls {
-    return {
-      up: Phaser.Input.Keyboard.KeyCodes.UP,
-      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      dash: Phaser.Input.Keyboard.KeyCodes.SPACE,
-      ghost: Phaser.Input.Keyboard.KeyCodes.Q,
-      interact: Phaser.Input.Keyboard.KeyCodes.E,
-      shoot: Phaser.Input.Keyboard.KeyCodes.W,
-    };
-  }
-
-  public getGamepadControls(): KeyControls {
-    return {
-      up: Phaser.Input.Keyboard.KeyCodes.UP,
-      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      dash: Phaser.Input.Keyboard.KeyCodes.SPACE,
-      ghost: Phaser.Input.Keyboard.KeyCodes.Q,
-      interact: Phaser.Input.Keyboard.KeyCodes.E,
-      shoot: Phaser.Input.Keyboard.KeyCodes.W,
-    };
-  }
-
-  public getTouchControls(): KeyControls {
     return {
       up: Phaser.Input.Keyboard.KeyCodes.UP,
       down: Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -186,5 +161,14 @@ export class GameControlsService {
       });
     }
     return this.joystick;
+  }
+
+  public getGamepad() {
+    // buttons:
+    // B - 2
+    // A - 1
+    // Y - 3
+    // X - 0
+    return navigator.getGamepads()[0];
   }
 }

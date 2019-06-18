@@ -43,6 +43,8 @@ export class GameManager {
       joystickKeys.shoot = false;
       joystickKeys.vertical = 0;
       joystickKeys.horizontal = 0;
+    } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
+      // todo
     } else {
       const keys = scene.getPlayer().getKeys();
       Object.values(keys).forEach(el => el.isDown = false);

@@ -56,6 +56,9 @@ export class GameScene extends Phaser.Scene {
     if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
       document.getElementById('button-switch').removeEventListener('pointerdown', this.onGhostButton);
       document.getElementById('button-switch').addEventListener('pointerdown', this.onGhostButton);
+    } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
+      // this.input.gamepad.gamepads[0].buttons[4]
+      // todo
     } else {
       this.player.getKeys().ghost.removeListener('down', this.onGhostButton);
       this.player.getKeys().ghost.on('down', this.onGhostButton);

@@ -102,115 +102,84 @@ export class Player {
     const keys = this.keys;
     let attackAnim = '';
     let moveAnim = '';
+
+    let speedX = 0;
+    let speedY = 0;
+
+    let isDashing = false;
+    const animationPrefix = this.currentAnimationAsset.name;
+
     if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
 
-      const animationPrefix = this.currentAnimationAsset.name;
+      speedX = this.joystickKeys.horizontal * speed;
+      speedY = this.joystickKeys.vertical * speed;
+      isDashing = this.joystickKeys.dash;
 
-      const speedX = this.joystickKeys.horizontal * speed;
-      if (speedX > 0 && !this.body.blocked.right) {
-        this.body.setVelocityX(speedX);
-      } else if (speedX < 0 && !this.body.blocked.left) {
-        this.body.setVelocityX(speedX);
-      }
-
-      const speedY = this.joystickKeys.vertical * speed;
-      if (speedY > 0 && !this.body.blocked.down) {
-        this.body.setVelocityY(speedY);
-      } else if (speedY < 0 && !this.body.blocked.up) {
-        this.body.setVelocityY(speedY);
-      }
-
-      if (speedY > 0) {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
-        attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_DOWN].name}`;
-      } else if (speedY < 0) {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK_BACK].name}`;
-        attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_UP].name}`;
-      } else if (speedX) {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
-        attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH].name}`;
-      } else {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.IDLE].name}`;
-      }
-
-      this.sprite.setFlipX(this.joystickKeys.horizontal < 0);
-
-      if (
-        this.joystickKeys.dash &&
-        time > this.attackLockedUntil &&
-        this.body.velocity.length() > 0 &&
-        this.ghostService.isGhostMode()
-      ) {
-        GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
-        this.attackUntil = time + attackDuration;
-        this.attackLockedUntil = time + attackDuration + attackCooldown;
-        this.body.velocity.normalize().scale(attackSpeed);
-        this.sprite.anims.play(attackAnim, true);
-        this.emitter.start();
-        this.sprite.setBlendMode(Phaser.BlendModes.ADD);
-      } else {
-        this.sprite.anims.play(moveAnim, true);
-        this.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
-        if (this.emitter.on) {
-          this.emitter.stop();
-        }
+    } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
+      const pad = GameControlsService.getInstance().getGamepad();
+      if (pad) {
+        speedX = Math.abs(pad.axes[0]) > 0.01 ? pad.axes[0] * speed : 0;
+        speedY = Math.abs(pad.axes[1]) > 0.01 ? pad.axes[1] * speed : 0;
+        isDashing = pad.buttons[2].pressed;
       }
     } else {
-      const left = keys.left.isDown;
-      const right = keys.right.isDown;
-      const up = keys.up.isDown;
-      const down = keys.down.isDown;
+      // fallback to keyboard
+      const left = keys.left.isDown ? -1 : 0;
+      const right = keys.right.isDown ? 1 : 0;
+      const up = keys.up.isDown ? -1 : 0;
+      const down = keys.down.isDown ? 1 : 0;
 
-      if (!this.body.blocked.left && left) {
-        this.body.setVelocityX(-speed);
-        this.sprite.setFlipX(true);
-      } else if (!this.body.blocked.right && right) {
-        this.body.setVelocityX(speed);
-        this.sprite.setFlipX(false);
-      }
+      speedX = (left + right) * speed;
+      speedY = (up + down) * speed;
+      isDashing = this.keys.dash.isDown;
+    }
 
-      if (!this.body.blocked.up && up) {
-        this.body.setVelocityY(-speed);
-      } else if (!this.body.blocked.down && down) {
-        this.body.setVelocityY(speed);
-      }
+    this.sprite.setFlipX(speedX < 0);
 
-      const animationPrefix = this.currentAnimationAsset.name;
+    if (speedY > 0 && !this.body.blocked.down) {
+      this.body.setVelocityY(speedY);
+    } else if (speedY < 0 && !this.body.blocked.up) {
+      this.body.setVelocityY(speedY);
+    }
 
-      if (down) {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
-        attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_DOWN].name}`;
-      } else if (up) {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK_BACK].name}`;
-        attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_UP].name}`;
-      } else if (left || right) {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
-        attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH].name}`;
-      } else {
-        moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.IDLE].name}`;
-      }
+    if (speedX > 0 && !this.body.blocked.right) {
+      this.body.setVelocityX(speedX);
+    } else if (speedX < 0 && !this.body.blocked.left) {
+      this.body.setVelocityX(speedX);
+    }
 
-      if (
-        this.keys.dash.isDown &&
-        time > this.attackLockedUntil &&
-        this.body.velocity.length() > 0 &&
-        this.ghostService.isGhostMode() &&
-        GameProgressService.getInstance().getProgress().isControllable
-      ) {
-        GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
-        this.attackUntil = time + attackDuration;
-        this.attackLockedUntil = time + attackDuration + attackCooldown;
-        this.body.velocity.normalize().scale(attackSpeed);
-        this.sprite.anims.play(attackAnim, true);
-        this.emitter.start();
-        this.sprite.setBlendMode(Phaser.BlendModes.ADD);
-      } else {
-        this.sprite.anims.play(moveAnim, true);
-        this.body.velocity.normalize().scale(speed);
-        this.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
-        if (this.emitter.on) {
-          this.emitter.stop();
-        }
+    if (speedY > 0) {
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
+      attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_DOWN].name}`;
+    } else if (speedY < 0) {
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK_BACK].name}`;
+      attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH_UP].name}`;
+    } else if (speedX) {
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.WALK].name}`;
+      attackAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.SLASH].name}`;
+    } else {
+      moveAnim = `${animationPrefix}__${this.currentAnimationAsset.animations[LevelObjectAnimation.IDLE].name}`;
+    }
+
+
+    if (
+      isDashing &&
+      time > this.attackLockedUntil &&
+      this.body.velocity.length() > 0 &&
+      this.ghostService.isGhostMode()
+    ) {
+      GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
+      this.attackUntil = time + attackDuration;
+      this.attackLockedUntil = time + attackDuration + attackCooldown;
+      this.body.velocity.normalize().scale(attackSpeed);
+      this.sprite.anims.play(attackAnim, true);
+      this.emitter.start();
+      this.sprite.setBlendMode(Phaser.BlendModes.ADD);
+    } else {
+      this.sprite.anims.play(moveAnim, true);
+      this.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
+      if (this.emitter.on) {
+        this.emitter.stop();
       }
     }
   }
@@ -310,9 +279,7 @@ export class Player {
 
     if (this.controlsMode === ControlsType.ON_SCREEN) {
       this.joystick = GameControlsService.getInstance().getJoystick(this.joystickKeys);
-    } else if (this.controlsMode === ControlsType.GAMEPAD) {
-      this.keys = this.scene.input.keyboard.addKeys(GameControlsService.getInstance().getGamepadControls()) as Keys;
-    } else {
+    } else if (this.controlsMode === ControlsType.KEYBOARD) {
       this.keys = this.scene.input.keyboard.addKeys(GameControlsService.getInstance().getKeyboardControls()) as Keys;
     }
   }

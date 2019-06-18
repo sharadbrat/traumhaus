@@ -33,6 +33,7 @@ export class GamePage extends React.Component<any, GamePageState> {
 
   private gameManager: GameManager;
   private canvasRef: React.Ref<HTMLCanvasElement>;
+  private gamepadInterval: number;
 
   state = {
     pause: false,
@@ -118,6 +119,7 @@ export class GamePage extends React.Component<any, GamePageState> {
         this.gameManager.resume();
         window.removeEventListener('keydown', listener);
         window.removeEventListener('pointerdown', listener);
+        clearInterval(this.gamepadInterval);
         this.setState({dialogStep: null, isDialogActive: false});
         if (dialog.onDialogFinishedTrigger) {
           TriggerManager.fire(dialog.onDialogFinishedTrigger, this.getTriggerContentObject());
@@ -139,6 +141,22 @@ export class GamePage extends React.Component<any, GamePageState> {
           dialogStep(currentStep, clickListener);
         };
         window.addEventListener('pointerdown', clickListener, false);
+      } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
+        const clickListener = () => {
+          currentStep++;
+          dialogStep(currentStep, clickListener);
+        };
+        let wasPressed = true;
+        // @ts-ignore
+        this.gamepadInterval = setInterval(() => {
+          const pad = GameControlsService.getInstance().getGamepad();
+          if (!wasPressed && pad && pad.buttons[2].pressed) {
+            clickListener();
+            wasPressed = true;
+          } else if (wasPressed && pad && !pad.buttons[2].pressed) {
+            wasPressed = false;
+          }
+        }, 20);
       } else {
         const keydownListener = (event: KeyboardEvent) => {
           event.stopPropagation();

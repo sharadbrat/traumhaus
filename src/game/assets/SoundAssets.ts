@@ -2,6 +2,7 @@ import { Asset } from './AssetManager';
 
 export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
 export const GHOST_THEME_AUDIO_ID = 'GHOST_THEME_AUDIO';
+export const CAVE_THEME_AUDIO_ID = 'CAVE_THEME_AUDIO';
 
 export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
 export const SHOOT_SOUND_ASSET_ID = 'SHOOT_SOUND_ASSET';
@@ -33,6 +34,11 @@ export const ghostThemeAudioAsset: SoundAsset = {
   file: '/sounds/theme_ghost.mp3',
 };
 
+export const caveThemeAudioAsset: SoundAsset = {
+  name: CAVE_THEME_AUDIO_ID,
+  file: '/sounds/theme_cave.mp3',
+};
+
 // SFX
 
 export const dashSoundAsset: SoundAsset = {
@@ -60,25 +66,39 @@ export const footStepDirtSoundAsset: SoundAsset = {
   file: '/sounds/FS_dirt.mp3',
   soundConfig: { loop: false, volume: 1 },
 };
+
 export const footStepFloorSoundAsset: SoundAsset = {
   name: FOOTSTEP_FLOOR_SOUND_ASSET_ID,
   file: '/sounds/FS_floor.mp3',
   soundConfig: { loop: false, volume: 1 },
 };
+
 export const footStepGhostSoundAsset: SoundAsset = {
   name: FOOTSTEP_GHOST_SOUND_ASSET_ID,
   file: '/sounds/FS_ghost.mp3',
-  soundConfig: { loop: false, volume: 1 },
+  soundConfig: {
+    loop: true,
+    volume: 0.5,
+    seek: 0,
+    delay: 0
+  },
 };
+
 export const footStepGrassSoundAsset: SoundAsset = {
   name: FOOTSTEP_GRASS_SOUND_ASSET_ID,
   file: '/sounds/FS_grass.mp3',
   soundConfig: { loop: false, volume: 1 },
 };
+
 export const footStepPlainSoundAsset: SoundAsset = {
   name: FOOTSTEP_PLAIN_SOUND_ASSET_ID,
-  file: '/sounds/FS_plain.mp3',
-  soundConfig: { loop: false, volume: 1 },
+  file: '/sounds/FS.mp3',
+  soundConfig: {
+    loop: true,
+    volume: 1,
+    seek: 0,
+    delay: 0
+  },
 };
 export const footStepStoneSoundAsset: SoundAsset = {
   name: FOOTSTEP_STONE_SOUND_ASSET_ID,

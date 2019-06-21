@@ -112,6 +112,8 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   onDialogStart = (dialog: GameDialog) => {
+    GameSoundService.getInstance().stopFootstep();
+
     const dialogStep = (step: number, listener: (evt: any) => void) => {
       if (dialog.steps[step]) {
         this.setState({dialogStep: dialog.steps[step]});

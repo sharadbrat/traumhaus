@@ -175,4 +175,9 @@ export class GameSoundService {
       this.footstep.setVolume(flag ? footStepPlainSoundAsset.soundConfig.volume : 0);
     }
   }
+
+  public stopFootstep() {
+    this.footstep.setVolume(0);
+    this.ghostFootstep.setVolume(0);
+  }
 }

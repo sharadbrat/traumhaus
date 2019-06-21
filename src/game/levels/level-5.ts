@@ -55,11 +55,7 @@ export const LEVEL_5_DATA: LevelMapData = {
       playerLightRolloff: 8,
       fogAlpha: 0.9,
     },
-    objects: [
-      getSpiderEnemyChasing({x: 10, y: 20}),
-      getSpiderEnemyChasing({x: 20, y: 20}),
-      getSpiderEnemyChasing({x: 30, y: 20}),
-    ],
+
     themeId: CAVE_THEME_AUDIO_ID,
   },
   ghostWorld: {
@@ -100,9 +96,10 @@ export const LEVEL_5_DATA: LevelMapData = {
     },
 
     objects: [
-
+      getSpiderEnemyChasing({x: 10, y: 20}),
+      getSpiderEnemyChasing({x: 20, y: 20}),
+      getSpiderEnemyChasing({x: 30, y: 20}),
     ],
-
     themeId: CAVE_THEME_AUDIO_ID,
   },
   triggerActions: [

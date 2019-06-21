@@ -21,7 +21,7 @@ export function getSpiderEnemyChasing(pos: MapPosition): EnemyLevelObjectData {
         radius: 9,
       },
     },
-    inGhostWorld: false,
+    inGhostWorld: true,
   };
 }
 

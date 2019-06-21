@@ -3,7 +3,7 @@ import * as Pathfinding from 'pathfinding';
 import { LevelObject } from './LevelObject';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service';
-import { TriggerManager } from '../TriggerManager';
+import { TriggerContents, TriggerManager } from '../TriggerManager';
 import {
   CollisionDetector,
   EnemyLevelObjectData,
@@ -28,6 +28,7 @@ export class EnemyLevelObject extends LevelObject {
   private collision?: CollisionDetector[][];
   private prevPathCalculation = 0;
   private collider: Phaser.Physics.Arcade.Collider;
+  private isAlive: boolean;
 
   // PATROLING
   private direction?: MapPosition;
@@ -37,6 +38,7 @@ export class EnemyLevelObject extends LevelObject {
     super(scene, options);
 
     this.options = options;
+    this.isAlive = true;
 
     this.ghostService = GameGhostService.getInstance();
 
@@ -70,6 +72,10 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   update(time: number) {
+    if (!this.isAlive) {
+      return;
+    }
+
     if (this.options.triggers) {
       this.checkTriggers(time);
     }
@@ -342,5 +348,17 @@ export class EnemyLevelObject extends LevelObject {
     }
 
     return anim;
+  }
+
+  public onHit(content: TriggerContents) {
+    this.isAlive = false;
+    this.sprite.setVelocity(0);
+    this.sprite.disableBody();
+    this.scene.tweens.add({
+      targets: this.sprite,
+      alpha: 0,
+      duration: 1000
+    });
+    setTimeout(() => this.sprite.setVisible(false), 1000);
   }
 }

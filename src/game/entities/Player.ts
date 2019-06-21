@@ -6,7 +6,7 @@ import { GameGhostService, GameProgressService, GameSoundService } from '../../s
 import { LevelMap } from './LevelMap';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
-import { ENEMY_TRIGGERS_ACTIONS } from './EnemyLevelObject';
+import { ENEMY_TRIGGERS_ACTIONS, EnemyLevelObject } from './EnemyLevelObject';
 import { LevelObjectAnimation } from './model';
 import { ControlsType, GameControlsService, JoystickKeys, Keys } from '../../service/GameControlsService';
 
@@ -80,8 +80,12 @@ export class Player {
     });
 
     TriggerManager.add(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, (content: TriggerContents) => {
-      if (content.services.progress.getProgress().isVulnerable) {
-        this.onPlayerHit(content);
+      if (this.attackUntil > content.scene.time.now) {
+        (content.object as EnemyLevelObject).onHit(content);
+      } else {
+        if (content.services.progress.getProgress().isVulnerable) {
+          this.onPlayerHit(content);
+        }
       }
     });
   }

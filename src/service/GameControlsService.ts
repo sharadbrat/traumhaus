@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import nipplejs from 'nipplejs';
 import { GameProgressService } from './GameProgressService';
-import { GameScene } from '../game/scenes/GameScene';
 
 export enum ControlsType {
   KEYBOARD = 'KEYBOARD',

@@ -31,14 +31,17 @@ export class GameProgressService {
   private gameProgress: GameProgress;
 
   private lastDoor: Door;
+  private onHealthChange: (health: number) => any;
+
+  decreaseHealthTimeout: number;
 
   private constructor() {
     this.gameProgress = {
       health: 3,
       isVulnerable: true,
-      isControllable: false,
-      // isControllable: true,
-      // canBecomeGhost: true,
+      // isControllable: false,
+      isControllable: true,
+      canBecomeGhost: true,
       stage1: {
         gateDialogFinished: false,
         doorDialogFinished: false,
@@ -52,7 +55,8 @@ export class GameProgressService {
         switch: false,
         shoot: false,
       },
-      showGhostHud: false,
+      // showGhostHud: false,
+      showGhostHud: true,
     };
   }
 
@@ -61,6 +65,10 @@ export class GameProgressService {
       GameProgressService.instance = new GameProgressService();
     }
     return GameProgressService.instance;
+  }
+
+  public setOnHealthChange(callback: (health: number) => any) {
+    this.onHealthChange = callback;
   }
 
   public changeLevel(id: string) {
@@ -119,27 +127,21 @@ export class GameProgressService {
   }
 
   public decreaseHealth() {
-    const health = --this.getProgress().health;
-    if (health === 3) {
-      document.getElementById('health-1').className = 'game__hud-heart';
-      document.getElementById('health-2').className = 'game__hud-heart';
-      document.getElementById('health-3').className = 'game__hud-heart';
-    } else if (health === 2) {
-      document.getElementById('health-1').className = 'game__hud-heart';
-      document.getElementById('health-2').className = 'game__hud-heart';
-      document.getElementById('health-3').className = 'game__hud-heart game__hud-heart_damaged';
-    } else if (health === 1) {
-      document.getElementById('health-1').className = 'game__hud-heart';
-      document.getElementById('health-2').className = 'game__hud-heart game__hud-heart_damaged';
-      document.getElementById('health-3').className = 'game__hud-heart game__hud-heart_damaged';
-    } else {
-      document.getElementById('health-1').className = 'game__hud-heart game__hud-heart_damaged';
-      document.getElementById('health-2').className = 'game__hud-heart game__hud-heart_damaged';
-      document.getElementById('health-3').className = 'game__hud-heart game__hud-heart_damaged';
+    if (this.decreaseHealthTimeout) {
+      clearTimeout(this.decreaseHealthTimeout);
     }
 
-    if (health === 0) {
-      console.log('lost the game');
-    }
+    this.recoverHealthTimer();
+
+    this.onHealthChange(--this.getProgress().health);
+  }
+
+  public recoverHealthTimer() {
+    this.decreaseHealthTimeout = window.setTimeout(() => {
+      this.onHealthChange(++this.getProgress().health);
+      if (this.getProgress().health < 3) {
+        this.recoverHealthTimer();
+      }
+    }, 10000);
   }
 }

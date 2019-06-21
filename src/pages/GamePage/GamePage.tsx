@@ -23,6 +23,8 @@ interface GamePageState {
   isDialogActive: boolean;
   loadingProgress: number;
   virtualJoystickEnabled: boolean;
+  health: number;
+  showHud: boolean;
 }
 
 const ACTION_BUTTON_CODE = ' ';
@@ -43,6 +45,8 @@ export class GamePage extends React.Component<any, GamePageState> {
     dialogStep: undefined,
     loadingProgress: 0,
     virtualJoystickEnabled: false,
+    health: 3,
+    showHud: false,
   };
 
   constructor(props: GamePageProps) {
@@ -52,6 +56,8 @@ export class GamePage extends React.Component<any, GamePageState> {
   }
 
   componentDidMount(): void {
+    GameProgressService.getInstance().setOnHealthChange(this.onHealthChange);
+    GameGhostService.getInstance().setOnGhostHud(this.onGhostHud);
     if (!GameControlsService.getInstance().getMode()) {
       this.props.history.push('/');
       return;
@@ -193,10 +199,10 @@ export class GamePage extends React.Component<any, GamePageState> {
     const HUD = (
       <div className="game__hud-container">
         <button className="game__hud-back" aria-label="Menu" onClick={this.onMenuToggle}/>
-        <div className={GameGhostService.getInstance().isGhostMode() ? 'game__hud-hearts game__hud-hearts_enabled' : 'game__hud-hearts'} id="hearts">
-          <div className="game__hud-heart" id="health-1"/>
-          <div className="game__hud-heart" id="health-2"/>
-          <div className="game__hud-heart" id="health-3"/>
+        <div className={ this.state.showHud ? 'game__hud-hearts game__hud-hearts_enabled' : 'game__hud-hearts'} id="hearts">
+          <div className={`game__hud-heart ${this.state.health < 1 ? 'game__hud-heart_damaged' : ''}`}/>
+          <div className={`game__hud-heart ${this.state.health < 2 ? 'game__hud-heart_damaged' : ''}`}/>
+          <div className={`game__hud-heart ${this.state.health < 3 ? 'game__hud-heart_damaged' : ''}`}/>
         </div>
       </div>
     );
@@ -218,6 +224,14 @@ export class GamePage extends React.Component<any, GamePageState> {
       </section>
     );
   }
+
+  private onHealthChange = (health: number) => {
+    this.setState({health: health});
+  };
+
+  private onGhostHud = (isGhost: boolean) => {
+    this.setState({showHud: isGhost && GameProgressService.getInstance().getProgress().showGhostHud});
+  };
 
   private getTriggerContentObject(): TriggerContents {
     const game = this.gameManager.getGame();

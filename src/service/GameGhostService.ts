@@ -1,8 +1,7 @@
-import { GameProgressService } from './GameProgressService';
-
 export class GameGhostService {
   private static instance: GameGhostService;
   private ghostMode: boolean;
+  private onGhostHud: (isGhost: boolean) => any;
 
   private constructor() {
   }
@@ -18,14 +17,12 @@ export class GameGhostService {
     return this.ghostMode;
   }
 
+  public setOnGhostHud(callback: (isGhost: boolean) => any) {
+    this.onGhostHud = callback;
+  }
+
   public setGhostMode(value: boolean) {
     this.ghostMode = value;
-    // todo: fix the issue with react. when I show the dialog, react recalculates the HUD and makes it shown
-    if (value && GameProgressService.getInstance().getProgress().showGhostHud) {
-      document.getElementById('hearts').className = "game__hud-hearts game__hud-hearts_enabled";
-    } else {
-      document.getElementById('hearts').className = "game__hud-hearts";
-    }
-
+    this.onGhostHud(value);
   }
 }

@@ -53,6 +53,10 @@
   margin: 10px auto;
   cursor: pointer;
 
+  appearance: none;
+  border: none;
+  background-color: transparent;
+
   &:hover, &:focus, &:active {
     &:before {
       max-width: 100%;

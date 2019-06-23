@@ -66,4 +66,8 @@ export class GameManager {
     GameMenuService.getInstance().reset();
     GameControlsService.getInstance().reset();
   }
+
+  public restartFromCheckpoint() {
+    // todo: add impl
+  }
 }

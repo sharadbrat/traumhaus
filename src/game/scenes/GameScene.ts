@@ -156,7 +156,7 @@ export class GameScene extends Phaser.Scene {
 
     const isNewGame = this.progressService.getProgress().isNewGame;
 
-    if (isNewGame) {
+    if (isNewGame || !level) {
       level = LevelManager.getFirstLevel();
       this.progressService.changeLevel(level.id);
     }

@@ -4,7 +4,7 @@ import { AssetManager, GameManager, GameManagerOptions } from '../../game';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
-import { Dialog, Menu, SettingsMenu } from '../../components';
+import { DeathMenu, Dialog, Menu, SettingsMenu } from '../../components';
 import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
 import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
@@ -26,6 +26,7 @@ interface GamePageState {
   health: number;
   showHud: boolean;
   isSettingsActive: boolean;
+  isDeathMenuActive: boolean;
 }
 
 const ACTION_BUTTON_CODE = ' ';
@@ -38,17 +39,16 @@ export class GamePage extends React.Component<any, GamePageState> {
   private canvasRef: React.Ref<HTMLCanvasElement>;
   private gamepadInterval: number;
 
-  state = {
+  state: GamePageState = {
     pause: false,
     isDialogActive: false,
-
-    // @ts-ignore
     dialogStep: undefined,
     loadingProgress: 0,
     virtualJoystickEnabled: false,
     health: 3,
     showHud: false,
     isSettingsActive: false,
+    isDeathMenuActive: false,
   };
 
   constructor(props: GamePageProps) {
@@ -223,13 +223,19 @@ export class GamePage extends React.Component<any, GamePageState> {
             <button className="game__menu-option" onClick={this.onMenuExitClick}>Exit to main menu</button>
           </Menu>
           <SettingsMenu isActive={this.state.isSettingsActive} onClose={this.onMenuSettingsClose}/>
+          <DeathMenu onGoToMainMenu={this.onDeathMenuMainMenuClick} onGoToCheckpoint={this.onDeathMenuCheckpointClick} show={this.state.isDeathMenuActive}/>
         </div>
       </section>
     );
   }
 
   private onHealthChange = (health: number) => {
-    this.setState({health: health});
+    if (health) {
+      this.setState({health: health});
+    } else {
+      this.gameManager.pause();
+      this.setState({isDeathMenuActive: true});
+    }
   };
 
   private onGhostHud = (isGhost: boolean) => {
@@ -262,5 +268,13 @@ export class GamePage extends React.Component<any, GamePageState> {
 
   private onMenuSettingsClose = () => {
     this.setState({isSettingsActive: false});
-  }
+  };
+
+  private onDeathMenuMainMenuClick = () => {
+    this.onMenuExitClick();
+  };
+
+  private onDeathMenuCheckpointClick = () => {
+    this.gameManager.restartFromCheckpoint();
+  };
 }

@@ -184,4 +184,10 @@ export class GameSoundService {
   reset() {
     GameSoundService.instance = new GameSoundService();
   }
+
+  stopTheme() {
+    if (this.currentTheme && this.currentTheme.sound.isPlaying) {
+      this.currentTheme.sound.setVolume(0);
+    }
+  }
 }

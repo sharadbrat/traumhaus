@@ -234,6 +234,7 @@ export class GamePage extends React.Component<any, GamePageState> {
       this.setState({health: health});
     } else {
       this.gameManager.pause();
+      GameSoundService.getInstance().stopTheme();
       this.setState({isDeathMenuActive: true});
     }
   };
@@ -271,10 +272,12 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   private onDeathMenuMainMenuClick = () => {
+    this.setState({isDeathMenuActive: false});
     this.onMenuExitClick();
   };
 
   private onDeathMenuCheckpointClick = () => {
     this.gameManager.restartFromCheckpoint();
+    this.setState({isDeathMenuActive: false});
   };
 }

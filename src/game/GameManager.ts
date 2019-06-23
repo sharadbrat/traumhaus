@@ -68,6 +68,6 @@ export class GameManager {
   }
 
   public restartFromCheckpoint() {
-    // todo: add impl
+    this.game.scene.run(SceneIdentifier.GAME_SCENE);
   }
 }

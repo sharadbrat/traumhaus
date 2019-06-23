@@ -80,7 +80,7 @@ export class GameControlsService {
     };
   }
 
-  getJoystick(joystickKeys: JoystickKeys) {
+  public getJoystick(joystickKeys: JoystickKeys) {
     this.joystickKeys = joystickKeys;
 
     if (!this.joystick) {
@@ -169,5 +169,9 @@ export class GameControlsService {
     // Y - 3
     // X - 0
     return navigator.getGamepads()[0];
+  }
+
+  reset() {
+    GameControlsService.instance = null;
   }
 }

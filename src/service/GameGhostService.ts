@@ -25,4 +25,9 @@ export class GameGhostService {
     this.ghostMode = value;
     this.onGhostHud(value);
   }
+
+  reset() {
+    this.onGhostHud = null;
+    this.ghostMode = null;
+  }
 }

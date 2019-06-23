@@ -31,8 +31,9 @@ export class GameScene extends Phaser.Scene {
 
   private realWorldObjects: LevelObject[];
   private ghostWorldObjects: LevelObject[];
-  private isNewGame: boolean = false;
   private gamepadGhostFlag: boolean;
+
+  private nextCameraUpdate: number = 0;
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
@@ -67,14 +68,15 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
-
-    // const mainTheme = this.game.sound.add(AssetManager.soundAssets.main.name);
-
-    // GameSoundService.getInstance().playSfx(AssetManager.soundAssets.main.name);
   }
 
   update(time: number, delta: number) {
     const door = this.levelMap.checkPlayerDoorCollision(this.player.getBody());
+
+    // if (time > this.nextCameraUpdate) {
+    //   this.cameraResizeNeeded = true;
+    //   this.nextCameraUpdate = time + 1000;
+    // }
 
     if (door) {
       this.changeLevel(door);
@@ -152,11 +154,11 @@ export class GameScene extends Phaser.Scene {
   private getCurrentLevel(): LevelMapData {
     let level = this.progressService.getCurrentLevel();
 
-    if (!level) {
-      // new game
+    const isNewGame = this.progressService.getProgress().isNewGame;
+
+    if (isNewGame) {
       level = LevelManager.getFirstLevel();
-      this.progressService.setCurrentLevel(level);
-      this.isNewGame = true;
+      this.progressService.changeLevel(level.id);
     }
 
     return level;
@@ -224,11 +226,13 @@ export class GameScene extends Phaser.Scene {
 
     this.setupDialogs(currentLevel);
 
+    debugger;
+
     this.setupTriggers(currentLevel);
 
     this.setupMusicTheme(currentLevel);
 
-    if (this.isNewGame) {
+    if (this.progressService.getProgress().isNewGame) {
       this.setupNewGame();
     }
 
@@ -348,7 +352,7 @@ export class GameScene extends Phaser.Scene {
     setTimeout(() => {
       TriggerManager.fire(LEVEL_1_TRIGGER_ACTIONS.ON_NEW_GAME, this.constructTriggerContents());
     }, time);
-    this.isNewGame = false;
+    this.progressService.getProgress().isNewGame = false;
   }
 
   private constructTriggerContents(): TriggerContents {
@@ -406,6 +410,7 @@ export class GameScene extends Phaser.Scene {
     GameSoundService.getInstance().setFootstepPlay(false);
     GameProgressService.getInstance().changeLevel(door.toId);
     GameProgressService.getInstance().setLastDoor(door);
+    GameProgressService.getInstance().saveProgressToLocalStorage();
     this.scene.start(SceneIdentifier.GAME_SCENE);
   }
 }

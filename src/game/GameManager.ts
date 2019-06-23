@@ -2,6 +2,7 @@ import { SceneIdentifier, SceneManager } from './scenes/SceneManager';
 import { Game } from './Game';
 import { GameScene } from './scenes/GameScene';
 import { ControlsType, GameControlsService } from '../service/GameControlsService';
+import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../service';
 
 export interface GameManagerOptions {
   canvas: HTMLCanvasElement;
@@ -30,7 +31,7 @@ export class GameManager {
   }
 
   public saveProgress() {
-
+    GameProgressService.getInstance().saveProgressToLocalStorage();
   }
 
   public pause() {
@@ -58,7 +59,11 @@ export class GameManager {
   }
 
   public shutdown() {
-    // todo: add reset of services
     this.game.destroy(false);
+    GameProgressService.getInstance().reset();
+    GameGhostService.getInstance().reset();
+    GameSoundService.getInstance().reset();
+    GameMenuService.getInstance().reset();
+    GameControlsService.getInstance().reset();
   }
 }

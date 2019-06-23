@@ -180,4 +180,8 @@ export class GameSoundService {
     this.footstep.setVolume(0);
     this.ghostFootstep.setVolume(0);
   }
+
+  reset() {
+    GameSoundService.instance = new GameSoundService();
+  }
 }

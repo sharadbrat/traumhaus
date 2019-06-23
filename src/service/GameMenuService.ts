@@ -29,4 +29,9 @@ export class GameMenuService {
   public updateLoadingProgress(val: number) {
     this.updateLoadingListener(val);
   }
+
+  reset() {
+    this.menuToggleListener = null;
+    this.updateLoadingListener = null;
+  }
 }

@@ -2,11 +2,13 @@ import { LevelManager } from '../game/levels';
 import { Door, LevelMapData } from '../game/entities/model';
 
 export interface GameProgress {
+  isNewGame: boolean;
   health: number;
   isVulnerable?: boolean;
   canBecomeGhost?: boolean;
-  currentLevel?: LevelMapData;
+  currentLevelId?: string;
   isControllable: boolean;
+  lastDoor: Door;
   stage1: {
     gateDialogFinished: boolean;
     doorDialogFinished: boolean;
@@ -23,6 +25,31 @@ export interface GameProgress {
   showGhostHud: boolean;
 }
 
+const DEFAULT_PROGRESS: GameProgress = {
+  health: 3,
+  isVulnerable: true,
+  isControllable: false,
+  // isControllable: true,
+  // canBecomeGhost: true,
+  isNewGame: true,
+  lastDoor: null,
+  stage1: {
+    gateDialogFinished: false,
+    doorDialogFinished: false,
+    isStudentCardRetrieved: false,
+    benchDialogFinished: false,
+    benchGhostDialogFinished: false,
+    isMensaGateOpened: false
+  },
+  controls: {
+    dash: false,
+    switch: false,
+    shoot: false,
+  },
+  showGhostHud: false,
+  // showGhostHud: true,
+};
+
 export class GameProgressService {
   public static GAME_PROGRESS_ID = 'TRAUMHAUS_GAME_PROGRESS';
 
@@ -30,34 +57,13 @@ export class GameProgressService {
 
   private gameProgress: GameProgress;
 
-  private lastDoor: Door;
+  // private lastDoor: Door;
   private onHealthChange: (health: number) => any;
 
   decreaseHealthTimeout: number;
 
   private constructor() {
-    this.gameProgress = {
-      health: 3,
-      isVulnerable: true,
-      // isControllable: false,
-      isControllable: true,
-      canBecomeGhost: true,
-      stage1: {
-        gateDialogFinished: false,
-        doorDialogFinished: false,
-        isStudentCardRetrieved: false,
-        benchDialogFinished: false,
-        benchGhostDialogFinished: false,
-        isMensaGateOpened: false
-      },
-      controls: {
-        dash: false,
-        switch: false,
-        shoot: false,
-      },
-      // showGhostHud: false,
-      showGhostHud: true,
-    };
+    this.gameProgress = DEFAULT_PROGRESS;
   }
 
   public static getInstance(): GameProgressService {
@@ -72,25 +78,20 @@ export class GameProgressService {
   }
 
   public changeLevel(id: string) {
-    this.gameProgress.currentLevel = LevelManager.getLevelById(id);
+    this.gameProgress.currentLevelId = id;
     // this.saveProgressToLocalStorage();
   }
 
   public getCurrentLevel(): LevelMapData {
-    return this.gameProgress.currentLevel;
-  }
-
-  public setCurrentLevel(level: LevelMapData) {
-    this.gameProgress.currentLevel = level;
-    // this.saveProgressToLocalStorage();
+    return LevelManager.getLevelById(this.gameProgress.currentLevelId);
   }
 
   public getLastDoor(): Door {
-    return this.lastDoor;
+    return this.gameProgress.lastDoor;
   }
 
   public setLastDoor(door: Door) {
-    this.lastDoor = door;
+    this.gameProgress.lastDoor = door;
   }
 
   public getProgressFromLocalStorage(): GameProgress {
@@ -115,14 +116,14 @@ export class GameProgressService {
 
   public loadProgress(progress: GameProgress) {
     this.gameProgress = progress;
+    this.gameProgress.health = 3;
   }
 
   public setControllable(val: boolean) {
     this.gameProgress.isControllable = val;
   }
 
-  private saveProgressToLocalStorage() {
-    // todo: add position save
+  public saveProgressToLocalStorage() {
     localStorage.setItem(GameProgressService.GAME_PROGRESS_ID, JSON.stringify(this.gameProgress));
   }
 
@@ -143,5 +144,11 @@ export class GameProgressService {
         this.recoverHealthTimer();
       }
     }, 10000);
+  }
+
+  reset() {
+    this.gameProgress = DEFAULT_PROGRESS;
+    clearTimeout(this.decreaseHealthTimeout);
+    this.onHealthChange = null;
   }
 }

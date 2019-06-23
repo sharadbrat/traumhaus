@@ -177,6 +177,7 @@ export class LevelObject {
         ghost: GameGhostService.getInstance(),
         sound: GameSoundService.getInstance(),
         menu: GameMenuService.getInstance(),
+        controls: GameControlsService.getInstance(),
       },
       managers: {
         dialog: DialogManager,

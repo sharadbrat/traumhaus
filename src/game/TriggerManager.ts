@@ -6,6 +6,7 @@ import { GameManager } from './GameManager';
 import { AssetManager } from './assets';
 import { SceneManager } from './scenes/SceneManager';
 import { LevelManager } from './levels';
+import { GameControlsService } from '../service/GameControlsService';
 
 export type TriggerCallback = (content: TriggerContents) => void;
 
@@ -22,6 +23,7 @@ export interface TriggerContents {
     ghost: GameGhostService,
     sound: GameSoundService,
     menu: GameMenuService,
+    controls: GameControlsService,
   },
   managers: {
     dialog: typeof DialogManager,

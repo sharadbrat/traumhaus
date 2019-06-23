@@ -360,6 +360,7 @@ export class GameScene extends Phaser.Scene {
         ghost: this.ghostService,
         sound: this.soundService,
         menu: this.menuService,
+        controls: this.controlsService,
       },
       managers: {
         dialog: DialogManager,

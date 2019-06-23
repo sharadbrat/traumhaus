@@ -1,5 +1,3 @@
-import { GameManager } from '../GameManager';
-
 export interface GameDialogStep {
   actor: GameDialogActor;
   phrase: string;
@@ -8,8 +6,8 @@ export interface GameDialogStep {
 
 export interface GameDialogActor {
   id: string;
-  image: string;
-  title: string;
+  image?: string;
+  title?: string;
 }
 
 export interface GameDialog {

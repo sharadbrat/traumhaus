@@ -2,19 +2,27 @@ import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../asse
 import { TriggerContents } from '../TriggerManager';
 import { LEVEL_TEST_DATA } from './level-test';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
-import { playerActor, professorActor } from './actors';
+import { gameActor, playerActor, professorActor } from './actors';
+import { ControlsType } from '../../service/GameControlsService';
 
 export const LEVEL_1_TRIGGER_ACTIONS = {
   ON_PROFESSOR_ACTION: 'ON_PROFESSOR_ACTION',
   ON_WAKE_UP_DIALOG_FINISHED: 'ON_WAKE_UP_DIALOG_FINISHED',
   ON_NEW_GAME: 'ON_NEW_GAME',
   ON_THOSKA_ACTION: 'ON_THOSKA_ACTION',
+  ON_MOVEMENT_TUTORIAL_FINISHED: 'ON_MOVEMENT_TUTORIAL_FINISHED',
 };
 
 export const LEVEL_1_DIALOGS_IDS = {
   WAKE_UP_DIALOG: 'WAKE_UP_DIALOG',
   PROFESSOR_DIALOG: 'PROFESSOR_DIALOG',
   STUDENT_CARD_RETRIEVE_DIALOG: 'STUDENT_CARD_RETREIVE_DIALOG',
+  MOVEMENT_TUTORIAL_KEYBOARD_DIALOG: 'MOVEMENT_TUTORIAL_KEYBOARD_DIALOG',
+  MOVEMENT_TUTORIAL_GAMEPAD_DIALOG: 'MOVEMENT_TUTORIAL_GAMEPAD_DIALOG',
+  MOVEMENT_TUTORIAL_ONSCREEN_DIALOG: 'MOVEMENT_TUTORIAL_ONSCREEN_DIALOG',
+  ACTION_TUTORIAL_ONSCREEN_DIALOG: 'ACTION_TUTORIAL_ONSCREEN_DIALOG',
+  ACTION_TUTORIAL_KEYBOARD_DIALOG: 'ACTION_TUTORIAL_KEYBOARD_DIALOG',
+  ACTION_TUTORIAL_GAMEPAD_DIALOG: 'ACTION_TUTORIAL_GAMEPAD_DIALOG',
 };
 
 
@@ -269,7 +277,31 @@ export const LEVEL_1_DATA: LevelMapData = {
     {
       action: LEVEL_1_TRIGGER_ACTIONS.ON_WAKE_UP_DIALOG_FINISHED,
       callback: (content: TriggerContents) => {
-        // todo: show movement tutorial
+        setTimeout(() => {
+          const mode = content.services.controls.getMode();
+          if (mode === ControlsType.GAMEPAD) {
+            content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.MOVEMENT_TUTORIAL_GAMEPAD_DIALOG);
+          } else if (mode === ControlsType.ON_SCREEN) {
+            content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.MOVEMENT_TUTORIAL_ONSCREEN_DIALOG);
+          } else {
+            content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.MOVEMENT_TUTORIAL_KEYBOARD_DIALOG);
+          }
+        }, 2000);
+      }
+    },
+    {
+      action: LEVEL_1_TRIGGER_ACTIONS.ON_MOVEMENT_TUTORIAL_FINISHED,
+      callback: (content: TriggerContents) => {
+        setTimeout(() => {
+          const mode = content.services.controls.getMode();
+          if (mode === ControlsType.GAMEPAD) {
+            content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.ACTION_TUTORIAL_GAMEPAD_DIALOG);
+          } else if (mode === ControlsType.ON_SCREEN) {
+            content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.ACTION_TUTORIAL_ONSCREEN_DIALOG);
+          } else {
+            content.managers.dialog.runDialog(LEVEL_1_DIALOGS_IDS.ACTION_TUTORIAL_KEYBOARD_DIALOG);
+          }
+        }, 10000)
       }
     },
     {
@@ -284,6 +316,11 @@ export const LEVEL_1_DATA: LevelMapData = {
     {
       id: LEVEL_1_DIALOGS_IDS.WAKE_UP_DIALOG,
       steps: [
+        {
+          actor: gameActor,
+          phrase: 'Press space (keyboard mode), "B" (gamepad mode) or tap on the screen (touch mode) to go to the next dialog step.',
+          position: 'right',
+        },
         {
           actor: playerActor,
           phrase: '"Whoa, did I fall asleep again?"',
@@ -366,6 +403,77 @@ export const LEVEL_1_DATA: LevelMapData = {
           position: 'right',
         },
       ]
+    },
+
+
+    // tutorials
+
+    {
+      id: LEVEL_1_DIALOGS_IDS.MOVEMENT_TUTORIAL_KEYBOARD_DIALOG,
+      steps: [
+        {
+          actor: gameActor,
+          phrase: 'Use keyboard arrows "right", "left", "down", or "up" to move the game character.',
+          position: 'right',
+        },
+      ],
+      onDialogFinishedTrigger: LEVEL_1_TRIGGER_ACTIONS.ON_MOVEMENT_TUTORIAL_FINISHED,
+    },
+    {
+      id: LEVEL_1_DIALOGS_IDS.MOVEMENT_TUTORIAL_GAMEPAD_DIALOG,
+      steps: [
+        {
+          actor: gameActor,
+          phrase: 'Use gamepad stick to move the game character',
+          position: 'right',
+        },
+      ],
+      onDialogFinishedTrigger: LEVEL_1_TRIGGER_ACTIONS.ON_MOVEMENT_TUTORIAL_FINISHED,
+    },
+    {
+      id: LEVEL_1_DIALOGS_IDS.MOVEMENT_TUTORIAL_ONSCREEN_DIALOG,
+      steps: [
+        {
+          actor: gameActor,
+          phrase: 'Use screen joystick to move the game character',
+          position: 'right',
+        },
+      ],
+      onDialogFinishedTrigger: LEVEL_1_TRIGGER_ACTIONS.ON_MOVEMENT_TUTORIAL_FINISHED,
+    },
+
+
+
+
+    {
+      id: LEVEL_1_DIALOGS_IDS.ACTION_TUTORIAL_KEYBOARD_DIALOG,
+      steps: [
+        {
+          actor: gameActor,
+          phrase: 'Use "E" keyboard button to interact with different items.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_1_DIALOGS_IDS.ACTION_TUTORIAL_GAMEPAD_DIALOG,
+      steps: [
+        {
+          actor: gameActor,
+          phrase: 'Use "Y" button to interact with different items.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_1_DIALOGS_IDS.ACTION_TUTORIAL_ONSCREEN_DIALOG,
+      steps: [
+        {
+          actor: gameActor,
+          phrase: 'Use "Lens" button on the bottom right part of the screen to interact with different items.',
+          position: 'right',
+        },
+      ],
     },
   ],
 };

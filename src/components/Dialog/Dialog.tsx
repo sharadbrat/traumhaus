@@ -19,7 +19,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
     if (this.props.step) {
       const actor = this.props.step.actor;
       const portraitStyle = {
-        backgroundImage: `url(${actor.image})`,
+        backgroundImage: actor.image ? `url(${actor.image})` : '',
       };
 
       const position = this.props.step.position;
@@ -29,7 +29,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
           <div className="dialog__outer">
             <div className={`dialog__container dialog__container_${position}`}>
               <div className="dialog__group">
-                <div className="dialog__title">{actor.title}</div>
+                <div className="dialog__title">{actor.title ? actor.title : ''}</div>
                 <div className="dialog__portrait" style={portraitStyle}/>
               </div>
               <div className="dialog__group">

@@ -4,7 +4,7 @@ import { AssetManager, GameManager, GameManagerOptions } from '../../game';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
-import { Dialog, Menu } from '../../components';
+import { Dialog, Menu, SettingsMenu } from '../../components';
 import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
 import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
@@ -25,6 +25,7 @@ interface GamePageState {
   virtualJoystickEnabled: boolean;
   health: number;
   showHud: boolean;
+  isSettingsActive: boolean;
 }
 
 const ACTION_BUTTON_CODE = ' ';
@@ -47,6 +48,7 @@ export class GamePage extends React.Component<any, GamePageState> {
     virtualJoystickEnabled: false,
     health: 3,
     showHud: false,
+    isSettingsActive: false,
   };
 
   constructor(props: GamePageProps) {
@@ -107,7 +109,7 @@ export class GamePage extends React.Component<any, GamePageState> {
 
   onMenuSettingsClick = () => {
     this.gameManager.resume();
-    this.setState({pause: false});
+    this.setState({isSettingsActive: true});
   };
 
   onMenuExitClick = () => {
@@ -214,12 +216,13 @@ export class GamePage extends React.Component<any, GamePageState> {
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
           {virtualControls}
           {HUD}
+          <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
           <Menu heading="Pause" isActive={this.state.pause}>
             <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>
             <button className="game__menu-option" onClick={this.onMenuSettingsClick}>Settings</button>
             <button className="game__menu-option" onClick={this.onMenuExitClick}>Exit to main menu</button>
           </Menu>
-          <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
+          <SettingsMenu isActive={this.state.isSettingsActive} onClose={this.onMenuSettingsClose}/>
         </div>
       </section>
     );
@@ -244,6 +247,7 @@ export class GamePage extends React.Component<any, GamePageState> {
         ghost: GameGhostService.getInstance(),
         sound: GameSoundService.getInstance(),
         menu: GameMenuService.getInstance(),
+        controls: GameControlsService.getInstance(),
       },
       managers: {
         dialog: DialogManager,
@@ -254,5 +258,9 @@ export class GamePage extends React.Component<any, GamePageState> {
         level: LevelManager,
       }
     }
+  }
+
+  private onMenuSettingsClose = () => {
+    this.setState({isSettingsActive: false});
   }
 }

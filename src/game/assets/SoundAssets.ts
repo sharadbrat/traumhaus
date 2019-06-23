@@ -27,11 +27,17 @@ export interface SoundAsset extends Asset {
 export const mainThemeAudioAsset: SoundAsset = {
   name: MAIN_THEME_AUDIO_ID,
   file: '/sounds/theme_main.mp3',
+  soundConfig: {
+    loop: true,
+  }
 };
 
 export const ghostThemeAudioAsset: SoundAsset = {
   name: GHOST_THEME_AUDIO_ID,
   file: '/sounds/theme_ghost.mp3',
+  soundConfig: {
+    loop: true,
+  }
 };
 
 export const caveThemeAudioAsset: SoundAsset = {

@@ -63,9 +63,9 @@ Georgii Sharadze - Coding
 - Controls manager +
 - Gamepad controls
 - Ambient sounds +
-- Footsteps sounds
-- Shooting Enemies
+- Footsteps sounds +
+- Health recovery and enemy hit system +
 - Dashing Enemies
 - Shooting mechanics
-- All settings and menus and dialog windows
+- All settings and menus and dialog windows +
 - Bugfixing

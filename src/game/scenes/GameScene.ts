@@ -132,7 +132,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onGhostButton = () => {
-    if (this.progressService.getProgress().canBecomeGhost && this.progressService.getProgress().isControllable) {
+    if (this.progressService.getProgress().controls.switch && this.progressService.getProgress().isControllable) {
       const mode = !this.ghostService.isGhostMode();
 
       this.setGhostMode(mode);
@@ -193,8 +193,8 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.setBounds(
       0,
       0,
-      levelMap.getWidth() * AssetManager.graphicalAssets.environment.width,
-      levelMap.getHeight() * AssetManager.graphicalAssets.environment.height
+      levelMap.getWidth() * AssetManager.graphicalAssets.stage1real.width,
+      levelMap.getHeight() * AssetManager.graphicalAssets.stage1real.height
     );
     this.cameras.main.startFollow(this.player.getSprite());
   }
@@ -225,8 +225,6 @@ export class GameScene extends Phaser.Scene {
     this.lightLayer = new LightLayer(this.levelMap);
 
     this.setupDialogs(currentLevel);
-
-    debugger;
 
     this.setupTriggers(currentLevel);
 

@@ -3,12 +3,16 @@ import { LevelObjectAnimation } from '../entities/model';
 
 export const STAGE_1_REAL_GRAPHICAL_ASSET_ID = 'STAGE_1_REAL_GRAPHICAL_ASSET';
 export const STAGE_1_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_1_GHOST_GRAPHICAL_ASSET';
+export const STAGE_2_REAL_GRAPHICAL_ASSET_ID = 'STAGE_2_REAL_GRAPHICAL_ASSET';
+export const STAGE_2_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_2_GHOST_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
 export const ENEMY_SPIDER_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR_GRAPHICAL_ASSET';
 export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
+export const TRANSFORM_ESSENCE_GRAPHICAL_ASSET_ID = 'TRANSFORM_ESSENCE_GRAPHICAL_ASSET';
+export const SHOOTING_OBJECT_GRAPHICAL_ASSET_ID = 'SHOOTING_OBJECT_GRAPHICAL_ASSET';
 export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
 
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
@@ -45,6 +49,20 @@ export const stage1ghostGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/stage-1-ghost.png',
+};
+
+export const stage2realGraphicalAsset: GraphicalAsset = {
+  name: STAGE_2_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/stage-2.png',
+};
+
+export const stage2ghostGraphicalAsset: GraphicalAsset = {
+  name: STAGE_2_GHOST_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/stage-2-ghost.png',
 };
 
 // SPRITE ASSETS
@@ -143,6 +161,38 @@ export const studentCardGraphicalAsset: SpriteAsset = {
   width: 16,
   height: 16,
   file: '/tiles/sprite-student-card.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      start: 0x00,
+      end: 0x03,
+      frameRate: 3,
+      repeat: true
+    }
+  }
+};
+
+export const shootingObjectGraphicalAsset: SpriteAsset = {
+  name: SHOOTING_OBJECT_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/sprite-shooting-object.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      start: 0x00,
+      end: 0x03,
+      frameRate: 3,
+      repeat: true
+    }
+  }
+};
+
+export const transformEssenceGraphicalAsset: SpriteAsset = {
+  name: TRANSFORM_ESSENCE_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/sprite-transform-essence.png',
   animations: {
     [LevelObjectAnimation.IDLE]: {
       name: LevelObjectAnimation.IDLE,

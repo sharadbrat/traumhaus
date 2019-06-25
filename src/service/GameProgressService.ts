@@ -5,7 +5,6 @@ export interface GameProgress {
   isNewGame: boolean;
   health: number;
   isVulnerable?: boolean;
-  canBecomeGhost?: boolean;
   currentLevelId?: string;
   isControllable: boolean;
   lastDoor: Door;
@@ -16,6 +15,9 @@ export interface GameProgress {
     benchGhostDialogFinished: boolean;
     isStudentCardRetrieved: boolean;
     isMensaGateOpened: boolean;
+  };
+  stage2: {
+    transformTouched: boolean;
   };
   controls: {
     dash: boolean;
@@ -28,10 +30,10 @@ export interface GameProgress {
 const DEFAULT_PROGRESS: GameProgress = {
   health: 3,
   isVulnerable: true,
-  isControllable: false,
-  // isControllable: true,
-  // canBecomeGhost: true,
-  isNewGame: true,
+  // isControllable: false,
+  isControllable: true,
+  isNewGame: false,
+  // isNewGame: true,
   lastDoor: null,
   stage1: {
     gateDialogFinished: false,
@@ -40,6 +42,9 @@ const DEFAULT_PROGRESS: GameProgress = {
     benchDialogFinished: false,
     benchGhostDialogFinished: false,
     isMensaGateOpened: false
+  },
+  stage2: {
+    transformTouched: false,
   },
   controls: {
     dash: false,
@@ -132,9 +137,11 @@ export class GameProgressService {
       clearTimeout(this.decreaseHealthTimeout);
     }
 
-    this.recoverHealthTimer();
+    if (--this.getProgress().health !== 0) {
+      this.recoverHealthTimer();
+    }
 
-    this.onHealthChange(--this.getProgress().health);
+    this.onHealthChange(this.getProgress().health);
   }
 
   public recoverHealthTimer() {

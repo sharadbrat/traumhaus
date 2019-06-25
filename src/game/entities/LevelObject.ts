@@ -150,7 +150,12 @@ export class LevelObject {
   }
 
   protected checkInAreaTrigger(trigger: CheckedTrigger, time: number) {
+    const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
 
+    if (distance < 10) {
+      TriggerManager.fire(trigger.action, this.getTriggerContentObject());
+      trigger.lastCheckedOn = time;
+    }
   }
 
   protected checkInNearAreaTrigger(trigger: CheckedTrigger, time: number) {

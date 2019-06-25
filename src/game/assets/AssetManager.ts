@@ -16,11 +16,21 @@ import {
 } from './SoundAssets';
 import {
   stage1realGraphicalAsset,
-  stage1ghostGraphicalAsset, ghostPlayerGraphicalAsset,
-  GraphicalAsset, playerGraphicalAsset, professorGraphicalAsset,
+  stage1ghostGraphicalAsset,
+  ghostPlayerGraphicalAsset,
+  GraphicalAsset,
+  playerGraphicalAsset,
+  professorGraphicalAsset,
   SpriteAsset,
   utilGraphicalAsset,
-  Animation, invisibleGraphicalAsset, studentCardGraphicalAsset, enemySpiderGraphicalAsset
+  Animation,
+  invisibleGraphicalAsset,
+  studentCardGraphicalAsset,
+  enemySpiderGraphicalAsset,
+  transformEssenceGraphicalAsset,
+  shootingObjectGraphicalAsset,
+  stage2realGraphicalAsset,
+  stage2ghostGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -34,6 +44,8 @@ export class AssetManager {
   public static readonly tiles: GraphicalAsset[] = [
     stage1realGraphicalAsset,
     stage1ghostGraphicalAsset,
+    stage2realGraphicalAsset,
+    stage2ghostGraphicalAsset,
     utilGraphicalAsset,
   ];
 
@@ -44,6 +56,8 @@ export class AssetManager {
     invisibleGraphicalAsset,
     studentCardGraphicalAsset,
     enemySpiderGraphicalAsset,
+    shootingObjectGraphicalAsset,
+    transformEssenceGraphicalAsset,
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -67,9 +81,11 @@ export class AssetManager {
   ];
 
   public static readonly graphicalAssets = {
-    environment: stage1realGraphicalAsset,
+    stage1real: stage1realGraphicalAsset,
+    stage1ghost: stage1ghostGraphicalAsset,
+    stage2real: stage2realGraphicalAsset,
+    stage2ghost: stage2ghostGraphicalAsset,
     util: utilGraphicalAsset,
-    ghost: stage1ghostGraphicalAsset
   };
 
   public static readonly spriteAssets = {
@@ -79,6 +95,8 @@ export class AssetManager {
     studentCard: studentCardGraphicalAsset,
     invisible: invisibleGraphicalAsset,
     enemySpider: enemySpiderGraphicalAsset,
+    shootingObject: shootingObjectGraphicalAsset,
+    transformEssence: transformEssenceGraphicalAsset
   };
 
   public static readonly soundAssets = {
@@ -88,7 +106,7 @@ export class AssetManager {
     footsteps: {
       dirt: footStepDirtSoundAsset,
       floor: footStepFloorSoundAsset,
-      ghost: footStepGhostSoundAsset,
+      stage1ghost: footStepGhostSoundAsset,
       grass: footStepGrassSoundAsset,
       plain: footStepPlainSoundAsset,
       stone: footStepStoneSoundAsset,

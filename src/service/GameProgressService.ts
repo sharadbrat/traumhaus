@@ -80,6 +80,7 @@ export class GameProgressService {
 
   public setOnHealthChange(callback: (health: number) => any) {
     this.onHealthChange = callback;
+    this.onHealthChange(this.getProgress().health);
   }
 
   public changeLevel(id: string) {
@@ -122,6 +123,9 @@ export class GameProgressService {
   public loadProgress(progress: GameProgress) {
     this.gameProgress = progress;
     this.gameProgress.health = 3;
+    if (this.onHealthChange) {
+      this.onHealthChange(this.getProgress().health);
+    }
   }
 
   public setControllable(val: boolean) {

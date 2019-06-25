@@ -187,6 +187,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         if (!content.services.progress.getProgress().stage2.transformTouched) {
           content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE);
           content.services.progress.getProgress().controls.switch = true;
+          content.services.progress.getProgress().showGhostHud = true;
           content.services.progress.getProgress().stage2.transformTouched = true;
           content.object.setVisible(false);
         }

@@ -30,10 +30,10 @@ export interface GameProgress {
 const DEFAULT_PROGRESS: GameProgress = {
   health: 3,
   isVulnerable: true,
-  // isControllable: false,
-  isControllable: true,
-  isNewGame: false,
-  // isNewGame: true,
+  isControllable: false,
+  // isControllable: true,
+  // isNewGame: false,
+  isNewGame: true,
   lastDoor: null,
   stage1: {
     gateDialogFinished: false,

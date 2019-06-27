@@ -14,6 +14,7 @@ export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
 export const TRANSFORM_ESSENCE_GRAPHICAL_ASSET_ID = 'TRANSFORM_ESSENCE_GRAPHICAL_ASSET';
 export const SHOOTING_OBJECT_GRAPHICAL_ASSET_ID = 'SHOOTING_OBJECT_GRAPHICAL_ASSET';
 export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
+export const PROJECTILE_GRAPHICAL_ASSET_ID = 'PROJECTILE_GRAPHICAL_ASSET';
 
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
@@ -122,6 +123,29 @@ export const playerGraphicalAsset: SpriteAsset = {
       repeat: false
     },
   }
+};
+
+export const projectileGraphicalAsset: SpriteAsset = {
+  name: PROJECTILE_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/projectile.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      start: 0x01,
+      end: 0x03,
+      frameRate: 6,
+      repeat: true
+    },
+    [LevelObjectAnimation.DEATH]: {
+      name: LevelObjectAnimation.DEATH,
+      start: 0x04,
+      end: 0x07,
+      frameRate: 6,
+      repeat: false
+    },
+  },
 };
 
 export const professorGraphicalAsset: SpriteAsset = {

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { LevelMap, LevelObject, LightLayer, MapObjectFactory, Player } from '../entities';
+import { LevelMap, LevelObject, LightLayer, MapObjectFactory, Player, Projectile } from '../entities';
 import { AssetManager } from '../assets';
 import { SceneIdentifier, SceneManager } from './SceneManager';
 import { LEVEL_1_TRIGGER_ACTIONS, LevelManager } from '../levels';
@@ -10,6 +10,10 @@ import { DialogManager } from '../dialogs';
 import { Door, LevelMapData, LevelObjectData } from '../entities/model';
 import { GameManager } from '../GameManager';
 import { ControlsType, GameControlsService } from '../../service/GameControlsService';
+
+// 10 seconds
+const GHOST_COOLDOWN = 10 * 1000;
+const SHOOT_COOLDOWN = 5 * 1000;
 
 export class GameScene extends Phaser.Scene {
   private lastX: number;
@@ -31,9 +35,13 @@ export class GameScene extends Phaser.Scene {
 
   private realWorldObjects: LevelObject[];
   private ghostWorldObjects: LevelObject[];
-  private gamepadGhostFlag: boolean;
+
+  private projectiles: Projectile[] = [];
 
   private nextCameraUpdate: number = 0;
+  private gamepadShootFlag: boolean;
+  private nextGhostAvailable: number = 0;
+  private nextShootAvailable: number = 0;
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
@@ -65,6 +73,16 @@ export class GameScene extends Phaser.Scene {
       this.player.getKeys().ghost.on('down', this.onGhostButton);
     }
 
+    if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
+      document.getElementById('button-shoot').removeEventListener('pointerdown', this.onShootButton);
+      document.getElementById('button-shoot').addEventListener('pointerdown', this.onShootButton);
+    } else if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
+        // could not find the correct listener, so handle it in update
+    } else {
+      this.player.getKeys().shoot.removeListener('down', this.onShootButton);
+      this.player.getKeys().shoot.on('down', this.onShootButton);
+    }
+
     this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
@@ -84,13 +102,10 @@ export class GameScene extends Phaser.Scene {
     } else {
 
       // workaround for gamepad
-      if (GameControlsService.getInstance().getMode() === ControlsType.GAMEPAD) {
-        const pad = GameControlsService.getInstance().getGamepad();
-        if (!this.gamepadGhostFlag && pad && pad.buttons[0].pressed) {
+      if (this.controlsService.getMode() === ControlsType.GAMEPAD) {
+        const pad = this.controlsService.getGamepad();
+        if (pad && pad.buttons[0].pressed) {
           this.onGhostButton();
-          this.gamepadGhostFlag = true;
-        } else if (this.gamepadGhostFlag && pad && !pad.buttons[0].pressed) {
-          this.gamepadGhostFlag = false
         }
       }
 
@@ -99,6 +114,8 @@ export class GameScene extends Phaser.Scene {
       this.updateCamera();
 
       this.updateGameObjects(time);
+
+      this.updateProjectiles(time);
 
       this.updateLightLayer(delta);
     }
@@ -132,14 +149,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onGhostButton = () => {
-    if (this.progressService.getProgress().controls.switch && this.progressService.getProgress().isControllable) {
+    if (this.nextGhostAvailable < this.time.now && this.progressService.getProgress().controls.switch && this.progressService.getProgress().isControllable) {
       const mode = !this.ghostService.isGhostMode();
+      this.nextGhostAvailable = this.time.now + GHOST_COOLDOWN;
 
       this.setGhostMode(mode);
     }
   };
 
-  private createCollider() {
+  private createPlayerCollider() {
     if (this.levelMap.getMapData().realWorld) {
       this.playerRealCollider = this.physics.add.collider(this.player.getSprite(), this.levelMap.getRealCollisionLayer());
       this.playerRealCollider.active = !this.ghostService.isGhostMode();
@@ -220,7 +238,7 @@ export class GameScene extends Phaser.Scene {
 
     this.createCamera(this.levelMap);
 
-    this.createCollider();
+    this.createPlayerCollider();
 
     this.lightLayer = new LightLayer(this.levelMap);
 
@@ -404,11 +422,65 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  getCurrentObjects(): LevelObject[] {
+    if (this.ghostService.isGhostMode()) {
+      return this.ghostWorldObjects;
+    } else {
+      return this.realWorldObjects;
+    }
+  }
+
   changeLevel(door: Door) {
     GameSoundService.getInstance().setFootstepPlay(false);
     GameProgressService.getInstance().changeLevel(door.toId);
     GameProgressService.getInstance().setLastDoor(door);
     GameProgressService.getInstance().saveProgressToLocalStorage();
     this.scene.start(SceneIdentifier.GAME_SCENE);
+  }
+
+  private updateProjectiles(time: number) {
+
+    // gamepad workaround
+    const mode = this.controlsService.getMode();
+    if (mode === ControlsType.GAMEPAD) {
+      const pad = this.controlsService.getGamepad();
+      if (pad && pad.buttons[1].pressed) {
+        this.onShootButton();
+        this.nextShootAvailable = time + SHOOT_COOLDOWN;
+      }
+    }
+
+    this.projectiles.forEach(el => el.update());
+  }
+
+  private onShootButton = () => {
+    if (!GameGhostService.getInstance().isGhostMode()) {
+      return;
+    }
+
+    if (this.nextShootAvailable < this.time.now && this.progressService.getProgress().isControllable && this.progressService.getProgress().controls.shoot) {
+      const pDir = this.player.getMovementDirection();
+
+      if (pDir.x === 0 && pDir.y === 0) {
+        return;
+      }
+
+      this.nextShootAvailable = this.time.now + SHOOT_COOLDOWN;
+      const id = `${Date.now()}__${Math.random()}`;
+
+      const {x, y} = this.player.getPosition();
+
+      let norm = Math.abs(pDir.x) + Math.abs(pDir.y);
+      if (norm === 0) {
+        norm = 1;
+      }
+      const dir = {x: pDir.x / norm, y: pDir.y / norm};
+
+      this.projectiles.push(new Projectile(id, x, y, dir, this));
+    }
+  };
+
+  removeProjectile(id: string) {
+    this.projectiles = this.projectiles.filter(el => el.id !== id);
   }
 }

@@ -47,7 +47,7 @@ export class Projectile {
 
     if (objects) {
       objects
-        .filter(el => el.getObptions().type === LevelObjectType.ENEMY)
+        .filter(el => el.getOptions().type === LevelObjectType.ENEMY)
         .forEach((el) => {
           if (this.scene.physics.overlap(el.getSprite(), this.sprite)) {
             (el as EnemyLevelObject).onHit();

@@ -71,6 +71,10 @@ export class LevelObject {
     return this.sprite.body.position;
   }
 
+  public getOptions(): LevelObjectData {
+    return this.options;
+  }
+
   protected setupSprite(options: LevelObjectData) {
     const {asset, offsetX, offsetY} = options.graphics;
     const {x, y} = this.getWorldPositionFromTilePosition(this.scene, options.position);
@@ -193,5 +197,9 @@ export class LevelObject {
         level: LevelManager,
       }
     };
+  }
+
+  getSprite(): Phaser.Physics.Arcade.Sprite {
+    return this.sprite;
   }
 }

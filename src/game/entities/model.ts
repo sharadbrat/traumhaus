@@ -55,6 +55,7 @@ export enum LevelObjectAnimation {
   SLASH_DOWN = 'slash_down',
   SLASH_UP = 'slash_up',
   HIT = 'hit',
+  DEATH = 'death',
 }
 
 export enum TriggerEvent {

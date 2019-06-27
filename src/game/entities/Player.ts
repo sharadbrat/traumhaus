@@ -7,7 +7,7 @@ import { LevelMap } from './LevelMap';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { NPC_TRIGGERS_ACTIONS } from './NPCLevelObject';
 import { ENEMY_TRIGGERS_ACTIONS, EnemyLevelObject } from './EnemyLevelObject';
-import { LevelObjectAnimation } from './model';
+import { LevelObjectAnimation, MapPosition } from './model';
 import { ControlsType, GameControlsService, JoystickKeys, Keys } from '../../service/GameControlsService';
 
 const speed = 125;
@@ -81,7 +81,7 @@ export class Player {
 
     TriggerManager.add(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, (content: TriggerContents) => {
       if (this.attackUntil > content.scene.time.now) {
-        (content.object as EnemyLevelObject).onHit(content);
+        (content.object as EnemyLevelObject).onHit();
       } else {
         if (content.services.progress.getProgress().isVulnerable) {
           this.onPlayerHit(content);
@@ -278,6 +278,16 @@ export class Player {
     content.services.sound.playSfx(AssetManager.soundAssets.hit.name);
 
     GameProgressService.getInstance().decreaseHealth();
+  }
+
+  getMovementDirection(): MapPosition {
+    const velocityX = this.sprite.body.velocity.x;
+    const velocityY = this.sprite.body.velocity.y;
+
+    const x = velocityX > 0 ? 1 : velocityX < 0 ? -1 : 0;
+    const y = velocityY > 0 ? 1 : velocityY < 0 ? -1 : 0;
+
+    return {x, y};
   }
 
   private setupControls() {

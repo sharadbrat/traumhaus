@@ -354,14 +354,16 @@ export class EnemyLevelObject extends LevelObject {
     this.isAlive = false;
     this.sprite.setVelocity(0);
     this.sprite.disableBody();
-    this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.DEATH}`)
-    this.scene.tweens.add({
-      targets: this.sprite,
-      alpha: 0,
-      duration: 1000
-    });
+    this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.DEATH}`);
+    setTimeout(() => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        alpha: 0,
+        duration: 10000
+      });
+    }, 5000);
     setTimeout(() => {
       this.sprite.destroy();
-    }, 1000);
+    }, 15000);
   }
 }

@@ -47,6 +47,8 @@ const DEFAULT_PROGRESS: GameProgress = {
   },
   stage2: {
     transformTouched: false,
+    shootingTouched: false,
+    leverTouched: false,
   },
   controls: {
     dash: false,

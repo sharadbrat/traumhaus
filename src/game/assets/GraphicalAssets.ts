@@ -5,6 +5,8 @@ export const STAGE_1_REAL_GRAPHICAL_ASSET_ID = 'STAGE_1_REAL_GRAPHICAL_ASSET';
 export const STAGE_1_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_1_GHOST_GRAPHICAL_ASSET';
 export const STAGE_2_REAL_GRAPHICAL_ASSET_ID = 'STAGE_2_REAL_GRAPHICAL_ASSET';
 export const STAGE_2_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_2_GHOST_GRAPHICAL_ASSET';
+export const STAGE_3_REAL_GRAPHICAL_ASSET_ID = 'STAGE_3_REAL_GRAPHICAL_ASSET';
+export const STAGE_3_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_3_GHOST_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
@@ -61,6 +63,20 @@ export const stage2realGraphicalAsset: GraphicalAsset = {
 
 export const stage2ghostGraphicalAsset: GraphicalAsset = {
   name: STAGE_2_GHOST_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/stage-2-ghost.png',
+};
+
+export const stage3realGraphicalAsset: GraphicalAsset = {
+  name: STAGE_3_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/stage-3.png',
+};
+
+export const stage3ghostGraphicalAsset: GraphicalAsset = {
+  name: STAGE_3_GHOST_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
   file: '/tiles/stage-2-ghost.png',

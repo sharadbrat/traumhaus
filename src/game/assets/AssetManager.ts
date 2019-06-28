@@ -7,10 +7,10 @@ import {
   footStepGrassSoundAsset,
   footStepPlainSoundAsset,
   footStepStoneSoundAsset,
-  forestAmbientAudioAsset,
+  forestAmbientAudioAsset, gateSoundAsset,
   ghostThemeAudioAsset,
   hitSoundAsset,
-  mainThemeAudioAsset,
+  mainThemeAudioAsset, parkGhostThemeAudioAsset, parkThemeAudioAsset,
   shootSoundAsset,
   SoundAsset
 } from './SoundAssets';
@@ -30,7 +30,7 @@ import {
   transformEssenceGraphicalAsset,
   shootingObjectGraphicalAsset,
   stage2realGraphicalAsset,
-  stage2ghostGraphicalAsset, projectileGraphicalAsset
+  stage2ghostGraphicalAsset, projectileGraphicalAsset, stage3realGraphicalAsset, stage3ghostGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -47,6 +47,8 @@ export class AssetManager {
     stage2realGraphicalAsset,
     stage2ghostGraphicalAsset,
     utilGraphicalAsset,
+    stage3realGraphicalAsset,
+    stage3ghostGraphicalAsset,
   ];
 
   public static readonly sprites: SpriteAsset[] = [
@@ -65,6 +67,7 @@ export class AssetManager {
     dashSoundAsset,
     shootSoundAsset,
     hitSoundAsset,
+    gateSoundAsset,
     footStepDirtSoundAsset,
     footStepFloorSoundAsset,
     footStepGhostSoundAsset,
@@ -79,6 +82,8 @@ export class AssetManager {
     forestAmbientAudioAsset,
     cityAmbientAudioAsset,
     caveThemeAudioAsset,
+    parkThemeAudioAsset,
+    parkGhostThemeAudioAsset,
   ];
 
   public static readonly graphicalAssets = {
@@ -86,6 +91,8 @@ export class AssetManager {
     stage1ghost: stage1ghostGraphicalAsset,
     stage2real: stage2realGraphicalAsset,
     stage2ghost: stage2ghostGraphicalAsset,
+    stage3real: stage3realGraphicalAsset,
+    stage3ghost: stage3ghostGraphicalAsset,
     util: utilGraphicalAsset,
   };
 
@@ -105,6 +112,7 @@ export class AssetManager {
     dash: dashSoundAsset,
     shoot: shootSoundAsset,
     hit: hitSoundAsset,
+    gate: gateSoundAsset,
     footsteps: {
       dirt: footStepDirtSoundAsset,
       floor: footStepFloorSoundAsset,

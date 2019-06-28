@@ -200,6 +200,7 @@ export const LEVEL_4_DATA: LevelMapData = {
           toPosition: {x: pos.x, y: pos.y},
           toId: '04_mod',
         });
+        content.services.sound.playSfx(content.managers.asset.soundAssets.gate.name);
 
         setTimeout(() => content.managers.dialog.runDialog(LEVEL_4_DIALOGS_IDS.ON_LEVER_ACTION_DIALOG), 200);
       }

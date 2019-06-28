@@ -3,10 +3,13 @@ import { Asset } from './AssetManager';
 export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
 export const GHOST_THEME_AUDIO_ID = 'GHOST_THEME_AUDIO';
 export const CAVE_THEME_AUDIO_ID = 'CAVE_THEME_AUDIO';
+export const PARK_THEME_AUDIO_ID = 'PARK_THEME_AUDIO';
+export const PARK_GHOST_THEME_AUDIO_ID = 'PARK_GHOST_THEME_AUDIO';
 
 export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
 export const SHOOT_SOUND_ASSET_ID = 'SHOOT_SOUND_ASSET';
 export const HIT_SOUND_ASSET_ID = 'HIT_SOUND_ASSET';
+export const GATE_SOUND_ASSET_ID = 'GATE_SOUND_ASSET';
 
 export const FOOTSTEP_DIRT_SOUND_ASSET_ID = 'FOOTSTEP_DIRT_SOUND_ASSET';
 export const FOOTSTEP_FLOOR_SOUND_ASSET_ID = 'FOOTSTEP_FLOOR_SOUND_ASSET';
@@ -49,12 +52,36 @@ export const caveThemeAudioAsset: SoundAsset = {
   }
 };
 
+export const parkThemeAudioAsset: SoundAsset = {
+  name: PARK_THEME_AUDIO_ID,
+  file: '/sounds/theme_park_real.mp3',
+  soundConfig: {
+    volume: 1,
+    loop: true,
+  }
+};
+
+export const parkGhostThemeAudioAsset: SoundAsset = {
+  name: PARK_GHOST_THEME_AUDIO_ID,
+  file: '/sounds/theme_park_ghost.mp3',
+  soundConfig: {
+    volume: 1,
+    loop: true,
+  }
+};
+
 // SFX
 
 export const dashSoundAsset: SoundAsset = {
   name: DASH_SOUND_ASSET_ID,
   file: '/sounds/dash.mp3',
   soundConfig: { loop: false, volume: 0.1 },
+};
+
+export const gateSoundAsset: SoundAsset = {
+  name: GATE_SOUND_ASSET_ID,
+  file: '/sounds/SFX_gate.mp3',
+  soundConfig: { loop: false, volume: 0.5 },
 };
 
 export const shootSoundAsset: SoundAsset = {

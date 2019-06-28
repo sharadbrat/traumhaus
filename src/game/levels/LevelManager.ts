@@ -6,6 +6,8 @@ import { LEVEL_2_DATA } from './level-2';
 import { LEVEL_4_DATA } from './level-4';
 import { LEVEL_4_MOD_DATA } from './level-4_mod';
 import { LEVEL_5_DATA } from './level-5';
+import { LEVEL_5_MOD_DATA } from './level-5_mod';
+import { LEVEL_6_DATA } from './level-6';
 
 export class LevelManager {
 
@@ -16,6 +18,8 @@ export class LevelManager {
     [LEVEL_4_DATA.id]: LEVEL_4_DATA,
     [LEVEL_4_MOD_DATA.id]: LEVEL_4_MOD_DATA,
     [LEVEL_5_DATA.id]: LEVEL_5_DATA,
+    [LEVEL_5_MOD_DATA.id]: LEVEL_5_MOD_DATA,
+    [LEVEL_6_DATA.id]: LEVEL_6_DATA,
     [LEVEL_TEST_DATA.id]: LEVEL_TEST_DATA,
   };
 

@@ -2,15 +2,20 @@ import { AssetManager, CAVE_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { getSpiderEnemyChasing } from './enemies';
 import { TriggerContents } from '../TriggerManager';
-import { gameActor, playerActor } from './actors';
+import { gameActor, ghostActor, playerActor } from './actors';
 
 const LEVEL_5_TRIGGER_ACTIONS = {
   ON_TRANSFORM_ESSENCE_TOUCH: 'ON_TRANSFORM_ESSENCE_TOUCH',
   ON_SHOOTING_OBJECT_TOUCH: 'ON_SHOOTING_OBJECT_TOUCH',
+  ON_SHOOTING_ESSENCE_TOUCH: 'ON_SHOOTING_ESSENCE_TOUCH',
+  ON_LEVER_ACTION: 'ON_LEVER_ACTION',
 };
 
 const LEVEL_5_DIALOGS_IDS = {
   ON_TRANSFORM_ESSENCE: 'ON_TRANSFORM_ESSENCE',
+  ON_SHOOTING_OBJECT: 'ON_SHOOTING_OBJECT',
+  ON_LEVER_TOUCH: 'ON_LEVER_TOUCH',
+  ON_LEVER_FALSE_TOUCH: 'ON_LEVER_FALSE_TOUCH',
 };
 
 export const LEVEL_5_DATA: LevelMapData = {
@@ -177,6 +182,48 @@ export const LEVEL_5_DATA: LevelMapData = {
       getSpiderEnemyChasing({x: 10, y: 20}),
       getSpiderEnemyChasing({x: 20, y: 20}),
       getSpiderEnemyChasing({x: 30, y: 20}),
+      {
+        id: 'shooting_essence',
+        type: LevelObjectType.STATIC,
+        isCollideable: false,
+        width: 16,
+        height: 16,
+        position: {x: 41, y: 25, offsetY: 8},
+        graphics: {
+          asset: AssetManager.spriteAssets.shootingObject,
+          offsetX: 0,
+          offsetY: 0,
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_IN_AREA,
+            action: LEVEL_5_TRIGGER_ACTIONS.ON_SHOOTING_ESSENCE_TOUCH,
+            fixTime: 1000,
+          },
+        ],
+        inGhostWorld: true,
+      },
+      {
+        id: 'lever',
+        type: LevelObjectType.STATIC,
+        isCollideable: false,
+        width: 16,
+        height: 16,
+        position: {x: 46, y: 46, offsetY: 5, offsetX: -3},
+        graphics: {
+          asset: AssetManager.spriteAssets.invisible,
+          offsetX: 0,
+          offsetY: 0,
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_ACTION,
+            action: LEVEL_5_TRIGGER_ACTIONS.ON_LEVER_ACTION,
+            fixTime: 1000,
+          },
+        ],
+        inGhostWorld: true,
+      },
     ],
     themeId: CAVE_THEME_AUDIO_ID,
   },
@@ -192,7 +239,40 @@ export const LEVEL_5_DATA: LevelMapData = {
           content.object.setVisible(false);
         }
       },
-    }
+    },
+    {
+      action: LEVEL_5_TRIGGER_ACTIONS.ON_SHOOTING_ESSENCE_TOUCH,
+      callback: (content: TriggerContents) => {
+        if (!content.services.progress.getProgress().stage2.shootingTouched) {
+          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT);
+          content.services.progress.getProgress().controls.shoot = true;
+          content.services.progress.getProgress().stage2.shootingTouched = true;
+          content.object.setVisible(false);
+        }
+      },
+    },
+    {
+      action: LEVEL_5_TRIGGER_ACTIONS.ON_LEVER_ACTION,
+      callback: (content: TriggerContents) => {
+        if (!content.services.progress.getProgress().stage2.leverTouched && content.services.progress.getProgress().stage2.transformTouched && content.services.progress.getProgress().stage2.shootingTouched) {
+          const playerPos = content.player.getPosition();
+          const pos = content.scene.getLevelMap().getTilemap().worldToTileXY(playerPos.x, playerPos.y);
+          content.scene.changeLevel({
+            fromPosition: null,
+            toPosition: {x: pos.x, y: pos.y},
+            toId: '05_mod',
+          });
+          content.services.sound.playSfx(content.managers.asset.soundAssets.gate.name);
+          content.services.progress.getProgress().stage2.leverTouched = true;
+
+          setTimeout(() => {
+            content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_LEVER_TOUCH);
+          }, 200);
+        } else {
+          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_LEVER_FALSE_TOUCH);
+        }
+      },
+    },
   ],
   dialogs: [
     {
@@ -211,6 +291,51 @@ export const LEVEL_5_DATA: LevelMapData = {
         {
           actor: gameActor,
           phrase: 'Use Q keyboard button to switch to the different world.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: '"Now it feels like I\'m completely powered up!"',
+          position: 'right',
+        },
+        {
+          actor: ghostActor,
+          phrase: '"So much power!!!"',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Use W keyboard button to shoot while you are a ghost.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_LEVER_TOUCH,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: '"The door is opened now, he he .."',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_LEVER_FALSE_TOUCH,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: '"Hmm, it feels like I\'m not done in here."',
+          position: 'right',
+        },
+        {
+          actor: ghostActor,
+          phrase: '"I have to find something else"',
           position: 'right',
         },
       ],

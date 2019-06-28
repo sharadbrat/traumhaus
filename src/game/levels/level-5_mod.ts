@@ -52,7 +52,21 @@ export const LEVEL_5_MOD_DATA: LevelMapData = {
       },
     ],
     doors: [
-
+      {
+        fromPosition: {x: 44, y: 39},
+        toPosition: {x: 4, y: 42},
+        toId: '06',
+      },
+      {
+        fromPosition: {x: 44, y: 40},
+        toPosition: {x: 4, y: 42},
+        toId: '06',
+      },
+      {
+        fromPosition: {x: 44, y: 41},
+        toPosition: {x: 4, y: 42},
+        toId: '06',
+      },
     ],
     lightSettings: {
       playerLightRadius: 5,
@@ -131,6 +145,23 @@ export const LEVEL_5_MOD_DATA: LevelMapData = {
       playerLightRolloff: 8,
       fogAlpha: 0.9,
     },
+    doors: [
+      {
+        fromPosition: {x: 44, y: 39},
+        toPosition: {x: 4, y: 42},
+        toId: '06',
+      },
+      {
+        fromPosition: {x: 44, y: 40},
+        toPosition: {x: 4, y: 42},
+        toId: '06',
+      },
+      {
+        fromPosition: {x: 44, y: 41},
+        toPosition: {x: 4, y: 42},
+        toId: '06',
+      },
+    ],
 
     objects: [
 

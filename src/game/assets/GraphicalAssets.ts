@@ -300,13 +300,19 @@ export const enemySpiderGraphicalAsset: SpriteAsset = {
     [LevelObjectAnimation.WALK]: {
       name: LevelObjectAnimation.WALK,
       frames: [0x00, 0x01, 0x02],
-      frameRate: 10,
+      frameRate: 5,
       repeat: true
     },
     [LevelObjectAnimation.WALK_BACK]: {
       name: LevelObjectAnimation.WALK_BACK,
       frames: [0x06, 0x07, 0x08],
-      frameRate: 10,
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK_LEFT]: {
+      name: LevelObjectAnimation.WALK_LEFT,
+      frames: [0x03, 0x04, 0x05],
+      frameRate: 5,
       repeat: true
     },
     [LevelObjectAnimation.DEATH]: {

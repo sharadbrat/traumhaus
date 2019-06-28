@@ -244,9 +244,9 @@ export class EnemyLevelObject extends LevelObject {
       this.sprite.setVelocity(velocityX, velocityY);
     }
 
-    const animName = this.getAnimationNameByVelocity(velocityX, velocityY);
+    const animName = this.getAnimationNameByVelocity(velocityX, velocityY, !!this.options.graphics.asset.animations.walk_left);
     this.sprite.anims.play(animName, true);
-    this.sprite.setFlipX(velocityX < 0);
+    this.sprite.setFlipX(velocityX > 0);
 
     const distance = this.calcDistanceBetweenTiles(from, to);
 
@@ -298,9 +298,9 @@ export class EnemyLevelObject extends LevelObject {
         this.sprite.setVelocity(velocityX, velocityY);
       }
 
-      const animName = this.getAnimationNameByVelocity(velocityX, velocityY);
+      const animName = this.getAnimationNameByVelocity(velocityX, velocityY, !!this.options.graphics.asset.animations.walk_left);
       this.sprite.anims.play(animName, true);
-      this.sprite.setFlipX(velocityX < 0);
+      this.sprite.setFlipX(velocityX > 0);
     } catch (e) {
       console.error('Couldn\'t calculate path for chasing enemy, do nothing');
     }
@@ -334,15 +334,19 @@ export class EnemyLevelObject extends LevelObject {
     return directionX;
   }
 
-  private getAnimationNameByVelocity(velocityX: number, velocityY: number): string  {
+  private getAnimationNameByVelocity(velocityX: number, velocityY: number, hasWalkLeftAnim = false): string  {
     let anim = '';
 
-    if (velocityY > 0) {
+    if (velocityY > Math.abs(velocityX)) {
       anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK].name}`;
-    } else if (velocityY < 0) {
+    } else if (velocityY < -Math.abs(velocityX)) {
       anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK_BACK].name}`;
     } else if (velocityX !== 0) {
-      anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK].name}`;
+      if (hasWalkLeftAnim) {
+        anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK_LEFT].name}`;
+      } else {
+        anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.WALK].name}`;
+      }
     } else {
       anim = `${this.options.graphics.asset.name}__${this.options.graphics.asset.animations[LevelObjectAnimation.IDLE].name}`;
     }

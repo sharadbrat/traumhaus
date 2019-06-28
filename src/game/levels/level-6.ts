@@ -37,7 +37,7 @@ const sources = [
 const lightSettings = {
   playerLightRadius: 3,
   playerLightRolloff: 8,
-  fogAlpha: 0.95,
+  fogAlpha: 0.8,
   sources: sources
 };
 

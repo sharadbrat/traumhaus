@@ -1,21 +1,25 @@
 import { AssetManager, CAVE_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
-import { getSpiderEnemyChasing } from './enemies';
+import { getSpiderEnemyChasing, getSpiderEnemyPatroling } from './enemies';
 import { TriggerContents } from '../TriggerManager';
-import { gameActor, ghostActor, playerActor } from './actors';
+import { gameActor, ghostActor, playerActor, signActor } from './actors';
 
 const LEVEL_5_TRIGGER_ACTIONS = {
   ON_TRANSFORM_ESSENCE_TOUCH: 'ON_TRANSFORM_ESSENCE_TOUCH',
   ON_SHOOTING_OBJECT_TOUCH: 'ON_SHOOTING_OBJECT_TOUCH',
   ON_SHOOTING_ESSENCE_TOUCH: 'ON_SHOOTING_ESSENCE_TOUCH',
   ON_LEVER_ACTION: 'ON_LEVER_ACTION',
+  ON_BROKEN_LEVER_ACTION: 'ON_BROKEN_LEVER_ACTION',
+  ON_SIGN_ACTION: 'ON_SIGN_ACTION',
 };
 
-const LEVEL_5_DIALOGS_IDS = {
+export const LEVEL_5_DIALOGS_IDS = {
   ON_TRANSFORM_ESSENCE: 'ON_TRANSFORM_ESSENCE',
   ON_SHOOTING_OBJECT: 'ON_SHOOTING_OBJECT',
   ON_LEVER_TOUCH: 'ON_LEVER_TOUCH',
   ON_LEVER_FALSE_TOUCH: 'ON_LEVER_FALSE_TOUCH',
+  ON_BROKEN_LEVER_TOUCH: 'ON_BROKEN_LEVER_TOUCH',
+  SIGN_ACTION_DIALOG: 'SIGN_ACTION_DIALOG',
 };
 
 export const LEVEL_5_DATA: LevelMapData = {
@@ -122,6 +126,48 @@ export const LEVEL_5_DATA: LevelMapData = {
         ],
         inGhostWorld: false,
       },
+      {
+        id: 'sign',
+        type: LevelObjectType.STATIC,
+        isCollideable: false,
+        width: 16,
+        height: 16,
+        position: {x: 42, y: 38, offsetY: 5, offsetX: -3},
+        graphics: {
+          asset: AssetManager.spriteAssets.invisible,
+          offsetX: 0,
+          offsetY: 0,
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_ACTION,
+            action: LEVEL_5_TRIGGER_ACTIONS.ON_SIGN_ACTION,
+            fixTime: 1000,
+          },
+        ],
+        inGhostWorld: false,
+      },
+      {
+        id: 'broken_lever',
+        type: LevelObjectType.STATIC,
+        isCollideable: false,
+        width: 16,
+        height: 16,
+        position: {x: 46, y: 46, offsetY: 5, offsetX: -3},
+        graphics: {
+          asset: AssetManager.spriteAssets.invisible,
+          offsetX: 0,
+          offsetY: 0,
+        },
+        triggers: [
+          {
+            event: TriggerEvent.ON_ACTION,
+            action: LEVEL_5_TRIGGER_ACTIONS.ON_BROKEN_LEVER_ACTION,
+            fixTime: 1000,
+          },
+        ],
+        inGhostWorld: false,
+      },
     ],
 
     themeId: CAVE_THEME_AUDIO_ID,
@@ -179,8 +225,13 @@ export const LEVEL_5_DATA: LevelMapData = {
     },
 
     objects: [
-      getSpiderEnemyChasing({x: 10, y: 20}),
-      getSpiderEnemyChasing({x: 20, y: 20}),
+      getSpiderEnemyPatroling({x: 17, y: 6}, {x: 17, y: 6}, {x: 27, y: 13}),
+      getSpiderEnemyPatroling({x: 17, y: 13}, {x: 17, y: 13}, {x: 27, y: 7}),
+      getSpiderEnemyChasing({x: 39, y: 25}),
+      getSpiderEnemyChasing({x: 40, y: 43}),
+      getSpiderEnemyChasing({x: 40, y: 38}),
+      getSpiderEnemyChasing({x: 33, y: 39}),
+      getSpiderEnemyChasing({x: 33, y: 43}),
       getSpiderEnemyChasing({x: 30, y: 20}),
       {
         id: 'shooting_essence',
@@ -273,6 +324,20 @@ export const LEVEL_5_DATA: LevelMapData = {
         }
       },
     },
+    {
+      action: LEVEL_5_TRIGGER_ACTIONS.ON_BROKEN_LEVER_ACTION,
+      callback: (content: TriggerContents) => {
+        if (!content.services.progress.getProgress().stage2.leverTouched && !content.services.progress.getProgress().stage2.transformTouched && !content.services.progress.getProgress().stage2.shootingTouched) {
+          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_BROKEN_LEVER_TOUCH);
+        }
+      },
+    },
+    {
+      action: LEVEL_5_TRIGGER_ACTIONS.ON_SIGN_ACTION,
+      callback: (content: TriggerContents) => {
+        content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.SIGN_ACTION_DIALOG);
+      }
+    },
   ],
   dialogs: [
     {
@@ -316,16 +381,6 @@ export const LEVEL_5_DATA: LevelMapData = {
       ],
     },
     {
-      id: LEVEL_5_DIALOGS_IDS.ON_LEVER_TOUCH,
-      steps: [
-        {
-          actor: ghostActor,
-          phrase: '"The door is opened now, he he .."',
-          position: 'right',
-        },
-      ],
-    },
-    {
       id: LEVEL_5_DIALOGS_IDS.ON_LEVER_FALSE_TOUCH,
       steps: [
         {
@@ -337,6 +392,31 @@ export const LEVEL_5_DATA: LevelMapData = {
           actor: ghostActor,
           phrase: '"I have to find something else"',
           position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_BROKEN_LEVER_TOUCH,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '"Ah man, what\'s with my luck today? This lever is broken..."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"I have to find a way to activate it to get out of here."',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.SIGN_ACTION_DIALOG,
+      steps: [
+        {
+          actor: signActor,
+          phrase: '"Pull the lever, to open the gate to Park an der Ilm."',
+          position: 'left',
         },
       ],
     },

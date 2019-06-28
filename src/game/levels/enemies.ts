@@ -31,8 +31,8 @@ export function getSpiderEnemyPatroling(pos: MapPosition, pos1: MapPosition, pos
     type: LevelObjectType.ENEMY,
     isCollideable: false,
     position: pos,
-    width: 20,
-    height: 20,
+    width: 12,
+    height: 12,
     graphics: {
       asset: AssetManager.spriteAssets.enemySpider,
       offsetX: 8,
@@ -41,7 +41,7 @@ export function getSpiderEnemyPatroling(pos: MapPosition, pos1: MapPosition, pos
     meta: {
       enemyType: EnemyLevelObjectType.PATROLING,
       patrol: {
-        speed: 10,
+        speed: 50,
         delay: 100,
         from: pos1,
         to: pos2,

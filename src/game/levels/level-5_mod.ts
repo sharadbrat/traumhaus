@@ -1,5 +1,7 @@
 import { AssetManager, CAVE_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData } from '../entities/model';
+import { ghostActor } from './actors';
+import { LEVEL_5_DIALOGS_IDS } from './level-5';
 
 export const LEVEL_5_MOD_DATA: LevelMapData = {
   id: '05_mod',
@@ -172,7 +174,16 @@ export const LEVEL_5_MOD_DATA: LevelMapData = {
 
   ],
   dialogs: [
-
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_LEVER_TOUCH,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: '"The door is opened now, he he .."',
+          position: 'right',
+        },
+      ],
+    },
   ],
   startPosition: {x: 46, y: 45},
 };

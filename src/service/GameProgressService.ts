@@ -18,6 +18,8 @@ export interface GameProgress {
   };
   stage2: {
     transformTouched: boolean;
+    shootingTouched: boolean;
+    leverTouched: boolean;
   };
   controls: {
     dash: boolean;
@@ -49,7 +51,9 @@ const DEFAULT_PROGRESS: GameProgress = {
   controls: {
     dash: false,
     switch: false,
+    // switch: true,
     shoot: false,
+    // shoot: true,
   },
   showGhostHud: false,
   // showGhostHud: true,

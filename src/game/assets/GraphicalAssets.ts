@@ -92,22 +92,22 @@ export const playerGraphicalAsset: SpriteAsset = {
   animations: {
     [LevelObjectAnimation.IDLE]: {
       name: LevelObjectAnimation.IDLE,
-      start: 0x01,
-      end: 0x07,
+      start: 0,
+      end: 7,
       frameRate: 6,
       repeat: true
     },
     [LevelObjectAnimation.WALK]: {
       name: LevelObjectAnimation.WALK,
-      start: 0x08,
-      end: 0x0d,
+      start: 8,
+      end: 13,
       frameRate: 10,
       repeat: true
     },
     [LevelObjectAnimation.WALK_BACK]: {
       name: LevelObjectAnimation.WALK_BACK,
-      start: 0x10,
-      end: 0x15,
+      start: 16,
+      end: 21,
       frameRate: 10,
       repeat: true
     },
@@ -115,27 +115,23 @@ export const playerGraphicalAsset: SpriteAsset = {
     // align with the attack duration of 165ms
     [LevelObjectAnimation.SLASH]: {
       name: LevelObjectAnimation.SLASH,
-      frames: [0x18, 0x19, 0x19, 0x1a, 0x1b],
-      frameRate: 30,
+      start: 8,
+      end: 13,
+      frameRate: 6,
       repeat: false
     },
     [LevelObjectAnimation.SLASH_UP]: {
       name: LevelObjectAnimation.SLASH_UP,
-      frames: [0x21, 0x22, 0x22, 0x23, 0x24],
-      frameRate: 30,
+      start: 8,
+      end: 13,
+      frameRate: 6,
       repeat: false
     },
     [LevelObjectAnimation.SLASH_DOWN]: {
       name: LevelObjectAnimation.SLASH_DOWN,
-      frames: [0x29, 0x2a, 0x2a, 0x2b, 0x2c],
-      frameRate: 30,
-      repeat: false
-    },
-    [LevelObjectAnimation.HIT]: {
-      name: LevelObjectAnimation.HIT,
-      start: 0x30,
-      end: 0x34,
-      frameRate: 24,
+      start: 16,
+      end: 21,
+      frameRate: 6,
       repeat: false
     },
   }
@@ -144,20 +140,19 @@ export const playerGraphicalAsset: SpriteAsset = {
 export const projectileGraphicalAsset: SpriteAsset = {
   name: PROJECTILE_GRAPHICAL_ASSET_ID,
   width: 16,
-  height: 16,
+  height: 32,
   file: '/tiles/projectile.png',
   animations: {
     [LevelObjectAnimation.IDLE]: {
       name: LevelObjectAnimation.IDLE,
-      start: 0x01,
-      end: 0x03,
+      frames: [0, 1, 2, 1],
       frameRate: 6,
       repeat: true
     },
     [LevelObjectAnimation.DEATH]: {
       name: LevelObjectAnimation.DEATH,
-      start: 0x04,
-      end: 0x07,
+      start: 3,
+      end: 5,
       frameRate: 6,
       repeat: false
     },
@@ -172,8 +167,7 @@ export const professorGraphicalAsset: SpriteAsset = {
   animations: {
     [LevelObjectAnimation.IDLE]: {
       name: LevelObjectAnimation.IDLE,
-      start: 0x00,
-      end: 0x02,
+      frames: [0, 1, 2, 1],
       frameRate: 6,
       repeat: true
     }
@@ -252,50 +246,53 @@ export const ghostPlayerGraphicalAsset: SpriteAsset = {
   animations: {
     [LevelObjectAnimation.IDLE]: {
       name: LevelObjectAnimation.IDLE,
-      start: 0x01,
-      end: 0x07,
+      start: 0,
+      end: 3,
       frameRate: 6,
       repeat: true
     },
     [LevelObjectAnimation.WALK]: {
       name: LevelObjectAnimation.WALK,
-      start: 0x08,
-      end: 0x0d,
-      frameRate: 10,
+      start: 4,
+      end: 7,
+      frameRate: 6,
       repeat: true
     },
     [LevelObjectAnimation.WALK_BACK]: {
       name: LevelObjectAnimation.WALK_BACK,
-      start: 0x10,
-      end: 0x15,
-      frameRate: 10,
+      start: 8,
+      end: 11,
+      frameRate: 6,
       repeat: true
     },
     // Ideally attacks should be five frames at 30fps to
     // align with the attack duration of 165ms
     [LevelObjectAnimation.SLASH]: {
       name: LevelObjectAnimation.SLASH,
-      frames: [0x18, 0x19, 0x19, 0x1a, 0x1b],
+      start: 12,
+      end: 15,
       frameRate: 30,
       repeat: false
     },
     [LevelObjectAnimation.SLASH_UP]: {
       name: LevelObjectAnimation.SLASH_UP,
-      frames: [0x21, 0x22, 0x22, 0x23, 0x24],
+      start: 16,
+      end: 19,
       frameRate: 30,
       repeat: false
     },
     [LevelObjectAnimation.SLASH_DOWN]: {
       name: LevelObjectAnimation.SLASH_DOWN,
-      frames: [0x29, 0x2a, 0x2a, 0x2b, 0x2c],
+      start: 20,
+      end: 23,
       frameRate: 30,
       repeat: false
     },
     [LevelObjectAnimation.HIT]: {
       name: LevelObjectAnimation.HIT,
-      start: 0x30,
-      end: 0x34,
-      frameRate: 24,
+      start: 0,
+      end: 3,
+      frameRate: 6,
       repeat: false
     },
   }

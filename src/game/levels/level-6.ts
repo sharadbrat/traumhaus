@@ -32,6 +32,7 @@ const sources = [
   getLantern(3, 13),
   getLantern(10, 8),
   getLantern(13, 1),
+  getLantern(28, 29),
 ];
 
 const lightSettings = {

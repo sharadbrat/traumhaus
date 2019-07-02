@@ -152,6 +152,7 @@ export class GameScene extends Phaser.Scene {
     if (this.nextGhostAvailable < this.time.now && this.progressService.getProgress().controls.switch && this.progressService.getProgress().isControllable) {
       const mode = !this.ghostService.isGhostMode();
       this.nextGhostAvailable = this.time.now + GHOST_COOLDOWN;
+      this.progressService.setTransformCooldown(GHOST_COOLDOWN);
 
       this.setGhostMode(mode);
     }
@@ -446,7 +447,6 @@ export class GameScene extends Phaser.Scene {
       const pad = this.controlsService.getGamepad();
       if (pad && pad.buttons[1].pressed) {
         this.onShootButton();
-        this.nextShootAvailable = time + SHOOT_COOLDOWN;
       }
     }
 
@@ -466,6 +466,7 @@ export class GameScene extends Phaser.Scene {
       }
 
       this.nextShootAvailable = this.time.now + SHOOT_COOLDOWN;
+      this.progressService.setShootCooldown(SHOOT_COOLDOWN);
       const id = `${Date.now()}__${Math.random()}`;
 
       const {x, y} = this.player.getPosition();

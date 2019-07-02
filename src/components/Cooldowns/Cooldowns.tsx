@@ -9,7 +9,13 @@ interface CooldownsState {
   transform: boolean;
 }
 
-export class Cooldowns extends React.PureComponent<null, CooldownsState> {
+export class Cooldowns extends React.PureComponent<any, CooldownsState> {
+
+  state = {
+    dash: false,
+    shoot: false,
+    transform: false,
+  };
 
   componentDidMount(): void {
     GameProgressService.getInstance().setOnDashCooldownChange(this.onDashChange);

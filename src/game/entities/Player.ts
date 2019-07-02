@@ -13,7 +13,7 @@ import { ControlsType, GameControlsService, JoystickKeys, Keys } from '../../ser
 const speed = 125;
 const attackSpeed = 500;
 const attackDuration = 165;
-const attackCooldown = attackDuration * 2;
+const attackCooldown = 5000;
 
 export class Player {
   private static readonly INVULNERABLE_TIME = 3000;
@@ -177,6 +177,7 @@ export class Player {
       GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
       this.attackUntil = time + attackDuration;
       this.attackLockedUntil = time + attackDuration + attackCooldown;
+      GameProgressService.getInstance().setDashCooldown(attackCooldown);
       this.body.velocity.normalize().scale(attackSpeed);
       this.sprite.anims.play(attackAnim, true);
       this.emitter.start();

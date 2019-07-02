@@ -4,7 +4,7 @@ import { AssetManager, GameManager, GameManagerOptions } from '../../game';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
-import { DeathMenu, Dialog, Menu, SettingsMenu } from '../../components';
+import { Cooldowns, DeathMenu, Dialog, Menu, SettingsMenu } from '../../components';
 import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
 import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
@@ -216,6 +216,7 @@ export class GamePage extends React.Component<any, GamePageState> {
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
           {virtualControls}
           {HUD}
+          <Cooldowns/>
           <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
           <Menu heading="Pause" isActive={this.state.pause}>
             <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>

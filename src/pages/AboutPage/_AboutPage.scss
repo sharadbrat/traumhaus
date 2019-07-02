@@ -3,6 +3,7 @@
 
 .about {
   @include Page();
+  background: black;
 }
 
 .about__container {
@@ -11,6 +12,7 @@
 
 .about__heading {
   @include PageHeading();
+  color: $color-light-text-primary;
 }
 
 .about__block {
@@ -21,6 +23,7 @@
   @include PageHeading();
   @include FontElegant();
   font-size: 36px;
+  color: $color-light-text-primary;
 }
 
 .about__paragraph {
@@ -29,6 +32,7 @@
   line-height: 1.5;
   margin-top: 10px;
   text-align: justify;
+  color: $color-light-text-primary;
 }
 
 .about__paragraph._florian {

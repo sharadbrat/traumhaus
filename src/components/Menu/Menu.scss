@@ -45,7 +45,7 @@
   padding: $spacing-padding-container;
 
   border-radius: $border-radius-outer;
-  background-color: white;
+  background-color: $color-dark-background-secondary;
   box-shadow: 0 5px 15px -7px rgba(0, 0, 0, 0.15);
 
   transform: translate3d(0, -50px, 0);
@@ -57,10 +57,13 @@
 .menu__header {
   @include TypographyHeadingLarge();
   text-align: center;
+  color: $color-light-text-primary;
+  padding-bottom: $spacing-padding-element;
 }
 
 .menu__main {
   padding-top: $spacing-padding-element;
+  color: $color-light-text-primary;
 }
 
 .menu__actions {

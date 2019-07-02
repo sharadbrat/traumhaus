@@ -18,7 +18,6 @@ export class Load extends React.PureComponent<LoadProps> {
             <div/>
           </div>
           <p className="load__progress">{`${this.props.progress * 100}`.substr(0, 3)}% loaded</p>
-          <p className="load__description">Setting up ...</p>
         </div>
       </div>
     );

@@ -3,6 +3,7 @@
 
 .settings {
   @include Page();
+  background-color: black;
 }
 
 .settings__container {
@@ -11,6 +12,7 @@
 
 .settings__heading {
   @include PageHeading();
+  color: $color-light-text-primary;
 }
 
 .settings__block {
@@ -20,6 +22,7 @@
 .settings__subheading {
   @include PageHeading();
   @include FontElegant();
+  color: $color-light-text-primary;
   font-size: 36px;
   margin-bottom: 10px;
 }
@@ -35,6 +38,7 @@
 
 .settings__label {
   @include FontPixel();
+  color: $color-light-text-primary;
   text-transform: uppercase;
   font-size: 20px;
   line-height: 1.2;

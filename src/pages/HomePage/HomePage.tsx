@@ -52,7 +52,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
     return (
       <section className="home">
         <div className="home__container">
-          <h1 className="home__heading">TRAUMHAUS</h1>
+          <img className="home__heading" src="/image/logo_black.png" alt="Traumhaus game"/>
           <div className="home__group">
             <Link to="game" className="home__link" onClick={this.onNewGameClick}>New game</Link>
             <Link aria-disabled={!this.progress} to="game" className={`home__link${this.progress ? '' : ' home__link_inactive'}`} onClick={this.onContinueClick}>Continue</Link>

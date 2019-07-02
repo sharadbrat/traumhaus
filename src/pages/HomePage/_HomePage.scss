@@ -4,6 +4,7 @@
 
 .home {
   @include Page();
+  background-color: black;
 }
 
 .home__container {
@@ -11,8 +12,9 @@
 }
 
 .home__heading {
-  @include PageHeading();
-  color: $color-palette-blue;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
 }
 
 .home__heading_special {

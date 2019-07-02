@@ -13,7 +13,7 @@
 
 @mixin PageContainer() {
   height: fit-content;
-  max-width: 450px;
+  max-width: 600px;
   width: 100%;
   padding: 20px;
   display: flex;
@@ -47,7 +47,7 @@
   font-size: 32px;
   text-transform: uppercase;
   text-decoration: none;
-  color: $color-dark-text-primary;
+  color: $color-light-text-primary;
   display: block;
   width: fit-content;
   margin: 10px auto;
@@ -57,25 +57,10 @@
   border: none;
   background-color: transparent;
 
+  transition: color ease-in-out 70ms;
+  will-change: color;
+
   &:hover, &:focus, &:active {
-    &:before {
-      max-width: 100%;
-    }
-  }
-
-  &:before {
-    position: absolute;
-    content: '';
-    display: block;
-    left: 0;
-    bottom: -2px;
-    width: 100%;
-    max-width: 10px;
-
-    height: 2px;
-    background-color: $color-palette-purple;
-
-    transition: max-width ease-in-out 200ms;
-    will-change: max-width;
+    color: #5a42ff;
   }
 }

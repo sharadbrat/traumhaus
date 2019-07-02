@@ -1,5 +1,6 @@
 @import "../../style/typography";
 @import "../../style/components/page";
+@import "../../style/spacing";
 
 .controls-menu {
   width: 100%;
@@ -12,6 +13,9 @@
   @include FontPixel();
   font-size: 28px;
   margin-top: 16px;
+  &:nth-of-type(1) {
+    padding-bottom: $spacing-padding-element;
+  }
 }
 
 .controls-menu__button {

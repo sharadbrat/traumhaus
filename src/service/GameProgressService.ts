@@ -130,10 +130,14 @@ export class GameProgressService {
   }
 
   public loadProgress(progress: GameProgress) {
-    this.gameProgress = progress;
+    if (progress) {
+      this.gameProgress = progress;
+    } else {
+      this.gameProgress = DEFAULT_PROGRESS;
+    }
     this.gameProgress.health = 3;
     if (this.onHealthChange) {
-      this.onHealthChange(this.getProgress().health);
+      this.onHealthChange(3);
     }
   }
 
@@ -169,7 +173,6 @@ export class GameProgressService {
   reset() {
     this.gameProgress = DEFAULT_PROGRESS;
     clearTimeout(this.decreaseHealthTimeout);
-    this.onHealthChange = null;
   }
 
   setOnDashCooldownChange(onDashChange: (val: boolean) => void) {
@@ -182,5 +185,20 @@ export class GameProgressService {
 
   setOnTransformCooldownChange(onTransformChange: (val: boolean) => void) {
     this.onTransformCooldownChange = onTransformChange;
+  }
+
+  setDashCooldown(time: number) {
+    this.onDashCooldownChange(true);
+    setTimeout(() => this.onDashCooldownChange(false), time);
+  }
+
+  setShootCooldown(time: number) {
+    this.onShootCooldownChange(true);
+    setTimeout(() => this.onShootCooldownChange(false), time);
+  }
+
+  setTransformCooldown(time: number) {
+    this.onTransformCooldownChange(true);
+    setTimeout(() => this.onTransformCooldownChange(false), time);
   }
 }

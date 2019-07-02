@@ -29,8 +29,8 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
 
   onContinueClick = (event: React.MouseEvent) => {
     event.preventDefault();
+    GameProgressService.getInstance().loadProgress(this.progress);
     if (this.progress) {
-      GameProgressService.getInstance().loadProgress(this.progress);
       this.setState({isControlsMenuActive: true});
     }
   };

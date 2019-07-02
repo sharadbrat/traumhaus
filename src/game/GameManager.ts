@@ -27,7 +27,9 @@ export class GameManager {
   }
 
   public loadProgress() {
-
+    const progress = GameProgressService.getInstance().getProgressFromLocalStorage();
+    GameProgressService.getInstance().reset();
+    GameProgressService.getInstance().loadProgress(progress);
   }
 
   public saveProgress() {
@@ -68,6 +70,7 @@ export class GameManager {
   }
 
   public restartFromCheckpoint() {
+    this.loadProgress();
     this.game.scene.run(SceneIdentifier.GAME_SCENE);
   }
 }

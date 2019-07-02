@@ -70,6 +70,9 @@ export class GameProgressService {
 
   // private lastDoor: Door;
   private onHealthChange: (health: number) => any;
+  private onDashCooldownChange: (health: boolean) => any;
+  private onShootCooldownChange: (health: boolean) => any;
+  private onTransformCooldownChange: (health: boolean) => any;
 
   decreaseHealthTimeout: number;
 
@@ -167,5 +170,17 @@ export class GameProgressService {
     this.gameProgress = DEFAULT_PROGRESS;
     clearTimeout(this.decreaseHealthTimeout);
     this.onHealthChange = null;
+  }
+
+  setOnDashCooldownChange(onDashChange: (val: boolean) => void) {
+    this.onDashCooldownChange = onDashChange;
+  }
+
+  setOnShootCooldownChange(onShootChange: (val: boolean) => void) {
+    this.onShootCooldownChange = onShootChange;
+  }
+
+  setOnTransformCooldownChange(onTransformChange: (val: boolean) => void) {
+    this.onTransformCooldownChange = onTransformChange;
   }
 }

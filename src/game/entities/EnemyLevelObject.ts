@@ -3,7 +3,7 @@ import * as Pathfinding from 'pathfinding';
 import { LevelObject } from './LevelObject';
 import { GameScene } from '../scenes/GameScene';
 import { GameGhostService } from '../../service';
-import { TriggerContents, TriggerManager } from '../TriggerManager';
+import { TriggerManager } from '../TriggerManager';
 import {
   CollisionDetector,
   EnemyLevelObjectData,

@@ -79,7 +79,7 @@ export const stage3ghostGraphicalAsset: GraphicalAsset = {
   name: STAGE_3_GHOST_GRAPHICAL_ASSET_ID,
   width: 16,
   height: 16,
-  file: '/tiles/stage-2-ghost.png',
+  file: '/tiles/stage-3-ghost.png',
 };
 
 // SPRITE ASSETS

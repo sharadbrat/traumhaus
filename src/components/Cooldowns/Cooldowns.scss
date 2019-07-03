@@ -18,33 +18,34 @@
   display: block;
   height: 48px;
   width: 48px;
-  background-color: rgba(255, 128, 128, 0.2);
-  border-radius: 24px;
   flex-shrink: 0;
 
   background-repeat: no-repeat;
-  background-size: 32px;
+  background-size: contain;
   background-position: center;
+
+  image-rendering: pixelated;
 
   transition: opacity ease-in-out 200ms, visibility ease-in-out 200ms;
 
-  opacity: 0;
-  visibility: hidden;
-
-  &.cooldown_active {
-    opacity: 1;
-    visibility: visible;
-  }
-
   &.cooldown_dash {
-    background-image: url('/image/dash.svg');
+    background-image: url('/image/Cooldown_Icon_Dash.png');
+    &.cooldown_active {
+      background-image: url('/image/Cooldown_Icon_Dash_inactive.png');
+    }
   }
 
   &.cooldown_shoot {
-    background-image: url('/image/shoot.svg');
+    background-image: url('/image/Cooldown_Icon_Shoot.png');
+    &.cooldown_active {
+      background-image: url('/image/Cooldown_Icon_Shoot_inactive.png');
+    }
   }
 
   &.cooldown_transform {
-    background-image: url('/image/switch.svg');
+    background-image: url('/image/Cooldown_Icon_Change.png');
+    &.cooldown_active {
+      background-image: url('/image/Cooldown_Icon_Change_inactive.png');
+    }
   }
 }

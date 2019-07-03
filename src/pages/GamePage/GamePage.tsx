@@ -4,7 +4,7 @@ import { AssetManager, GameManager, GameManagerOptions } from '../../game';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../../game/TriggerManager';
 import { DialogManager, GameDialog, GameDialogStep } from '../../game/dialogs';
-import { Cooldowns, DeathMenu, Dialog, Menu, SettingsMenu } from '../../components';
+import { Cooldowns, DeathMenu, Dialog, Menu, SettingsMenu, VirtualControls } from '../../components';
 import { SceneIdentifier, SceneManager } from '../../game/scenes/SceneManager';
 import { LevelManager } from '../../game/levels';
 import { GameScene } from '../../game/scenes/GameScene';
@@ -182,20 +182,11 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   render() {
-    let virtualControls;
+    let hudAddition;
     if (this.state.virtualJoystickEnabled) {
-      virtualControls = (
-        <div className="game__virtual-controls">
-          <div id="joystick" className="game__virtual-joystick-area"/>
-          <div className="game__virtual-buttons">
-            <button className="game__virtual-button" id="button-interact"/>
-            <button className="game__virtual-button" id="button-switch"/>
-            <br/>
-            <button className="game__virtual-button" id="button-dash"/>
-            <button className="game__virtual-button" id="button-shoot"/>
-          </div>
-        </div>
-      );
+      hudAddition = <VirtualControls/>;
+    } else {
+      hudAddition = <Cooldowns/>;
     }
 
     const HUD = (
@@ -214,9 +205,8 @@ export class GamePage extends React.Component<any, GamePageState> {
         <Load progress={this.state.loadingProgress}/>
         <div className="game__container">
           <canvas ref={this.canvasRef} id={this.GAME_CANVAS_ID} className="game__canvas"/>
-          {virtualControls}
+          {hudAddition}
           {HUD}
-          <Cooldowns/>
           <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
           <Menu heading="Pause" isActive={this.state.pause}>
             <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>

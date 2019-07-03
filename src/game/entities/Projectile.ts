@@ -59,7 +59,7 @@ export class Projectile {
 
   private setupSprite(pos: MapPosition, dir: MapPosition, asset: SpriteAsset) {
     const offsetX = 4;
-    const offsetY = 4;
+    const offsetY = 10;
 
     const sizeX = 8;
     const sizeY = 8;

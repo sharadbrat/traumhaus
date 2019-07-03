@@ -1,0 +1,57 @@
+
+
+.game__virtual-buttons {
+}
+
+.game__virtual-button {
+  $size: 40px;
+  height: $size;
+  width: $size;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+
+  user-select: none;
+  transition: background-color ease-in-out 50ms;
+  will-change: background-color;
+}
+
+.game__virtual-button:nth-child(1) {
+  margin-left: -20px;
+}
+
+#button-dash {
+  background-image: url('/image/Cooldown_Icon_Dash_inactive.png');
+  &.game__virtual-button_active {
+    background-image: url('/image/Cooldown_Icon_Dash.png');
+  }
+}
+
+#button-interact {
+  background-image: url('/image/Cooldown_Icon_Inspect_inactive.png');
+  &.game__virtual-button_active {
+    background-image: url('/image/Cooldown_Icon_Inspect.png');
+  }
+}
+
+#button-switch {
+  background-image: url('/image/Cooldown_Icon_Change_inactive.png');
+  &.game__virtual-button_active {
+    background-image: url('/image/Cooldown_Icon_Change.png');
+  }
+}
+
+#button-shoot {
+  background-image: url('/image/Cooldown_Icon_Shoot_inactive.png');
+  &.game__virtual-button_active {
+    background-image: url('/image/Cooldown_Icon_Shoot.png');
+  }
+}

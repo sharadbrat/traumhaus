@@ -152,9 +152,8 @@ export const projectileGraphicalAsset: SpriteAsset = {
     },
     [LevelObjectAnimation.DEATH]: {
       name: LevelObjectAnimation.DEATH,
-      start: 3,
-      end: 5,
-      frameRate: 6,
+      frames: [3, 4, 5],
+      frameRate: 10,
       repeat: false
     },
   },

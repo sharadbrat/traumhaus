@@ -42,9 +42,9 @@ export class Cooldowns extends React.PureComponent<any, CooldownsState> {
 
     return (
       <div className="cooldowns">
+        <div className={transformClass}/>
         <div className={dashClass}/>
         <div className={shootClass}/>
-        <div className={transformClass}/>
       </div>
     );
   }

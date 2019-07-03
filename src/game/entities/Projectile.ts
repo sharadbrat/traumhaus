@@ -20,6 +20,7 @@ export class Projectile {
   private ghostService: GameGhostService;
   private asset: SpriteAsset;
   private collider: Phaser.Physics.Arcade.Collider;
+  private isDead = false;
 
   constructor(id: string, x: number, y: number, direction: MapPosition, scene: GameScene) {
     this.scene = scene;
@@ -38,6 +39,10 @@ export class Projectile {
   }
 
   update() {
+    if (this.isDead) {
+      return;
+    }
+
     if (!this.ghostService.isGhostMode()) {
       this.destroy();
       return;
@@ -81,6 +86,7 @@ export class Projectile {
 
   public destroy() {
     this.scene.removeProjectile(this.id);
+    this.isDead = true;
     this.sprite.anims.play(`${this.asset.name}__${this.asset.animations[LevelObjectAnimation.DEATH].name}`);
     this.sprite.setVelocity(0);
     this.sprite.setAcceleration(0);
@@ -89,13 +95,13 @@ export class Projectile {
     this.scene.tweens.add({
       targets: this.sprite,
       alpha: 0,
-      duration: 300
+      duration: 400
     });
 
     setTimeout(() => {
       this.collider.destroy();
       this.sprite.destroy();
-    }, 300);
+    }, 400);
   }
 
   private onCollide = () => {

@@ -146,6 +146,9 @@ export const LEVEL_5_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: false,
+        meta: {
+          talkable: true,
+        },
       },
       {
         id: 'broken_lever',
@@ -167,6 +170,9 @@ export const LEVEL_5_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: false,
+        meta: {
+          talkable: true,
+        },
       },
     ],
 
@@ -274,6 +280,9 @@ export const LEVEL_5_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: true,
+        meta: {
+          talkable: true,
+        },
       },
     ],
     themeId: CAVE_THEME_AUDIO_ID,

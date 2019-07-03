@@ -96,6 +96,9 @@ export const LEVEL_3_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: false,
+        meta: {
+          talkable: true,
+        },
       },
       {
         id: 'gate',
@@ -223,6 +226,9 @@ export const LEVEL_3_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: true,
+        meta: {
+          talkable: true,
+        }
       },
     ],
     doors: [

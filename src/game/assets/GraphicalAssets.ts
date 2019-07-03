@@ -17,6 +17,7 @@ export const TRANSFORM_ESSENCE_GRAPHICAL_ASSET_ID = 'TRANSFORM_ESSENCE_GRAPHICAL
 export const SHOOTING_OBJECT_GRAPHICAL_ASSET_ID = 'SHOOTING_OBJECT_GRAPHICAL_ASSET';
 export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
 export const PROJECTILE_GRAPHICAL_ASSET_ID = 'PROJECTILE_GRAPHICAL_ASSET';
+export const GLOWING_GRAPHICAL_ASSET_ID = 'GLOWING_GRAPHICAL_ASSET';
 
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
@@ -185,6 +186,21 @@ export const invisibleGraphicalAsset: SpriteAsset = {
       start: 0x00,
       end: 0x00,
       frameRate: 6,
+      repeat: true
+    }
+  }
+};
+
+export const glowingGraphicalAsset: SpriteAsset = {
+  name: GLOWING_GRAPHICAL_ASSET_ID,
+  width: 32,
+  height: 16,
+  file: '/tiles/Indicator_Glow.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 2, 1, 0],
+      frameRate: 7,
       repeat: true
     }
   }

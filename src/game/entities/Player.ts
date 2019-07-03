@@ -19,6 +19,7 @@ export class Player {
   private static readonly INVULNERABLE_TIME = 3000;
 
   private readonly sprite: Phaser.Physics.Arcade.Sprite;
+  private readonly glowingSprite: Phaser.Physics.Arcade.Sprite;
   private readonly body: Phaser.Physics.Arcade.Body;
   private keys: Keys;
 
@@ -44,6 +45,8 @@ export class Player {
     this.scene = scene;
 
     this.ghostService = GameGhostService.getInstance();
+
+    this.glowingSprite = this.setupGlowingSprite(x, y);
 
     if (this.ghostService.isGhostMode()) {
       this.sprite = this.setupSprite(x, y, AssetManager.spriteAssets.ghostPlayer);
@@ -74,11 +77,6 @@ export class Player {
 
     this.body = <Phaser.Physics.Arcade.Body>this.sprite.body;
 
-    TriggerManager.add(NPC_TRIGGERS_ACTIONS.ON_IN_NEAR_AREA, (content: TriggerContents) => {
-      // todo: add glowing implementation
-      console.log('near');
-    });
-
     TriggerManager.add(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, (content: TriggerContents) => {
       if (this.attackUntil > content.scene.time.now) {
         (content.object as EnemyLevelObject).onHit();
@@ -98,8 +96,10 @@ export class Player {
     this.body.setVelocity(0);
 
     if (GameProgressService.getInstance().getProgress().isControllable) {
-      this.updateControls(time)
+      this.updateControls(time);
     }
+    const {x, y} = this.sprite.body.position;
+    this.glowingSprite.setPosition(x + 3, y + 4);
   }
 
   updateControls(time: number) {
@@ -299,5 +299,26 @@ export class Player {
     } else if (this.controlsMode === ControlsType.KEYBOARD) {
       this.keys = this.scene.input.keyboard.addKeys(GameControlsService.getInstance().getKeyboardControls()) as Keys;
     }
+  }
+
+  private setupGlowingSprite(x: number, y: number) {
+    const sprite = this.scene.physics.add.sprite(x, y, AssetManager.spriteAssets.glowing.name, 0);
+    sprite.anims.play(`${AssetManager.spriteAssets.glowing.name}__${LevelObjectAnimation.IDLE}`);
+    sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
+    sprite.setAlpha(0);
+
+
+    let timeout: number = null;
+    TriggerManager.add(NPC_TRIGGERS_ACTIONS.ON_IN_NEAR_AREA, (content: TriggerContents) => {
+      this.glowingSprite.setAlpha(0.75);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(() => {
+        this.glowingSprite.setAlpha(0);
+      }, 200) as unknown as number;
+    });
+
+    return sprite;
   }
 }

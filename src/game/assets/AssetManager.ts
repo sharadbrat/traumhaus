@@ -30,7 +30,11 @@ import {
   transformEssenceGraphicalAsset,
   shootingObjectGraphicalAsset,
   stage2realGraphicalAsset,
-  stage2ghostGraphicalAsset, projectileGraphicalAsset, stage3realGraphicalAsset, stage3ghostGraphicalAsset
+  stage2ghostGraphicalAsset,
+  projectileGraphicalAsset,
+  stage3realGraphicalAsset,
+  stage3ghostGraphicalAsset,
+  glowingGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -61,6 +65,7 @@ export class AssetManager {
     shootingObjectGraphicalAsset,
     transformEssenceGraphicalAsset,
     projectileGraphicalAsset,
+    glowingGraphicalAsset,
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -106,6 +111,7 @@ export class AssetManager {
     shootingObject: shootingObjectGraphicalAsset,
     transformEssence: transformEssenceGraphicalAsset,
     projectile: projectileGraphicalAsset,
+    glowing: glowingGraphicalAsset,
   };
 
   public static readonly soundAssets = {

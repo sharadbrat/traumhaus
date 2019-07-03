@@ -96,6 +96,9 @@ export const LEVEL_4_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: false,
+        meta: {
+          talkable: true,
+        },
       },
       {
         id: 'lever',
@@ -117,6 +120,9 @@ export const LEVEL_4_DATA: LevelMapData = {
           },
         ],
         inGhostWorld: false,
+        meta: {
+          talkable: true,
+        },
       },
     ],
     themeId: MAIN_THEME_AUDIO_ID,

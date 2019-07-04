@@ -20,6 +20,7 @@ export class GameScene extends Phaser.Scene {
   private lastY: number;
   private player: Player | null;
   cameraResizeNeeded: boolean;
+  fullscreenCameraResizeNeeded: boolean;
 
   lightLayer: LightLayer;
 
@@ -38,7 +39,6 @@ export class GameScene extends Phaser.Scene {
 
   private projectiles: Projectile[] = [];
 
-  private nextCameraUpdate: number = 0;
   private gamepadShootFlag: boolean;
   private nextGhostAvailable: number = 0;
   private nextShootAvailable: number = 0;
@@ -48,6 +48,7 @@ export class GameScene extends Phaser.Scene {
     this.lastX = -1;
     this.lastY = -1;
     this.cameraResizeNeeded = false;
+    this.fullscreenCameraResizeNeeded = false;
 
     this.menuService = GameMenuService.getInstance();
     this.ghostService = GameGhostService.getInstance();
@@ -317,20 +318,38 @@ export class GameScene extends Phaser.Scene {
 
   private updateCamera() {
     if (this.cameraResizeNeeded) {
+      const width = document.getElementById('root').getBoundingClientRect().width;
+      const height = document.getElementById('root').getBoundingClientRect().height;
       // Do this here rather than the resize callback as it limits
       // how much we'll slow down the game
-      this.cameras.main.setSize(window.innerWidth, window.innerHeight);
+      this.cameras.main.setSize(width, height);
       this.cameraResizeNeeded = false;
-      this.game.canvas.width = window.innerWidth;
-      this.game.canvas.height = window.innerHeight;
+      this.game.canvas.width = width;
+      this.game.canvas.height = height;
       this.game.scale.scaleMode = Phaser.Scale.RESIZE;
 
       const wanted = 9 * AssetManager.TILE_SIZE;
-      const zoomX = wanted / window.innerWidth;
-      const zoomY = wanted / window.innerHeight;
+      const zoomX = wanted / width;
+      const zoomY = wanted / height;
 
       this.getCamera().zoom = Math.min(1 / zoomX, 1 / zoomY);
       this.game.scale.refresh();
+    } else if (this.fullscreenCameraResizeNeeded) {
+      this.fullscreenCameraResizeNeeded = false;
+      const width = document.getElementById('root').getBoundingClientRect().width;
+      const height = document.getElementById('root').getBoundingClientRect().height;
+
+      this.game.canvas.width = width;
+      this.game.canvas.height = height;
+      this.cameras.main.setSize(width, height);
+
+      const wanted = 9 * AssetManager.TILE_SIZE;
+      const zoomX = wanted / width;
+      const zoomY = wanted / height;
+
+      this.getCamera().zoom = Math.min(1 / zoomX, 1 / zoomY);
+      this.game.scale.refresh();
+
     }
   }
 
@@ -396,7 +415,11 @@ export class GameScene extends Phaser.Scene {
 
   private setupResizeEvents() {
     window.addEventListener('resize', () => {
-      this.cameraResizeNeeded = true;
+      if (!document.fullscreenElement) {
+        this.cameraResizeNeeded = true;
+      } else {
+        this.fullscreenCameraResizeNeeded = true;
+      }
     });
 
     window.addEventListener('orientationchange', () => {

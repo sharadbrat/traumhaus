@@ -108,7 +108,6 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   onMenuSettingsClick = () => {
-    this.gameManager.resume();
     this.setState({isSettingsActive: true});
   };
 

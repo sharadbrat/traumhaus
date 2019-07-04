@@ -10,7 +10,7 @@ interface SettingsFormProps {
 export class SettingsForm extends React.PureComponent<SettingsFormProps> {
 
   private onFullscreenButtonClick() {
-    const root = document.getElementById('root');
+    const root = document.documentElement;
     if (root) {
       root.requestFullscreen().catch((e: Error) => {
         alert(`Could not start fullscreen mode!\nError message: ${e.message}`);

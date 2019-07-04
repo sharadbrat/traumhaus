@@ -14,8 +14,12 @@ const LEVEL_5_TRIGGER_ACTIONS = {
 };
 
 export const LEVEL_5_DIALOGS_IDS = {
-  ON_TRANSFORM_ESSENCE: 'ON_TRANSFORM_ESSENCE',
-  ON_SHOOTING_OBJECT: 'ON_SHOOTING_OBJECT',
+  ON_TRANSFORM_ESSENCE_KEYBOARD: 'ON_TRANSFORM_ESSENCE_KEYBOARD',
+  ON_TRANSFORM_ESSENCE_ON_SCREEN: 'ON_TRANSFORM_ESSENCE_ON_SCREEN',
+  ON_TRANSFORM_ESSENCE_GAMEPAD: 'ON_TRANSFORM_ESSENCE_GAMEPAD',
+  ON_SHOOTING_OBJECT_KEYBOARD: 'ON_SHOOTING_OBJECT_KEYBOARD',
+  ON_SHOOTING_OBJECT_ON_SCREEN: 'ON_SHOOTING_OBJECT_ON_SCREEN',
+  ON_SHOOTING_OBJECT_GAMEPAD: 'ON_SHOOTING_OBJECT_GAMEPAD',
   ON_LEVER_TOUCH: 'ON_LEVER_TOUCH',
   ON_LEVER_FALSE_TOUCH: 'ON_LEVER_FALSE_TOUCH',
   ON_BROKEN_LEVER_TOUCH: 'ON_BROKEN_LEVER_TOUCH',
@@ -292,7 +296,7 @@ export const LEVEL_5_DATA: LevelMapData = {
       action: LEVEL_5_TRIGGER_ACTIONS.ON_TRANSFORM_ESSENCE_TOUCH,
       callback: (content: TriggerContents) => {
         if (!content.services.progress.getProgress().stage2.transformTouched) {
-          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE);
+          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE_KEYBOARD);
           content.services.progress.getProgress().controls.switch = true;
           content.services.progress.getProgress().showGhostHud = true;
           content.services.progress.getProgress().stage2.transformTouched = true;
@@ -304,7 +308,7 @@ export const LEVEL_5_DATA: LevelMapData = {
       action: LEVEL_5_TRIGGER_ACTIONS.ON_SHOOTING_ESSENCE_TOUCH,
       callback: (content: TriggerContents) => {
         if (!content.services.progress.getProgress().stage2.shootingTouched) {
-          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT);
+          content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT_KEYBOARD);
           content.services.progress.getProgress().controls.shoot = true;
           content.services.progress.getProgress().stage2.shootingTouched = true;
           content.object.setVisible(false);
@@ -350,7 +354,7 @@ export const LEVEL_5_DATA: LevelMapData = {
   ],
   dialogs: [
     {
-      id: LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE,
+      id: LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE_KEYBOARD,
       steps: [
         {
           actor: playerActor,
@@ -367,10 +371,95 @@ export const LEVEL_5_DATA: LevelMapData = {
           phrase: 'Use Q keyboard button to switch to the different world.',
           position: 'right',
         },
+        {
+          actor: gameActor,
+          phrase: 'While in a ghost form, use SPACE keyboard button to dash.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Indicators on the bottom of the screen are cooldown indicators.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'If indicator is grey, the ability is unable to use now.',
+          position: 'right',
+        },
       ],
     },
     {
-      id: LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT,
+      id: LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE_GAMEPAD,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '"Wow, I feel different."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Feels like I can become something different right now..."',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Use X gamepad button to switch to the different world.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'While in a ghost form, use B gamepad button to dash.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Indicators on the bottom of the screen are cooldown indicators.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'If indicator is grey, the ability is unable to use now.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_TRANSFORM_ESSENCE_ON_SCREEN,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '"Wow, I feel different."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Feels like I can become something different right now..."',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Use switch button to switch to the different world.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'While in a ghost form, use dash button to dash.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Indicators on the bottom of the screen are cooldown indicators.',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'If indicator is grey, the ability is unable to use now.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT_KEYBOARD,
       steps: [
         {
           actor: ghostActor,
@@ -385,6 +474,46 @@ export const LEVEL_5_DATA: LevelMapData = {
         {
           actor: gameActor,
           phrase: 'Use W keyboard button to shoot while you are a ghost.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT_GAMEPAD,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: '"Now it feels like I\'m completely powered up!"',
+          position: 'right',
+        },
+        {
+          actor: ghostActor,
+          phrase: '"So much power!!!"',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Use A gamepad button to shoot while you are a ghost.',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT_ON_SCREEN,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: '"Now it feels like I\'m completely powered up!"',
+          position: 'right',
+        },
+        {
+          actor: ghostActor,
+          phrase: '"So much power!!!"',
+          position: 'right',
+        },
+        {
+          actor: gameActor,
+          phrase: 'Use shoot button to shoot while you are a ghost.',
           position: 'right',
         },
       ],

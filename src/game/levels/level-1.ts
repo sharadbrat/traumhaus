@@ -318,7 +318,7 @@ export const LEVEL_1_DATA: LevelMapData = {
       steps: [
         {
           actor: gameActor,
-          phrase: 'Press space (keyboard mode), "B" (gamepad mode) or tap on the screen (touch mode) to go to the next dialog step.',
+          phrase: 'Press SPACE (keyboard mode), "B" (gamepad mode) or tap on the screen (touch mode) to go to the next dialog step.',
           position: 'right',
         },
         {
@@ -328,7 +328,7 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
         {
           actor: playerActor,
-          phrase: '"Probably I should see doctor..."',
+          phrase: '"Probably I should see a doctor..."',
           position: 'right',
         },
         {

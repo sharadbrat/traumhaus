@@ -164,10 +164,10 @@ export class GameControlsService {
 
   public getGamepad() {
     // buttons:
-    // B - 2
-    // A - 1
-    // Y - 3
-    // X - 0
+    // B - 2 - dash
+    // A - 1 - shoot
+    // Y - 3 - interact
+    // X - 0 - switch
     return navigator.getGamepads()[0];
   }
 

@@ -11,7 +11,7 @@ export function getSpiderEnemyChasing(pos: MapPosition): EnemyLevelObjectData {
     height: 12,
     graphics: {
       asset: AssetManager.spriteAssets.enemySpider,
-      offsetX: 17,
+      offsetX: 16,
       offsetY: 20,
     },
     meta: {
@@ -35,7 +35,7 @@ export function getSpiderEnemyPatroling(pos: MapPosition, pos1: MapPosition, pos
     height: 12,
     graphics: {
       asset: AssetManager.spriteAssets.enemySpider,
-      offsetX: 8,
+      offsetX: 16,
       offsetY: 20,
     },
     meta: {

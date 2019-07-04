@@ -16,6 +16,10 @@
   &:nth-of-type(1) {
     padding-bottom: $spacing-padding-element;
   }
+
+  @media screen and (max-height: 510px) {
+    margin-top: 0;
+  }
 }
 
 .controls-menu__button {
@@ -31,4 +35,9 @@
 
   background-color: transparent;
   font-size: 22px;
+
+  @media screen and (max-height: 510px) {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
 }

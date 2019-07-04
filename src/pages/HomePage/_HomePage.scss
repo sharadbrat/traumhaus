@@ -15,6 +15,12 @@
   width: 100%;
   height: auto;
   image-rendering: pixelated;
+  @media screen and (max-height: 510px) {
+    width: auto;
+    height: 80px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .home__heading_special {
@@ -25,10 +31,20 @@
 .home__group {
   @include PageBlock();
   margin-top: 35px;
+
+  @media screen and (max-height: 510px) {
+    margin-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 .home__link {
   @include PageLink();
+
+  @media screen and (max-height: 510px) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
   &.home__link_inactive {
     color: lighten($color-dark-text-primary, 40);

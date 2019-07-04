@@ -59,11 +59,17 @@
   text-align: center;
   color: $color-light-text-primary;
   padding-bottom: $spacing-padding-element;
+  @media screen and (max-height: 510px) {
+    padding-bottom: 0;
+  }
 }
 
 .menu__main {
   padding-top: $spacing-padding-element;
   color: $color-light-text-primary;
+  @media screen and (max-height: 510px) {
+    padding-top: $spacing-padding-particle;
+  }
 }
 
 .menu__actions {

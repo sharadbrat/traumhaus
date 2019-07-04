@@ -50,3 +50,30 @@ export function getSpiderEnemyPatroling(pos: MapPosition, pos1: MapPosition, pos
     inGhostWorld: true,
   };
 }
+
+export function getSpiderEnemyDashing(pos: MapPosition): EnemyLevelObjectData {
+  return {
+    id: `${Date.now()}-${Math.random()}`,
+    type: LevelObjectType.ENEMY,
+    isCollideable: false,
+    position: pos,
+    width: 12,
+    height: 12,
+    graphics: {
+      asset: AssetManager.spriteAssets.enemySpider,
+      offsetX: 16,
+      offsetY: 20,
+    },
+    meta: {
+      enemyType: EnemyLevelObjectType.DASHING,
+      dash: {
+        speed: 70,
+        radius: 18,
+        dashRadius: 5,
+        cooldown: 800,
+        duration: 500,
+      }
+    },
+    inGhostWorld: true,
+  };
+}

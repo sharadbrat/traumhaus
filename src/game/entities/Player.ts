@@ -182,7 +182,7 @@ export class Player {
       this.sprite.anims.play(attackAnim, true);
       this.emitter.start();
       this.sprite.setBlendMode(Phaser.BlendModes.ADD);
-    } else {
+    } else if (time > this.attackUntil) {
       this.sprite.anims.play(moveAnim, true);
       this.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
       if (this.emitter.on) {

@@ -1,51 +1,6 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { EnemyLevelObjectData, EnemyLevelObjectType, LevelMapData, LevelObjectType } from '../entities/model';
-
-const enemy1: EnemyLevelObjectData = {
-  id: 'Enemy 1',
-  type: LevelObjectType.ENEMY,
-  isCollideable: false,
-  position: {x: 5, y: 5},
-  width: 12,
-  height: 8,
-  graphics: {
-    asset: AssetManager.spriteAssets.professor,
-    offsetX: 8,
-    offsetY: 20,
-  },
-  meta: {
-    enemyType: EnemyLevelObjectType.PATROLING,
-    patrol: {
-      from: {x: 3, y: 3},
-      to: {x: 27, y: 3},
-      speed: 50,
-      delay: 0,
-    }
-  },
-  inGhostWorld: true,
-};
-
-const enemy2: EnemyLevelObjectData = {
-  id: 'Enemy 2',
-  type: LevelObjectType.ENEMY,
-  isCollideable: false,
-  position: {x: 4, y: 14},
-  width: 12,
-  height: 8,
-  graphics: {
-    asset: AssetManager.spriteAssets.professor,
-    offsetX: 8,
-    offsetY: 20,
-  },
-  meta: {
-    enemyType: EnemyLevelObjectType.CHASING,
-    chase: {
-      speed: 100,
-      radius: 10,
-    }
-  },
-  inGhostWorld: true,
-};
+import { getSpiderEnemyChasing, getSpiderEnemyDashing } from './enemies';
 
 export const LEVEL_TEST_DATA: LevelMapData = {
   id: 'test',
@@ -88,8 +43,8 @@ export const LEVEL_TEST_DATA: LevelMapData = {
       fogAlpha: 0,
     },
     objects: [
-      enemy1,
-      enemy2,
+      getSpiderEnemyDashing({x: 3, y: 3}),
+      // getSpiderEnemyChasing({x: 3, y: 3}),
     ],
     themeId: GHOST_THEME_AUDIO_ID,
   },

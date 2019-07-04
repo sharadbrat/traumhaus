@@ -28,7 +28,7 @@ export class LevelManager {
   }
 
   public static getFirstLevel(): LevelMapData {
-    return LevelManager.getLevelById(LEVEL_5_DATA.id);
+    return LevelManager.getLevelById(LEVEL_1_DATA.id);
     // return LevelManager.getLevelById(LEVEL_TEST_DATA.id);
   }
 }

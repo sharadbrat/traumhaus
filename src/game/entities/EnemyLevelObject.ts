@@ -2,7 +2,7 @@ import * as Pathfinding from 'pathfinding';
 
 import { LevelObject } from './LevelObject';
 import { GameScene } from '../scenes/GameScene';
-import { GameGhostService } from '../../service';
+import { GameGhostService, GameSoundService } from '../../service';
 import { TriggerManager } from '../TriggerManager';
 import {
   CollisionDetector,
@@ -12,6 +12,7 @@ import {
   MapPosition
 } from './model';
 import { AssetManager } from '../assets';
+import { LevelMap } from './LevelMap';
 
 export const ENEMY_TRIGGERS_ACTIONS = {
   ON_PLAYER_HIT: 'ON_ENEMY_PLAYER_HIT',
@@ -27,12 +28,14 @@ export class EnemyLevelObject extends LevelObject {
 
   private collision?: CollisionDetector[][];
   private prevPathCalculation = 0;
+  private prevDash = 0;
   private collider: Phaser.Physics.Arcade.Collider;
   private isAlive: boolean;
 
   // PATROLING
   private direction?: MapPosition;
   private oppDirection?: MapPosition;
+  private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor(scene: GameScene, options: EnemyLevelObjectData) {
     super(scene, options);
@@ -73,6 +76,10 @@ export class EnemyLevelObject extends LevelObject {
 
   update(time: number) {
     if (!this.isAlive) {
+      if (this.emitter && this.emitter.on) {
+        this.emitter.stop();
+        this.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
+      }
       return;
     }
 
@@ -111,7 +118,7 @@ export class EnemyLevelObject extends LevelObject {
     if (distance < this.options.meta.chase.radius * AssetManager.TILE_SIZE) {
       if (time - this.prevPathCalculation > cooldown) {
         this.prevPathCalculation = time;
-        this.makeChase();
+        this.makeChase(this.options.meta.chase.radius, this.options.meta.chase.speed);
       }
     } else {
       this.sprite.setVelocity(0, 0);
@@ -123,7 +130,39 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   private updateDashingEnemy(time: number) {
-// todo: Add impl
+    if (this.isCollidingWithPlayer()) {
+      TriggerManager.fire(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, this.getTriggerContentObject());
+    }
+
+    if (time < this.prevDash + this.options.meta.dash.duration) {
+      return;
+    } else {
+      if (this.emitter.on) {
+        this.emitter.stop();
+        this.sprite.setBlendMode(Phaser.BlendModes.NORMAL);
+      }
+    }
+
+    const speed = this.options.meta.dash.speed === 0 ? 1 : this.options.meta.dash.speed;
+    const distance = this.scene.getPlayer().getPosition().distance(this.sprite.body.position);
+    const cooldown = (EnemyLevelObject.UPDATE_COOLDOWN / speed) * 10;
+
+    if (distance < this.options.meta.dash.dashRadius * AssetManager.TILE_SIZE) {
+      if (time > this.prevDash + this.options.meta.dash.cooldown) {
+        this.prevDash = time;
+        this.makeDash(this.options.meta.dash.duration, speed * 3);
+        return;
+      }
+    }
+
+    if (distance < this.options.meta.dash.radius * AssetManager.TILE_SIZE) {
+      if (time - this.prevPathCalculation > cooldown) {
+        this.prevPathCalculation = time;
+        this.makeChase(this.options.meta.dash.radius, this.options.meta.dash.speed);
+      }
+    } else {
+      this.sprite.setVelocity(0, 0);
+    }
   }
 
   private updatePatrolingEnemy(time: number) {
@@ -146,7 +185,32 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   private initDashingEnemy() {
-    // todo: Add impl
+    if (!this.options.meta || !this.options.meta.dash) {
+      throw new Error('Can not initialize dashing enemy. Specified incorrect meta.');
+    }
+    const particles = this.scene.add.particles(this.options.graphics.asset.name);
+    this.emitter = particles.createEmitter({
+      alpha: {start: 0.7, end: 0, ease: 'Cubic.easeOut'},
+      follow: this.sprite,
+      quantity: 1,
+      lifespan: 200,
+      blendMode: Phaser.BlendModes.ADD,
+      scaleX: () => (this.sprite.flipX ? -1 : 1),
+      emitCallback: (particle: Phaser.GameObjects.Particles.Particle) => {
+        particle.frame = this.sprite.frame;
+      }
+    });
+    particles.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
+    this.emitter.stop();
+
+    let world;
+    if (this.options.inGhostWorld) {
+      world = this.scene.getLevelMap().getMapData().ghostWorld;
+    } else {
+      world = this.scene.getLevelMap().getMapData().realWorld;
+    }
+
+    this.collision = world.collisionMap;
   }
 
   private initPatrolingEnemy() {
@@ -257,7 +321,7 @@ export class EnemyLevelObject extends LevelObject {
     }
   }
 
-  private makeChase() {
+  private makeChase(radius: number, speed: number) {
     const worldX = this.sprite.body.position.x + this.sprite.body.halfWidth;
     const worldY = this.sprite.body.position.y + this.sprite.body.halfHeight;
 
@@ -273,7 +337,7 @@ export class EnemyLevelObject extends LevelObject {
       let velocityX = 0;
       let velocityY = 0;
 
-      if (path.length < this.options.meta.chase.radius * 3) {
+      if (path.length < radius * 3) {
         if (path.length > 3) {
           const step = {x: path[1][0], y: path[1][1]};
 
@@ -282,8 +346,8 @@ export class EnemyLevelObject extends LevelObject {
 
           const norm = this.normalizeVector({x: directionX, y: directionY});
 
-          velocityX = this.options.meta.chase.speed * norm.x;
-          velocityY = this.options.meta.chase.speed * norm.y;
+          velocityX = speed * norm.x;
+          velocityY = speed * norm.y;
 
           this.sprite.setVelocity(velocityX, velocityY);
         } else if (!this.isCollidingWithPlayer()) {
@@ -291,8 +355,8 @@ export class EnemyLevelObject extends LevelObject {
 
           const norm = this.normalizeVector(dir);
 
-          velocityX = this.options.meta.chase.speed * norm.x;
-          velocityY = this.options.meta.chase.speed * norm.y;
+          velocityX = speed * norm.x;
+          velocityY = speed * norm.y;
         }
 
         this.sprite.setVelocity(velocityX, velocityY);
@@ -369,5 +433,17 @@ export class EnemyLevelObject extends LevelObject {
     setTimeout(() => {
       this.sprite.destroy();
     }, 15000);
+  }
+
+  private makeDash(duration: number, speed: number) {
+    const playerPos = this.scene.getPlayer().getPosition();
+    const velocityX = this.sprite.body.position.x - playerPos.x;
+    const velocityY = this.sprite.body.position.y - playerPos.y;
+
+    GameSoundService.getInstance().playSfx(AssetManager.soundAssets.dash.name);
+    this.sprite.setVelocity(-velocityX, -velocityY);
+    this.sprite.body.velocity.normalize().scale(speed);
+    this.emitter.start();
+    this.sprite.setBlendMode(Phaser.BlendModes.ADD);
   }
 }

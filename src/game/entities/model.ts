@@ -127,6 +127,13 @@ export interface EnemyLevelObjectMeta extends LevelObjectMeta {
     speed: number;
     radius: number;
   };
+  dash?: {
+    dashRadius: number;
+    speed: number;
+    radius: number;
+    cooldown: number;
+    duration: number;
+  }
   enemyType: EnemyLevelObjectType;
 }
 

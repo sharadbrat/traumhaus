@@ -7,6 +7,10 @@ export const STAGE_2_REAL_GRAPHICAL_ASSET_ID = 'STAGE_2_REAL_GRAPHICAL_ASSET';
 export const STAGE_2_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_2_GHOST_GRAPHICAL_ASSET';
 export const STAGE_3_REAL_GRAPHICAL_ASSET_ID = 'STAGE_3_REAL_GRAPHICAL_ASSET';
 export const STAGE_3_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_3_GHOST_GRAPHICAL_ASSET';
+export const STAGE_4_REAL_GRAPHICAL_ASSET_ID = 'STAGE_4_REAL_GRAPHICAL_ASSET';
+export const STAGE_4_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_4_GHOST_GRAPHICAL_ASSET';
+export const STAGE_5_REAL_GRAPHICAL_ASSET_ID = 'STAGE_5_REAL_GRAPHICAL_ASSET';
+export const STAGE_5_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_5_GHOST_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
@@ -81,6 +85,34 @@ export const stage3ghostGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/stage-3-ghost.png',
+};
+
+export const stage4realGraphicalAsset: GraphicalAsset = {
+  name: STAGE_4_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/ilm2.png',
+};
+
+export const stage4ghostGraphicalAsset: GraphicalAsset = {
+  name: STAGE_4_GHOST_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/ilm2g.png',
+};
+
+export const stage5realGraphicalAsset: GraphicalAsset = {
+  name: STAGE_5_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/lib.png',
+};
+
+export const stage5ghostGraphicalAsset: GraphicalAsset = {
+  name: STAGE_5_GHOST_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/libg.png',
 };
 
 // SPRITE ASSETS

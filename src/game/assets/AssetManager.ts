@@ -34,7 +34,11 @@ import {
   projectileGraphicalAsset,
   stage3realGraphicalAsset,
   stage3ghostGraphicalAsset,
-  glowingGraphicalAsset
+  glowingGraphicalAsset,
+  stage4realGraphicalAsset,
+  stage4ghostGraphicalAsset,
+  stage5realGraphicalAsset,
+  stage5ghostGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -53,6 +57,10 @@ export class AssetManager {
     utilGraphicalAsset,
     stage3realGraphicalAsset,
     stage3ghostGraphicalAsset,
+    stage4realGraphicalAsset,
+    stage4ghostGraphicalAsset,
+    stage5realGraphicalAsset,
+    stage5ghostGraphicalAsset,
   ];
 
   public static readonly sprites: SpriteAsset[] = [
@@ -98,6 +106,10 @@ export class AssetManager {
     stage2ghost: stage2ghostGraphicalAsset,
     stage3real: stage3realGraphicalAsset,
     stage3ghost: stage3ghostGraphicalAsset,
+    stage4real: stage4realGraphicalAsset,
+    stage4ghost: stage4ghostGraphicalAsset,
+    stage5real: stage5realGraphicalAsset,
+    stage5ghost: stage5ghostGraphicalAsset,
     util: utilGraphicalAsset,
   };
 

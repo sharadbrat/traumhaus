@@ -11,6 +11,7 @@ export const STAGE_4_REAL_GRAPHICAL_ASSET_ID = 'STAGE_4_REAL_GRAPHICAL_ASSET';
 export const STAGE_4_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_4_GHOST_GRAPHICAL_ASSET';
 export const STAGE_5_REAL_GRAPHICAL_ASSET_ID = 'STAGE_5_REAL_GRAPHICAL_ASSET';
 export const STAGE_5_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_5_GHOST_GRAPHICAL_ASSET';
+export const STAGE_6_REAL_GRAPHICAL_ASSET_ID = 'STAGE_6_REAL_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
@@ -22,6 +23,7 @@ export const SHOOTING_OBJECT_GRAPHICAL_ASSET_ID = 'SHOOTING_OBJECT_GRAPHICAL_ASS
 export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
 export const PROJECTILE_GRAPHICAL_ASSET_ID = 'PROJECTILE_GRAPHICAL_ASSET';
 export const GLOWING_GRAPHICAL_ASSET_ID = 'GLOWING_GRAPHICAL_ASSET';
+export const BOOK_GRAPHICAL_ASSET_ID = 'BOOK_GRAPHICAL_ASSET';
 
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
@@ -113,6 +115,13 @@ export const stage5ghostGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/libg.png',
+};
+
+export const stage6realGraphicalAsset: GraphicalAsset = {
+  name: STAGE_6_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/lib2.png',
 };
 
 // SPRITE ASSETS
@@ -279,6 +288,21 @@ export const transformEssenceGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.IDLE,
       start: 0x00,
       end: 0x03,
+      frameRate: 3,
+      repeat: true
+    }
+  }
+};
+
+export const bookGraphicalAsset: SpriteAsset = {
+  name: BOOK_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/book.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 3, 2, 1],
       frameRate: 3,
       repeat: true
     }

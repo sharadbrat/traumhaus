@@ -14,7 +14,7 @@ export const playerActor: GameDialogActor = {
 
 export const ghostActor: GameDialogActor = {
   id: 'playerGhostActor',
-  image: '/dialog/player.png',
+  image: '/dialog/player_ghost.png',
   title: 'You'
 };
 

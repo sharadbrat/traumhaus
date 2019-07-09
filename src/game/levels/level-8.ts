@@ -1,5 +1,16 @@
-import { AssetManager, CAVE_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
-import { Door, LevelMapData, LightSource, MapPosition } from '../entities/model';
+import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
+import { Door, LevelMapData, LightSource } from '../entities/model';
+import { getBook } from './objects';
+import { playerActor } from './actors';
+import { LEVEL_9_DIALOGS_IDS } from './level-9';
+
+const LEVEL_8_TRIGGER_ACTIONS = {
+  ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
+};
+
+export const LEVEL_8_DIALOGS_IDS = {
+  ON_BOOK_TOUCH_DIALOG: 'ON_BOOK_TOUCH_DIALOG',
+};
 
 function getLantern(x: number, y: number): LightSource {
   return {
@@ -103,7 +114,9 @@ export const LEVEL_8_DATA: LevelMapData = {
     ],
     lightSettings: lightSettings,
 
-    objects: [],
+    objects: [
+      getBook('book_1', 4, 5, LEVEL_8_TRIGGER_ACTIONS.ON_BOOK_TOUCH),
+    ],
 
     themeId: PARK_THEME_AUDIO_ID,
   },
@@ -161,7 +174,34 @@ export const LEVEL_8_DATA: LevelMapData = {
     objects: [],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
   },
-  triggerActions: [],
-  dialogs: [],
+  triggerActions: [
+    {
+      action: LEVEL_8_TRIGGER_ACTIONS.ON_BOOK_TOUCH,
+      callback: content => {
+        content.object.setVisible(false);
+        if (!content.services.progress.getProgress().stage3.book1) {
+          content.services.progress.getProgress().stage3.book1 = true;
+          content.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+        }
+      },
+    },
+  ],
+  dialogs: [
+    {
+      id: LEVEL_8_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '"Found a book."',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '"Now I gotta find another one."',
+          position: 'right',
+        },
+      ],
+    }
+  ],
   startPosition: {x: 6, y: 46},
 };

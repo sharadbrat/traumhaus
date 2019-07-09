@@ -21,6 +21,10 @@ export interface GameProgress {
     shootingTouched: boolean;
     leverTouched: boolean;
   };
+  stage3: {
+    book1: boolean;
+    book2: boolean;
+  };
   controls: {
     dash: boolean;
     switch: boolean;
@@ -33,9 +37,9 @@ const DEFAULT_PROGRESS: GameProgress = {
   health: 3,
   isVulnerable: true,
   isControllable: false,
+  isNewGame: true,
   // isControllable: true,
   // isNewGame: false,
-  isNewGame: true,
   lastDoor: null,
   stage1: {
     gateDialogFinished: false,
@@ -50,11 +54,16 @@ const DEFAULT_PROGRESS: GameProgress = {
     shootingTouched: false,
     leverTouched: false,
   },
+  stage3: {
+    book1: false,
+    book2: false,
+  },
   controls: {
     dash: false,
     switch: false,
-    // switch: true,
     shoot: false,
+    // dash: true,
+    // switch: true,
     // shoot: true,
   },
   showGhostHud: false,

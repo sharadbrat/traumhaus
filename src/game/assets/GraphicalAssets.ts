@@ -16,6 +16,7 @@ export const STAGE_6_REAL_GRAPHICAL_ASSET_ID = 'STAGE_6_REAL_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
 export const ENEMY_SPIDER_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_GRAPHICAL_ASSET';
+export const ENEMY_GHOST_GRAPHICAL_ASSET_ID = 'ENEMY_GHOST_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR_GRAPHICAL_ASSET';
 export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
 export const TRANSFORM_ESSENCE_GRAPHICAL_ASSET_ID = 'TRANSFORM_ESSENCE_GRAPHICAL_ASSET';
@@ -403,6 +404,66 @@ export const enemySpiderGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.DEATH,
       start: 0x09,
       end: 0x11,
+      frameRate: 3,
+      repeat: false
+    },
+  }
+};
+
+export const enemyGhostGraphicalAsset: SpriteAsset = {
+  name: ENEMY_GHOST_GRAPHICAL_ASSET_ID,
+  width: 32,
+  height: 32,
+  file: '/tiles/Ghost_enemy.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 3, 2, 1],
+      frameRate: 6,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK]: {
+      name: LevelObjectAnimation.WALK,
+      frames: [4, 5, 6, 7],
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK_BACK]: {
+      name: LevelObjectAnimation.WALK_BACK,
+      frames: [8, 9, 10, 11],
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK_LEFT]: {
+      name: LevelObjectAnimation.WALK_LEFT,
+      frames: [4, 5, 6, 7],
+      frameRate: 5,
+      repeat: true
+    },
+
+    [LevelObjectAnimation.SLASH]: {
+      name: LevelObjectAnimation.WALK,
+      frames: [4, 5, 6, 7],
+      frameRate: 5,
+      repeat: false
+    },
+    [LevelObjectAnimation.SLASH_UP]: {
+      name: LevelObjectAnimation.WALK_BACK,
+      frames: [8, 9, 10, 11],
+      frameRate: 5,
+      repeat: false
+    },
+    [LevelObjectAnimation.SLASH_DOWN]: {
+      name: LevelObjectAnimation.WALK,
+      frames: [4, 5, 6, 7],
+      frameRate: 5,
+      repeat: false
+    },
+
+    [LevelObjectAnimation.DEATH]: {
+      name: LevelObjectAnimation.DEATH,
+      start: 12,
+      end: 14,
       frameRate: 3,
       repeat: false
     },

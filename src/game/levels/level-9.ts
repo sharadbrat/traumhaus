@@ -3,6 +3,7 @@ import { Door, LevelMapData, LightSource, MapPosition } from '../entities/model'
 import { getBook } from './objects';
 import { LEVEL_8_DIALOGS_IDS } from './level-8';
 import { gameActor, playerActor } from './actors';
+import { getGhostEnemyDashing } from './enemies';
 
 const LEVEL_9_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
@@ -64,6 +65,12 @@ const door2_2: Door = {
   fromPosition: {x: 24, y: 3},
   toPosition: {x: 37, y: 8},
 };
+
+const enemies = [
+  getGhostEnemyDashing({x: 2, y: 21}),
+  getGhostEnemyDashing({x: 25, y: 25}),
+  getGhostEnemyDashing({x: 24, y: 18}),
+];
 
 export const LEVEL_9_DATA: LevelMapData = {
   id: '09',
@@ -184,7 +191,9 @@ export const LEVEL_9_DATA: LevelMapData = {
       door2_2,
     ],
 
-    objects: [],
+    objects: [
+      ...enemies
+    ],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
   },
   triggerActions: [

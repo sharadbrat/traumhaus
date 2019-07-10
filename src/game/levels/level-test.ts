@@ -1,6 +1,6 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { EnemyLevelObjectData, EnemyLevelObjectType, LevelMapData, LevelObjectType } from '../entities/model';
-import { getSpiderEnemyChasing, getSpiderEnemyDashing } from './enemies';
+import { getSpiderEnemyChasing, getGhostEnemyDashing } from './enemies';
 
 export const LEVEL_TEST_DATA: LevelMapData = {
   id: 'test',
@@ -43,7 +43,7 @@ export const LEVEL_TEST_DATA: LevelMapData = {
       fogAlpha: 0,
     },
     objects: [
-      getSpiderEnemyDashing({x: 3, y: 3}),
+      getGhostEnemyDashing({x: 3, y: 3}),
       // getSpiderEnemyChasing({x: 3, y: 3}),
     ],
     themeId: GHOST_THEME_AUDIO_ID,

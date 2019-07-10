@@ -41,7 +41,7 @@ import {
   stage5realGraphicalAsset,
   stage5ghostGraphicalAsset,
   stage6realGraphicalAsset,
-  bookGraphicalAsset
+  bookGraphicalAsset, enemyGhostGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -79,6 +79,7 @@ export class AssetManager {
     projectileGraphicalAsset,
     glowingGraphicalAsset,
     bookGraphicalAsset,
+    enemyGhostGraphicalAsset,
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -127,6 +128,7 @@ export class AssetManager {
     studentCard: studentCardGraphicalAsset,
     invisible: invisibleGraphicalAsset,
     enemySpider: enemySpiderGraphicalAsset,
+    enemyGhost: enemyGhostGraphicalAsset,
     shootingObject: shootingObjectGraphicalAsset,
     transformEssence: transformEssenceGraphicalAsset,
     projectile: projectileGraphicalAsset,

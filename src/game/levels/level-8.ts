@@ -2,7 +2,7 @@ import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '..
 import { Door, LevelMapData, LightSource } from '../entities/model';
 import { getBook } from './objects';
 import { playerActor } from './actors';
-import { LEVEL_9_DIALOGS_IDS } from './level-9';
+import { getGhostEnemyDashing } from './enemies';
 
 const LEVEL_8_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
@@ -35,6 +35,15 @@ const lightSettings = {
     getLantern(34, 6),
   ]
 };
+
+const enemies = [
+  getGhostEnemyDashing({x: 34, y: 41}),
+  getGhostEnemyDashing({x: 33, y: 33}),
+  getGhostEnemyDashing({x: 25, y: 21}),
+  getGhostEnemyDashing({x: 25, y: 11}),
+  getGhostEnemyDashing({x: 13, y: 18}),
+  getGhostEnemyDashing({x: 5, y: 12}),
+];
 
 const door1_1: Door = {
   toId: '09',
@@ -171,7 +180,9 @@ export const LEVEL_8_DATA: LevelMapData = {
       door2_2,
     ],
 
-    objects: [],
+    objects: [
+      ...enemies
+    ],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
   },
   triggerActions: [

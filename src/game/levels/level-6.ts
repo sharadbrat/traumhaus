@@ -1,5 +1,6 @@
 import { AssetManager, CAVE_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
 import { Door, LevelMapData, LightSource, MapPosition } from '../entities/model';
+import { getGhostEnemyDashing, getSpiderEnemyChasing } from './enemies';
 
 function getLantern(x: number, y: number): LightSource {
   return {
@@ -58,6 +59,15 @@ const sources = [
   getLantern(10, 8),
   getLantern(13, 1),
   getLantern(28, 29),
+];
+
+const enemies = [
+  getSpiderEnemyChasing({x: 17, y: 34}),
+  getSpiderEnemyChasing({x: 23, y: 28}),
+  getSpiderEnemyChasing({x: 7, y: 11}),
+  getSpiderEnemyChasing({x: 38, y: 4}),
+  getSpiderEnemyChasing({x: 43, y: 17}),
+  getSpiderEnemyChasing({x: 33, y: 38}),
 ];
 
 const lightSettings = {
@@ -184,7 +194,9 @@ export const LEVEL_6_DATA: LevelMapData = {
       ...level7Doors
     ],
 
-    objects: [],
+    objects: [
+      ...enemies
+    ],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
   },
   triggerActions: [],

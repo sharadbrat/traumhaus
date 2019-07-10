@@ -66,7 +66,7 @@ export const parkThemeAudioAsset: SoundAsset = {
   name: PARK_THEME_AUDIO_ID,
   file: '/sounds/theme_park_real.mp3',
   soundConfig: {
-    volume: 1,
+    volume: 0.5,
     loop: true,
   }
 };
@@ -75,7 +75,7 @@ export const parkGhostThemeAudioAsset: SoundAsset = {
   name: PARK_GHOST_THEME_AUDIO_ID,
   file: '/sounds/theme_park_ghost.mp3',
   soundConfig: {
-    volume: 1,
+    volume: 0.5,
     loop: true,
   }
 };

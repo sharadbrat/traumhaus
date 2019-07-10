@@ -192,12 +192,7 @@ export const LEVEL_8_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Found a book."',
-          position: 'right',
-        },
-        {
-          actor: playerActor,
-          phrase: '"Now I gotta find another one."',
+          phrase: '"Found a book. He he ..."',
           position: 'right',
         },
       ],

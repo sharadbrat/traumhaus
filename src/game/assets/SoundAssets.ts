@@ -3,6 +3,7 @@ import { Asset } from './AssetManager';
 export const MAIN_THEME_AUDIO_ID = 'MAIN_THEME_AUDIO';
 export const GHOST_THEME_AUDIO_ID = 'GHOST_THEME_AUDIO';
 export const CAVE_THEME_AUDIO_ID = 'CAVE_THEME_AUDIO';
+export const CAVE_GHOST_THEME_AUDIO_ID = 'CAVE_GHOST_THEME_AUDIO';
 export const PARK_THEME_AUDIO_ID = 'PARK_THEME_AUDIO';
 export const PARK_GHOST_THEME_AUDIO_ID = 'PARK_GHOST_THEME_AUDIO';
 
@@ -46,6 +47,15 @@ export const ghostThemeAudioAsset: SoundAsset = {
 export const caveThemeAudioAsset: SoundAsset = {
   name: CAVE_THEME_AUDIO_ID,
   file: '/sounds/theme_cave.mp3',
+  soundConfig: {
+    volume: 0.14,
+    loop: true,
+  }
+};
+
+export const caveGhostThemeAudioAsset: SoundAsset = {
+  name: CAVE_GHOST_THEME_AUDIO_ID,
+  file: '/sounds/cave_theme_ghost.mp3',
   soundConfig: {
     volume: 0.14,
     loop: true,

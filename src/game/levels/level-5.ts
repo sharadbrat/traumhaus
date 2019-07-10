@@ -1,4 +1,4 @@
-import { AssetManager, CAVE_THEME_AUDIO_ID } from '../assets';
+import { AssetManager, CAVE_GHOST_THEME_AUDIO_ID, CAVE_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { getSpiderEnemyChasing, getSpiderEnemyPatroling } from './enemies';
 import { TriggerContents } from '../TriggerManager';
@@ -289,7 +289,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
       },
     ],
-    themeId: CAVE_THEME_AUDIO_ID,
+    themeId: CAVE_GHOST_THEME_AUDIO_ID,
   },
   triggerActions: [
     {

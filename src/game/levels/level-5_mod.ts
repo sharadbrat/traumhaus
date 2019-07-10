@@ -1,4 +1,4 @@
-import { AssetManager, CAVE_THEME_AUDIO_ID } from '../assets';
+import { AssetManager, CAVE_GHOST_THEME_AUDIO_ID, CAVE_THEME_AUDIO_ID } from '../assets';
 import { LevelMapData } from '../entities/model';
 import { ghostActor } from './actors';
 import { LEVEL_5_DIALOGS_IDS } from './level-5';
@@ -168,7 +168,7 @@ export const LEVEL_5_MOD_DATA: LevelMapData = {
     objects: [
 
     ],
-    themeId: CAVE_THEME_AUDIO_ID,
+    themeId: CAVE_GHOST_THEME_AUDIO_ID,
   },
   triggerActions: [
 

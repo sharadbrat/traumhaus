@@ -1,5 +1,5 @@
 import { AssetManager, CAVE_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
-import { LevelMapData, LightSource, MapPosition } from '../entities/model';
+import { Door, LevelMapData, LightSource, MapPosition } from '../entities/model';
 
 function getLantern(x: number, y: number): LightSource {
   return {
@@ -18,6 +18,14 @@ const lightSettings = {
     getLantern(10, 17)
   ]
 };
+
+const doors: Door[] = [
+  {
+    toId: '08',
+    fromPosition: {x: 25, y: 9},
+    toPosition: {x: 6, y: 46},
+  },
+];
 
 export const LEVEL_7_DATA: LevelMapData = {
   id: '07',
@@ -74,11 +82,7 @@ export const LEVEL_7_DATA: LevelMapData = {
       },
     ],
     doors: [
-      // {
-      //   fromPosition: {x: 3, y: 42},
-      //   toPosition: {x: 43, y: 40},
-      //   toId: '05_mod',
-      // },
+      ...doors
     ],
     lightSettings: lightSettings,
 
@@ -139,11 +143,7 @@ export const LEVEL_7_DATA: LevelMapData = {
     lightSettings: lightSettings,
 
     doors: [
-      {
-        fromPosition: {x: 3, y: 42},
-        toPosition: {x: 43, y: 40},
-        toId: '05_mod',
-      },
+      ...doors
     ],
 
     objects: [],

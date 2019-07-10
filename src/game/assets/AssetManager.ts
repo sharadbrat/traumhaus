@@ -1,4 +1,5 @@
 import {
+  caveGhostThemeAudioAsset,
   caveThemeAudioAsset,
   cityAmbientAudioAsset,
   dashSoundAsset, footStepDirtSoundAsset,
@@ -101,6 +102,7 @@ export class AssetManager {
     caveThemeAudioAsset,
     parkThemeAudioAsset,
     parkGhostThemeAudioAsset,
+    caveGhostThemeAudioAsset,
   ];
 
   public static readonly graphicalAssets = {

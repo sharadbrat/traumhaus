@@ -1,6 +1,5 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { TriggerContents } from '../TriggerManager';
-import { LEVEL_TEST_DATA } from './level-test';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { gameActor, playerActor, professorActor } from './actors';
 import { ControlsType } from '../../service/GameControlsService';
@@ -153,11 +152,6 @@ export const LEVEL_1_DATA: LevelMapData = {
         toPosition: {x: 5, y: 4},
         toId: '02',
       },
-      {
-        fromPosition: {x: 1, y: 8},
-        toPosition: {x: 3, y: 3},
-        toId: LEVEL_TEST_DATA.id,
-      },
     ],
 
     themeId: MAIN_THEME_AUDIO_ID,
@@ -221,11 +215,6 @@ export const LEVEL_1_DATA: LevelMapData = {
         fromPosition: {x: 5, y: 8},
         toPosition: {x: 5, y: 4},
         toId: '02',
-      },
-      {
-        fromPosition: {x: 1, y: 8},
-        toPosition: {x: 3, y: 3},
-        toId: LEVEL_TEST_DATA.id,
       },
     ],
     objects: [

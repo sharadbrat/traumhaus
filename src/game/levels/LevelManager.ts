@@ -1,6 +1,5 @@
 import { LEVEL_1_DATA } from './level-1';
 import { LEVEL_3_DATA } from './level-3';
-import { LEVEL_TEST_DATA } from './level-test';
 import { LevelMapData } from '../entities/model';
 import { LEVEL_2_DATA } from './level-2';
 import { LEVEL_4_DATA } from './level-4';
@@ -26,7 +25,6 @@ export class LevelManager {
     [LEVEL_7_DATA.id]: LEVEL_7_DATA,
     [LEVEL_8_DATA.id]: LEVEL_8_DATA,
     [LEVEL_9_DATA.id]: LEVEL_9_DATA,
-    [LEVEL_TEST_DATA.id]: LEVEL_TEST_DATA,
   };
 
   public static getLevelById(id: string): LevelMapData {

@@ -11,9 +11,9 @@ function getLantern(x: number, y: number): LightSource {
 }
 
 const lightSettings = {
-  playerLightRadius: 3,
+  playerLightRadius: 5,
   playerLightRolloff: 8,
-  fogAlpha: 0.8,
+  fogAlpha: 0.7,
   sources: [
     getLantern(10, 17)
   ]

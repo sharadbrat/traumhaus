@@ -45,7 +45,7 @@ import {
   enemyGhostGraphicalAsset,
   stageCorridorRealGraphicalAsset,
   enemySpiderParkGraphicalAsset,
-  stageStreetRealGraphicalAsset
+  stageStreetRealGraphicalAsset, stage6ghostGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -71,6 +71,7 @@ export class AssetManager {
     stage6realGraphicalAsset,
     stageCorridorRealGraphicalAsset,
     stageStreetRealGraphicalAsset,
+    stage6ghostGraphicalAsset
   ];
 
   public static readonly sprites: SpriteAsset[] = [
@@ -127,6 +128,7 @@ export class AssetManager {
     stage5real: stage5realGraphicalAsset,
     stage5ghost: stage5ghostGraphicalAsset,
     stage6real: stage6realGraphicalAsset,
+    stage6ghost: stage6ghostGraphicalAsset,
     util: utilGraphicalAsset,
   };
 

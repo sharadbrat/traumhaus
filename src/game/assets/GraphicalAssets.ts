@@ -14,6 +14,7 @@ export const STAGE_4_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_4_GHOST_GRAPHICAL_ASSET';
 export const STAGE_5_REAL_GRAPHICAL_ASSET_ID = 'STAGE_5_REAL_GRAPHICAL_ASSET';
 export const STAGE_5_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_5_GHOST_GRAPHICAL_ASSET';
 export const STAGE_6_REAL_GRAPHICAL_ASSET_ID = 'STAGE_6_REAL_GRAPHICAL_ASSET';
+export const STAGE_6_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_6_GHOST_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
@@ -140,6 +141,13 @@ export const stage6realGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/lib2.png',
+};
+
+export const stage6ghostGraphicalAsset: GraphicalAsset = {
+  name: STAGE_6_GHOST_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/lib2g.png',
 };
 
 // SPRITE ASSETS

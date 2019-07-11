@@ -7,9 +7,10 @@ import { LEVEL_1_TRIGGER_ACTIONS, LevelManager } from '../levels';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { DialogManager } from '../dialogs';
-import { Door, LevelMapData, LevelObjectData } from '../entities/model';
+import { Door, LevelMapData, LevelObjectData, LevelObjectType } from '../entities/model';
 import { GameManager } from '../GameManager';
 import { ControlsType, GameControlsService } from '../../service/GameControlsService';
+import { EnemyLevelObject } from '../entities/EnemyLevelObject';
 
 // 10 seconds
 const GHOST_COOLDOWN = 10 * 1000;
@@ -87,6 +88,7 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard.on('keydown_ESC', () => {
       GameMenuService.getInstance().triggerOnMenuToggle();
     });
+
   }
 
   update(time: number, delta: number) {
@@ -254,8 +256,8 @@ export class GameScene extends Phaser.Scene {
       this.setupNewGame();
     }
 
-    if (this.controlsService.getMode() === ControlsType.ON_SCREEN) {
-
+    if (currentLevel.onLoad) {
+      currentLevel.onLoad(this.constructTriggerContents());
     }
   }
 
@@ -452,6 +454,18 @@ export class GameScene extends Phaser.Scene {
     } else {
       return this.realWorldObjects;
     }
+  }
+
+  getAllObjects(): LevelObject[] {
+    return [
+      ...this.ghostWorldObjects,
+      ...this.realWorldObjects,
+    ]
+  }
+
+  getEnemies(): EnemyLevelObject[] {
+    const objects = this.getAllObjects();
+    return objects.filter(el => el.getOptions().type === LevelObjectType.ENEMY) as EnemyLevelObject[];
   }
 
   changeLevel(door: Door) {

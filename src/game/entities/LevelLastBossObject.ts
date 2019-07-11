@@ -10,6 +10,7 @@ export interface LevelLastBossObjectData extends LevelObjectData {
     pos: MapPosition,
     anim: string,
     flip: boolean,
+    animAttack: string,
   }[];
 }
 
@@ -31,6 +32,7 @@ export class LevelLastBossObject extends LevelObject {
   private readonly SHOOT_COOLDOWN = 2300;
   private readonly SHOOT_COOLDOWN_MICRO = 100;
   private readonly radius = 20;
+  private currentAttackAnim: string;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     super(scene, options);
@@ -47,14 +49,18 @@ export class LevelLastBossObject extends LevelObject {
     super.update(time);
 
     this.updateBoss(time);
-
-    if (this.isCollidingWithPlayer()) {
-      TriggerManager.fire(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, this.getTriggerContentObject());
-    }
   }
 
   updateBoss(time: number) {
     if (!this.isAlive) {
+      return;
+    }
+
+    if (!this.isVisible) {
+      return;
+    }
+
+    if (this.isDead) {
       return;
     }
 
@@ -65,6 +71,7 @@ export class LevelLastBossObject extends LevelObject {
         const pos = this.tilemap.worldToTileXY(this.sprite.body.position.x, this.sprite.body.position.y);
         this.scene.onBossShoot(pos);
         this.lastShoot = time;
+
         setTimeout(() => {
           this.scene.onBossShoot(pos);
           setTimeout(() => {
@@ -72,6 +79,12 @@ export class LevelLastBossObject extends LevelObject {
           }, this.SHOOT_COOLDOWN_MICRO)
         }, this.SHOOT_COOLDOWN_MICRO)
       }
+    }
+
+    if (time > this.lastShoot + 300) {
+      this.sprite.anims.play(this.currentAnim, true);
+    } else {
+      this.sprite.anims.play(this.currentAttackAnim, true);
     }
 
     if (this.isCollidingWithPlayer()) {
@@ -133,7 +146,8 @@ export class LevelLastBossObject extends LevelObject {
     const newPosition = this.bossOptions.positions[this.allHitPoints - this.hitPoints];
     const worldPos = this.getWorldPositionFromTilePosition(this.scene, newPosition.pos);
     this.sprite.setPosition(worldPos.x, worldPos.y);
-    this.sprite.anims.play(newPosition.anim);
+    this.currentAnim = newPosition.anim;
+    this.currentAttackAnim = newPosition.animAttack;
     this.sprite.setFlipX(newPosition.flip);
   }
 }

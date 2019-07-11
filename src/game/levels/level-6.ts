@@ -2,7 +2,7 @@ import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '..
 import { Door, LevelMapData, LevelObjectType, LightSource, TriggerEvent } from '../entities/model';
 import { getSpiderParkEnemyChasing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
-import { playerActor, professorActor, signActor } from './actors';
+import { lumberActor, lumberSonActor, playerActor, professorActor, signActor } from './actors';
 import { LEVEL_5_DIALOGS_IDS } from './level-5';
 
 function getLantern(x: number, y: number): LightSource {
@@ -24,12 +24,14 @@ function getDoor(x: number): Door {
 
 const LEVEL_6_TRIGGER_ACTIONS = {
   ON_STOP_NPC_TALK: 'ON_STOP_NPC_TALK',
+  ON_STOP_NPC_SON_TALK: 'ON_STOP_NPC_SON_TALK',
   ON_STOP_NPC_TALK_SUCCESS_FINISH: 'ON_STOP_NPC_TALK_SUCCESS_FINISH',
 };
 
 const LEVEL_6_DIALOGS_IDS = {
   ON_STOP_NPC_TALK_SUCCESS: 'ON_STOP_NPC_TALK_SUCCESS',
   ON_STOP_NPC_TALK_FAIL: 'ON_STOP_NPC_TALK_FAIL',
+  ON_SON_NPC_TALK: 'ON_SON_NPC_TALK',
 };
 
 const level7Doors = [
@@ -98,7 +100,7 @@ const stopNpc = {
   height: 16,
   position: {x: 11, y: 2},
   graphics: {
-    asset: AssetManager.spriteAssets.professor,
+    asset: AssetManager.spriteAssets.lumber,
     offsetX: 10,
     offsetY: 10,
   },
@@ -113,6 +115,31 @@ const stopNpc = {
     talkable: true,
   },
   inGhostWorld: false,
+};
+
+const stopNpcGhost = {
+  id: 'stop_ghost',
+  type: LevelObjectType.NPC,
+  isCollideable: true,
+  width: 12,
+  height: 16,
+  position: {x: 11, y: 2},
+  graphics: {
+    asset: AssetManager.spriteAssets.lumberSon,
+    offsetX: 10,
+    offsetY: 10,
+  },
+  triggers: [
+    {
+      event: TriggerEvent.ON_ACTION,
+      action: LEVEL_6_TRIGGER_ACTIONS.ON_STOP_NPC_SON_TALK,
+      fixTime: 1000,
+    },
+  ],
+  meta: {
+    talkable: true,
+  },
+  inGhostWorld: true,
 };
 
 const barrierReal = {
@@ -267,6 +294,7 @@ export const LEVEL_6_DATA: LevelMapData = {
 
     objects: [
       barrierGhost,
+      stopNpcGhost,
       ...enemies
     ],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
@@ -294,6 +322,12 @@ export const LEVEL_6_DATA: LevelMapData = {
       },
     },
     {
+      action: LEVEL_6_TRIGGER_ACTIONS.ON_STOP_NPC_SON_TALK,
+      callback: contents => {
+        contents.managers.dialog.runDialog(LEVEL_6_DIALOGS_IDS.ON_SON_NPC_TALK);
+      },
+    },
+    {
       action: LEVEL_6_TRIGGER_ACTIONS.ON_STOP_NPC_TALK_SUCCESS_FINISH,
       callback: contents => {
         const barrierReal = contents.scene.getAllObjects().find(el => el.getOptions().id === 'barrier_real');
@@ -312,17 +346,27 @@ export const LEVEL_6_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: 'Good evening sir, i need to pass this haunted park.',
+          phrase: 'Good evening sir, I need to pass this haunted park.',
           position: 'right',
         },
         {
-          actor: professorActor,
-          phrase: 'Haunted indeed! But i can\'t let you go further, as long as the evil pressences are in the park. My Son is gone missing since the daylight vanished.',
+          actor: lumberActor,
+          phrase: 'Haunted indeed! But I can\'t let you go any further, as long as the evil pressences are in the park.',
           position: 'left',
         },
         {
-          actor: professorActor,
-          phrase: 'Can you please find him? It\'s such a dark forest, i\'m scared all by myself. I will let you through when you found information about my son and defeated all evilness in the park.',
+          actor: lumberActor,
+          phrase: 'My Son is gone missing since the daylight vanished. Can you please find him?',
+          position: 'left',
+        },
+        {
+          actor: lumberActor,
+          phrase: 'It\'s such a dark forest, I\'m scared all by myself.',
+          position: 'left',
+        },
+        {
+          actor: lumberActor,
+          phrase: 'I will let you through when you found information about my son and defeated all evilness in the park.',
           position: 'left',
         },
       ],
@@ -331,17 +375,52 @@ export const LEVEL_6_DATA: LevelMapData = {
       id: LEVEL_6_DIALOGS_IDS.ON_STOP_NPC_TALK_SUCCESS,
       steps: [
         {
-          actor: professorActor,
-          phrase: 'You found him? My little boy is in another dimension you say? what nonsense ... just begone now.',
+          actor: lumberActor,
+          phrase: 'You found him? My little boy is in another dimension you say?',
           position: 'left',
         },
         {
-          actor: professorActor,
+          actor: lumberActor,
+          phrase: 'What nonsense ... just begone now.',
+          position: 'left',
+        },
+        {
+          actor: lumberActor,
           phrase: 'You can go.',
           position: 'left',
         },
       ],
       onDialogFinishedTrigger: LEVEL_6_TRIGGER_ACTIONS.ON_STOP_NPC_TALK_SUCCESS_FINISH,
+    },
+    {
+      id: LEVEL_6_DIALOGS_IDS.ON_SON_NPC_TALK,
+      steps: [
+        {
+          actor: lumberSonActor,
+          phrase: 'Uwahhh ... where‘s my daddy?',
+          position: 'left',
+        },
+        {
+          actor: lumberSonActor,
+          phrase: 'I‘m to afraid to move from here. That‘s the only place that feels safe.',
+          position: 'left',
+        },
+        {
+          actor: lumberSonActor,
+          phrase: 'Please Mrs., help me find my daddy.',
+          position: 'left',
+        },
+        {
+          actor: lumberSonActor,
+          phrase: 'I could go and search him myself, but there are giant spiders all over the park.',
+          position: 'left',
+        },
+        {
+          actor: lumberSonActor,
+          phrase: 'First they must leave!',
+          position: 'left',
+        },
+      ],
     },
   ],
   onLoad: contents => {

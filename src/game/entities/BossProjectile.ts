@@ -36,7 +36,7 @@ export class BossProjectile {
 
     this.ghostService = GameGhostService.getInstance();
 
-    this.asset = AssetManager.spriteAssets.projectile;
+    this.asset = AssetManager.spriteAssets.bossProjectile;
     this.sprite = this.setupSprite({x, y}, direction, this.asset);
 
     this.body = this.sprite.body as Phaser.Physics.Arcade.Body;
@@ -78,7 +78,6 @@ export class BossProjectile {
     sprite.setAcceleration(dir.x * ACC, dir.y * ACC);
     sprite.setMaxVelocity(MAX_SPEED);
     sprite.setScale(1.5);
-    sprite.setTint(0xFF00FF);
     sprite.setAngle(this.getRotation(dir));
     sprite.anims.play(`${asset.name}__${asset.animations[LevelObjectAnimation.IDLE].name}`);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);

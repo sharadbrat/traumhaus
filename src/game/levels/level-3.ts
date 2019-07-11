@@ -7,7 +7,7 @@ import {
 } from '../assets';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { TriggerContents } from '../TriggerManager';
-import { playerActor } from './actors';
+import { ghostActor, playerActor } from './actors';
 
 export const LEVEL_3_TRIGGER_ACTIONS = {
   ON_GATE_NEAR: 'ON_GATE_NEAR',
@@ -378,17 +378,17 @@ export const LEVEL_3_DATA: LevelMapData = {
       id: LEVEL_3_DIALOGS_IDS.BENCH_GHOST_DIALOG,
       steps: [
         {
-          actor: playerActor,
+          actor: ghostActor,
           phrase: '(Whoa! What is going on here?)',
           position: 'right',
         },
         {
-          actor: playerActor,
+          actor: ghostActor,
           phrase: '(What the ... happened to me?)',
           position: 'right',
         },
         {
-          actor: playerActor,
+          actor: ghostActor,
           phrase: '(Anyway, it will help me to get my student card back.)',
           position: 'right',
         },

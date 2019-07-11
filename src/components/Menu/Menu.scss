@@ -11,7 +11,7 @@
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 1);
 
   opacity: 0;
   visibility: hidden;
@@ -27,10 +27,6 @@
     opacity: 1;
     visibility: visible;
     z-index: 1000;
-
-    .menu__container {
-      transform: translate3d(0, 0, 0);
-    }
   }
 }
 
@@ -43,15 +39,6 @@
   margin-right: $spacing-margin-outer;
 
   padding: $spacing-padding-container;
-
-  border-radius: $border-radius-outer;
-  background-color: $color-dark-background-secondary;
-  box-shadow: 0 5px 15px -7px rgba(0, 0, 0, 0.15);
-
-  transform: translate3d(0, -50px, 0);
-
-  transition: transform ease-in-out 300ms 20ms;
-  will-change: transform;
 }
 
 .menu__header {

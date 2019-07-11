@@ -22,11 +22,14 @@ export const ENEMY_SPIDER_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_GRAPHICAL_ASSET';
 export const ENEMY_SPIDER_PARK_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_PARK_GRAPHICAL_ASSET';
 export const ENEMY_GHOST_GRAPHICAL_ASSET_ID = 'ENEMY_GHOST_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR_GRAPHICAL_ASSET';
+export const LUMBER_GRAPHICAL_ASSET_ID = 'LUMBER_GRAPHICAL_ASSET';
+export const LUMBER_SON_GRAPHICAL_ASSET_ID = 'LUMBER_SON_GRAPHICAL_ASSET';
 export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
 export const TRANSFORM_ESSENCE_GRAPHICAL_ASSET_ID = 'TRANSFORM_ESSENCE_GRAPHICAL_ASSET';
 export const SHOOTING_OBJECT_GRAPHICAL_ASSET_ID = 'SHOOTING_OBJECT_GRAPHICAL_ASSET';
 export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
 export const PROJECTILE_GRAPHICAL_ASSET_ID = 'PROJECTILE_GRAPHICAL_ASSET';
+export const PROJECTILE_BOSS_GRAPHICAL_ASSET_ID = 'PROJECTILE_BOSS_GRAPHICAL_ASSET';
 export const GLOWING_GRAPHICAL_ASSET_ID = 'GLOWING_GRAPHICAL_ASSET';
 export const BOOK_GRAPHICAL_ASSET_ID = 'BOOK_GRAPHICAL_ASSET';
 export const BOSS_GRAPHICAL_ASSET_ID = 'BOSS_GRAPHICAL_ASSET';
@@ -227,6 +230,27 @@ export const projectileGraphicalAsset: SpriteAsset = {
   },
 };
 
+export const projectileBossGraphicalAsset: SpriteAsset = {
+  name: PROJECTILE_BOSS_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 32,
+  file: '/tiles/Shooting_Attack_Animation_Endboss.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 1],
+      frameRate: 6,
+      repeat: true
+    },
+    [LevelObjectAnimation.DEATH]: {
+      name: LevelObjectAnimation.DEATH,
+      frames: [3, 4, 5],
+      frameRate: 10,
+      repeat: false
+    },
+  },
+};
+
 export const professorGraphicalAsset: SpriteAsset = {
   name: PROFESSOR_GRAPHICAL_ASSET_ID,
   width: 32,
@@ -237,6 +261,36 @@ export const professorGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.IDLE,
       frames: [0, 1, 2, 1],
       frameRate: 6,
+      repeat: true
+    }
+  }
+};
+
+export const lumberGraphicalAsset: SpriteAsset = {
+  name: LUMBER_GRAPHICAL_ASSET_ID,
+  width: 32,
+  height: 32,
+  file: '/tiles/NPC_Forest.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 1],
+      frameRate: 4,
+      repeat: true
+    }
+  }
+};
+
+export const lumberSonGraphicalAsset: SpriteAsset = {
+  name: LUMBER_SON_GRAPHICAL_ASSET_ID,
+  width: 32,
+  height: 32,
+  file: '/tiles/NPC_Forest_Ghost.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 1],
+      frameRate: 4,
       repeat: true
     }
   }

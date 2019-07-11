@@ -9,8 +9,9 @@ const LEVEL_9_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
 };
 
-export const LEVEL_9_DIALOGS_IDS = {
+const LEVEL_9_DIALOGS_IDS = {
   ON_BOOK_TOUCH_DIALOG: 'ON_BOOK_TOUCH_DIALOG',
+  ON_BOOK_TOUCH_DIALOG_FINAL: 'ON_BOOK_TOUCH_DIALOG_FINAL',
 };
 
 function getLantern(x: number, y: number): LightSource {
@@ -204,7 +205,13 @@ export const LEVEL_9_DATA: LevelMapData = {
         const stage3 = content.services.progress.getProgress().stage3;
         if (!stage3.book2) {
           stage3.book2 = true;
-          content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+
+          if (stage3.book1) {
+            content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL);
+          } else {
+            content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+          }
+
         }
 
         if (stage3.book2 && stage3.book1) {
@@ -231,7 +238,28 @@ export const LEVEL_9_DATA: LevelMapData = {
           position: 'right',
         },
       ],
-    }
+    },
+
+    {
+      id: LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '(That should be the last one I needed.)',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '(Now I‘m off to the student dorm as fast as possible.)',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '(What was that noise? Sounded like it was coming from the main hall of the library.)',
+          position: 'right',
+        },
+      ],
+    },
   ],
   onLoad: contents => {
     const enemies = contents.scene.getEnemies();

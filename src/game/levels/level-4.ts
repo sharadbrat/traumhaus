@@ -218,17 +218,17 @@ export const LEVEL_4_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"It is very late now, buses are not driving anymore"',
+          phrase: '(It is very late now, buses are not driving anymore)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Hmm ..."',
+          phrase: '(Hmm ...)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"The shortest path home should be through the caves to the south."',
+          phrase: '(The shortest path home should be through the caves to the south.)',
           position: 'right',
         },
       ],
@@ -238,7 +238,7 @@ export const LEVEL_4_DATA: LevelMapData = {
       steps: [
         {
           actor: signActor,
-          phrase: '"Find the red button in the guard house to open the Cave Gate."',
+          phrase: 'Find the red button in the guard house to open the Cave Gate.',
           position: 'left',
         },
       ],
@@ -248,7 +248,7 @@ export const LEVEL_4_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Now it seems like the gate is opened"',
+          phrase: '(Now it seems like the gate is opened.)',
           position: 'right',
         },
       ],

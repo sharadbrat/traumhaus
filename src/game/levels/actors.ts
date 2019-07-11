@@ -6,6 +6,18 @@ export const professorActor: GameDialogActor = {
   title: 'Professor'
 };
 
+export const lumberActor: GameDialogActor = {
+  id: 'lumberActor',
+  image: '/dialog/NPC_Forest_Face.png',
+  title: 'Lumberjack'
+};
+
+export const lumberSonActor: GameDialogActor = {
+  id: 'lumberSonActor',
+  image: '/dialog/NPC_Forest_Ghost_Face.png',
+  title: 'Son',
+};
+
 export const playerActor: GameDialogActor = {
   id: 'playerActor',
   image: '/dialog/player.png',

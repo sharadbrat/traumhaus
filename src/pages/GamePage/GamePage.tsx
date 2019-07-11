@@ -225,6 +225,7 @@ export class GamePage extends React.Component<any, GamePageState> {
     } else {
       this.gameManager.pause();
       GameSoundService.getInstance().stopTheme();
+      GameSoundService.getInstance().stopFootstep();
       this.setState({isDeathMenuActive: true});
     }
   };

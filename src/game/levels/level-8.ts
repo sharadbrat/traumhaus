@@ -1,11 +1,10 @@
 import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
 import { Door, LevelMapData, LevelObjectType, LightSource, TriggerEvent } from '../entities/model';
 import { getBook } from './objects';
-import { playerActor } from './actors';
+import { ghostActor, playerActor } from './actors';
 import { getBoss, getGhostEnemyDashing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
 import { LAST_BOSS_TRIGGERS } from '../entities/LevelLastBossObject';
-import { LEVEL_3_TRIGGER_ACTIONS } from './level-3';
 
 const LEVEL_8_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
@@ -15,6 +14,9 @@ const LEVEL_8_TRIGGER_ACTIONS = {
 
 export const LEVEL_8_DIALOGS_IDS = {
   ON_BOOK_TOUCH_DIALOG: 'ON_BOOK_TOUCH_DIALOG',
+  ON_BOOK_TOUCH_DIALOG_FINAL: 'ON_BOOK_TOUCH_DIALOG_FINAL',
+  ON_LIB_INIT: 'ON_LIB_INIT',
+  ON_BOSS_INIT: 'ON_BOSS_INIT',
 };
 
 function getLantern(x: number, y: number): LightSource {
@@ -78,9 +80,9 @@ const bossTriggerArea = {
   id: 'boss_trigger_area',
   type: LevelObjectType.STATIC,
   isCollideable: false,
-  width: 100,
-  height: 16,
-  position: {x: 20, y: 24},
+  width: 200,
+  height: 200,
+  position: {x: 13, y: 12},
   graphics: {
     asset: AssetManager.spriteAssets.invisible,
     offsetX: -10,
@@ -100,9 +102,9 @@ const bossTriggerAreaGhost = {
   id: 'boss_trigger_area_ghost',
   type: LevelObjectType.STATIC,
   isCollideable: false,
-  width: 100,
-  height: 16,
-  position: {x: 20, y: 24},
+  width: 200,
+  height: 200,
+  position: {x: 13, y: 12},
   graphics: {
     asset: AssetManager.spriteAssets.invisible,
     offsetX: -10,
@@ -125,6 +127,21 @@ const bossTriggerFenceArea = {
   width: 100,
   height: 16,
   position: {x: 20, y: 25},
+  graphics: {
+    asset: AssetManager.spriteAssets.invisible,
+    offsetX: -10,
+    offsetY: -7,
+  },
+  inGhostWorld: true,
+};
+
+const bossTriggerFenceArea2 = {
+  id: 'boss_trigger_fence_2',
+  type: LevelObjectType.STATIC,
+  isCollideable: true,
+  width: 16,
+  height: 100,
+  position: {x: 16, y: 8},
   graphics: {
     asset: AssetManager.spriteAssets.invisible,
     offsetX: -10,
@@ -250,6 +267,7 @@ export const LEVEL_8_DATA: LevelMapData = {
       getBoss(),
       bossTriggerAreaGhost,
       bossTriggerFenceArea,
+      bossTriggerFenceArea2,
     ],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
   },
@@ -261,7 +279,11 @@ export const LEVEL_8_DATA: LevelMapData = {
         const stage3 = content.services.progress.getProgress().stage3;
         if (!stage3.book1) {
           stage3.book1 = true;
-          content.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+          if (stage3.book2) {
+            content.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL);
+          } else {
+            content.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+          }
         }
 
         if (stage3.book2 && stage3.book1) {
@@ -282,7 +304,8 @@ export const LEVEL_8_DATA: LevelMapData = {
     {
       action: LAST_BOSS_TRIGGERS.DEATH,
       callback: contents => {
-        console.log('boss is dead');
+        contents.services.progress.getProgress().isControllable = false;
+        contents.services.progress.onGameFinish();
       },
     },
     {
@@ -299,7 +322,12 @@ export const LEVEL_8_DATA: LevelMapData = {
           const fence = contents.scene.getAllObjects().find(el => el.getOptions().id === 'boss_trigger_fence');
           fence.setDead(false);
 
+          const fence2 = contents.scene.getAllObjects().find(el => el.getOptions().id === 'boss_trigger_fence_2');
+          fence2.setDead(false);
+
           contents.services.progress.getProgress().controls.switch = false;
+
+          contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOSS_INIT);
         }
       },
     },
@@ -313,7 +341,12 @@ export const LEVEL_8_DATA: LevelMapData = {
           const fence = contents.scene.getAllObjects().find(el => el.getOptions().id === 'boss_trigger_fence');
           fence.setDead(false);
 
+          const fence2 = contents.scene.getAllObjects().find(el => el.getOptions().id === 'boss_trigger_fence_2');
+          fence2.setDead(false);
+
           contents.services.progress.getProgress().controls.switch = false;
+
+          contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOSS_INIT);
         }
       },
     },
@@ -328,7 +361,47 @@ export const LEVEL_8_DATA: LevelMapData = {
           position: 'right',
         },
       ],
-    }
+    },
+    {
+      id: LEVEL_8_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '(That should be the last one I needed. Now I‘m off to the student dorm as fast as possible.)',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_8_DIALOGS_IDS.ON_LIB_INIT,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '(Finally, library.)',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '(I should find the books to study, before I leave.)',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_8_DIALOGS_IDS.ON_BOSS_INIT,
+      steps: [
+        {
+          actor: ghostActor,
+          phrase: 'Oh boy ... that‘s by far the biggest creature of tonight.',
+          position: 'right',
+        },
+        {
+          actor: ghostActor,
+          phrase: 'How in the world shall I defeat this thing?',
+          position: 'right',
+        },
+      ],
+    },
   ],
   onLoad: contents => {
     const enemies = contents.scene.getEnemies();
@@ -355,6 +428,16 @@ export const LEVEL_8_DATA: LevelMapData = {
 
     const fence = contents.scene.getAllObjects().find(el => el.getOptions().id === 'boss_trigger_fence');
     fence.setDead(true);
+
+    const fence2 = contents.scene.getAllObjects().find(el => el.getOptions().id === 'boss_trigger_fence_2');
+    fence2.setDead(true);
+
+    if (!contents.services.progress.getProgress().stage3.isLibraryInitialized) {
+      setTimeout(() => {
+        contents.services.progress.getProgress().stage3.isLibraryInitialized = true;
+        contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_LIB_INIT);
+      }, 2000)
+    }
   },
   startPosition: {x: 6, y: 46},
 };

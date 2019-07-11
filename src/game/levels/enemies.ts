@@ -47,7 +47,7 @@ export function getSpiderParkEnemyChasing(id: string, pos: MapPosition): EnemyLe
     meta: {
       enemyType: EnemyLevelObjectType.CHASING,
       chase: {
-        speed: 50,
+        speed: 80,
         radius: 9,
       },
     },
@@ -127,26 +127,31 @@ export function getBoss(): LevelLastBossObjectData {
         pos: {x: 29, y: 13},
         anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
         flip: false,
+        animAttack: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.SHOOT_LEFT}`
       },
       {
         pos: {x: 20, y: 21},
         anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
         flip: true,
+        animAttack: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.SHOOT_LEFT}`
       },
       {
         pos: {x: 20, y: 13},
         anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
         flip: true,
+        animAttack: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.SHOOT_LEFT}`
       },
       {
         pos: {x: 29, y: 21},
         anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
         flip: false,
+        animAttack: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.SHOOT_LEFT}`
       },
       {
         pos: {x: 25, y: 13},
         anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE}`,
         flip: false,
+        animAttack: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.SHOOT}`
       },
     ]
   };

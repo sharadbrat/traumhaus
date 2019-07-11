@@ -23,7 +23,7 @@ export class LevelObject {
   protected tilemap: Phaser.Tilemaps.Tilemap;
   protected triggers: CheckedTrigger[];
   protected isCollided: boolean;
-  private isDead: boolean;
+  protected isDead: boolean;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     this.scene = scene;
@@ -163,9 +163,10 @@ export class LevelObject {
   }
 
   protected checkInAreaTrigger(trigger: CheckedTrigger, time: number) {
-    const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
+    const isOverlapping = this.scene.physics.overlap(this.sprite, this.scene.getPlayer().getSprite());
+    // const distance = this.getDistance(this.sprite.body.center, this.scene.getPlayer().getBody().center);
 
-    if (distance < 10) {
+    if (isOverlapping) {
       TriggerManager.fire(trigger.action, this.getTriggerContentObject());
       trigger.lastCheckedOn = time;
     }

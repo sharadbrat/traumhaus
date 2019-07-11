@@ -33,6 +33,7 @@ export interface GameProgress {
     }
   },
   stage3: {
+    isLibraryInitialized: boolean;
     isBossAvailable: boolean;
     isBossActive: boolean;
     book1: boolean;
@@ -94,6 +95,7 @@ const DEFAULT_PROGRESS: GameProgress = {
     book2: false,
     isBossAvailable: false,
     isBossActive: false,
+    isLibraryInitialized: false,
     enemies: {
       lib1_01: false,
       lib1_02: false,
@@ -130,6 +132,7 @@ export class GameProgressService {
   private onDashCooldownChange: (health: boolean) => any;
   private onShootCooldownChange: (health: boolean) => any;
   private onTransformCooldownChange: (health: boolean) => any;
+  private onGameFinishHandler: () => any;
 
   decreaseHealthTimeout: number;
 
@@ -257,5 +260,13 @@ export class GameProgressService {
   setTransformCooldown(time: number) {
     this.onTransformCooldownChange(true);
     setTimeout(() => this.onTransformCooldownChange(false), time);
+  }
+
+  setOnGameFinish(handler: () => any) {
+    this.onGameFinishHandler = handler;
+  }
+
+  onGameFinish() {
+    this.onGameFinishHandler();
   }
 }

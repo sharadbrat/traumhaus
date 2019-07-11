@@ -1,4 +1,4 @@
-import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
+import { AssetManager, BOSS_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
 import { Door, LevelMapData, LevelObjectType, LightSource, TriggerEvent } from '../entities/model';
 import { getBook } from './objects';
 import { ghostActor, playerActor } from './actors';
@@ -327,7 +327,11 @@ export const LEVEL_8_DATA: LevelMapData = {
 
           contents.services.progress.getProgress().controls.switch = false;
 
-          contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOSS_INIT);
+          contents.services.sound.setTheme(BOSS_THEME_AUDIO_ID, contents.scene);
+
+          setTimeout(() => {
+            contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOSS_INIT);
+          }, 500);
         }
       },
     },
@@ -345,6 +349,8 @@ export const LEVEL_8_DATA: LevelMapData = {
           fence2.setDead(false);
 
           contents.services.progress.getProgress().controls.switch = false;
+
+          contents.services.sound.setTheme(BOSS_THEME_AUDIO_ID, contents.scene);
 
           contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOSS_INIT);
         }

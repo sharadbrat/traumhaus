@@ -235,7 +235,7 @@ export class Player {
     return sprite;
   }
 
-  private onPlayerHit(content: TriggerContents) {
+  onPlayerHit(content: TriggerContents) {
     const enemyPos = content.object.getPosition();
     const playerPos = content.player.getPosition();
 

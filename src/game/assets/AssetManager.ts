@@ -45,7 +45,7 @@ import {
   enemyGhostGraphicalAsset,
   stageCorridorRealGraphicalAsset,
   enemySpiderParkGraphicalAsset,
-  stageStreetRealGraphicalAsset, stage6ghostGraphicalAsset
+  stageStreetRealGraphicalAsset, stage6ghostGraphicalAsset, bossGraphicalAsset
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -88,6 +88,7 @@ export class AssetManager {
     bookGraphicalAsset,
     enemyGhostGraphicalAsset,
     enemySpiderParkGraphicalAsset,
+    bossGraphicalAsset,
   ];
 
   public static readonly sounds: SoundAsset[] = [
@@ -145,8 +146,8 @@ export class AssetManager {
     projectile: projectileGraphicalAsset,
     glowing: glowingGraphicalAsset,
     book: bookGraphicalAsset,
-    enemySpiderPark: enemySpiderParkGraphicalAsset
-
+    enemySpiderPark: enemySpiderParkGraphicalAsset,
+    boss: bossGraphicalAsset,
   };
 
   public static readonly soundAssets = {

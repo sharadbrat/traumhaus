@@ -7,10 +7,11 @@ import { LEVEL_1_TRIGGER_ACTIONS, LevelManager } from '../levels';
 import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { TriggerContents, TriggerManager } from '../TriggerManager';
 import { DialogManager } from '../dialogs';
-import { Door, LevelMapData, LevelObjectData, LevelObjectType } from '../entities/model';
+import { Door, LevelMapData, LevelObjectData, LevelObjectType, MapPosition } from '../entities/model';
 import { GameManager } from '../GameManager';
 import { ControlsType, GameControlsService } from '../../service/GameControlsService';
 import { EnemyLevelObject } from '../entities/EnemyLevelObject';
+import { BossProjectile } from '../entities/BossProjectile';
 
 // 10 seconds
 const GHOST_COOLDOWN = 10 * 1000;
@@ -43,6 +44,7 @@ export class GameScene extends Phaser.Scene {
   private gamepadShootFlag: boolean;
   private nextGhostAvailable: number = 0;
   private nextShootAvailable: number = 0;
+  private bossProjectiles: BossProjectile[] = [];
 
   constructor() {
     super(SceneIdentifier.GAME_SCENE);
@@ -488,6 +490,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.projectiles.forEach(el => el.update());
+    this.bossProjectiles.forEach(el => el.update());
   }
 
   private onShootButton = () => {
@@ -518,7 +521,28 @@ export class GameScene extends Phaser.Scene {
     }
   };
 
+  public onBossShoot = (pos: MapPosition) => {
+    const id = `${Date.now()}__${Math.random()}`;
+
+    const player = this.getPlayer().getPosition();
+
+    const newPos = this.levelMap.getTilemap().tileToWorldXY(pos.x, pos.y);
+
+    let dir = {x: player.x - newPos.x, y: player.y - newPos.y};
+    let norm = Math.abs(dir.x) + Math.abs(dir.y);
+    if (norm === 0) {
+      norm = 1;
+    }
+    dir = {x: dir.x / norm, y: dir.y / norm};
+
+    this.bossProjectiles.push(new BossProjectile(id, newPos.x, newPos.y, dir, this));
+  };
+
   removeProjectile(id: string) {
     this.projectiles = this.projectiles.filter(el => el.id !== id);
+  }
+
+  removeBossProjectile(id: string) {
+    this.bossProjectiles = this.bossProjectiles.filter(el => el.id !== id);
   }
 }

@@ -312,17 +312,17 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
         {
           actor: playerActor,
-          phrase: '"Whoa, did I fall asleep again?"',
+          phrase: '(Did I fall asleep again?)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Probably I should see a doctor..."',
+          phrase: '(... perhaps I should see a doctor ...)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Is the lecture over already?"',
+          phrase: '(Seems like the lecture is over already, but why is Prof. W. waiting for me?)',
           position: 'right',
         },
         {
@@ -332,27 +332,27 @@ export const LEVEL_1_DATA: LevelMapData = {
         },
         {
           actor: professorActor,
-          phrase: 'You will not get good grades on my subject, student!',
+          phrase: 'Pull yourself together. There is one week left until your exams!',
           position: 'left',
         },
         {
           actor: playerActor,
-          phrase: 'I\'m sorry, professor. I don\'t feel very well.',
+          phrase: 'I\'m sorry, professor. I didn\'t meant ... ',
           position: 'right',
         },
         {
           actor: professorActor,
-          phrase: 'If you want to become good at my subject, you should put more efforts in it!',
+          phrase: 'All the books in the world won\'t help you, if you can\'t pay attention to the lecture [...] !',
           position: 'left',
         },
         {
           actor: playerActor,
-          phrase: '"LOL, what\'s the subject..."',
+          phrase: 'All the books ... mhh ... what if ...',
           position: 'right',
         },
         {
           actor: professorActor,
-          phrase: 'Now go home and have some sleep already. Don\'t make me angry!',
+          phrase: 'Leave already! I\'m sure you don\'t have time to day dream.',
           position: 'left',
         },
       ],
@@ -363,7 +363,7 @@ export const LEVEL_1_DATA: LevelMapData = {
       steps: [
         {
           actor: professorActor,
-          phrase: 'Are you okay, student?',
+          phrase: 'What is it?',
           position: 'left',
         },
         {
@@ -378,17 +378,17 @@ export const LEVEL_1_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Here it is!"',
+          phrase: '(Here it is!)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Now I can finally get back home ..."',
+          phrase: '(Now I can finally leave university grounds again  ...)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Firstly I have to find my body!"',
+          phrase: '(But firstly I have to find my body!)',
           position: 'right',
         },
       ]

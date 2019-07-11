@@ -1,8 +1,7 @@
-import { AssetManager, CAVE_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
-import { Door, LevelMapData, LightSource, MapPosition } from '../entities/model';
+import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
+import { Door, LevelMapData, LightSource } from '../entities/model';
 import { getBook } from './objects';
-import { LEVEL_8_DIALOGS_IDS } from './level-8';
-import { gameActor, playerActor } from './actors';
+import { playerActor } from './actors';
 import { getGhostEnemyDashing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
 
@@ -193,7 +192,7 @@ export const LEVEL_9_DATA: LevelMapData = {
     ],
 
     objects: [
-      ...enemies
+      ...enemies,
     ],
     themeId: PARK_GHOST_THEME_AUDIO_ID,
   },
@@ -202,9 +201,15 @@ export const LEVEL_9_DATA: LevelMapData = {
       action: LEVEL_9_TRIGGER_ACTIONS.ON_BOOK_TOUCH,
       callback: content => {
         content.object.setDead(true);
-        if (!content.services.progress.getProgress().stage3.book2) {
-          content.services.progress.getProgress().stage3.book2 = true;
+        const stage3 = content.services.progress.getProgress().stage3;
+        if (!stage3.book2) {
+          stage3.book2 = true;
           content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+        }
+
+        if (stage3.book2 && stage3.book1) {
+          content.services.progress.getProgress().stage3.isBossAvailable = true;
+          console.log('boss is alive');
         }
       },
     },
@@ -222,7 +227,7 @@ export const LEVEL_9_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Found a book. He he ..."',
+          phrase: '(Awesome! I found one of the books. That will help me study for the exam.)',
           position: 'right',
         },
       ],

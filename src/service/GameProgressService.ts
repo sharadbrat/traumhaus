@@ -1,7 +1,5 @@
 import { LevelManager } from '../game/levels';
 import { Door, LevelMapData } from '../game/entities/model';
-import { TriggerManager } from '../game/TriggerManager';
-import { ENEMY_TRIGGERS_ACTIONS } from '../game/entities/EnemyLevelObject';
 
 export interface GameProgress {
   isNewGame: boolean;
@@ -35,6 +33,8 @@ export interface GameProgress {
     }
   },
   stage3: {
+    isBossAvailable: boolean;
+    isBossActive: boolean;
     book1: boolean;
     book2: boolean;
     enemies: {
@@ -92,6 +92,8 @@ const DEFAULT_PROGRESS: GameProgress = {
   stage3: {
     book1: false,
     book2: false,
+    isBossAvailable: false,
+    isBossActive: false,
     enemies: {
       lib1_01: false,
       lib1_02: false,

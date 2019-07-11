@@ -29,6 +29,7 @@ export const INVISIBLE_GRAPHICAL_ASSET_ID = 'INVISIBLE_GRAPHICAL_ASSET';
 export const PROJECTILE_GRAPHICAL_ASSET_ID = 'PROJECTILE_GRAPHICAL_ASSET';
 export const GLOWING_GRAPHICAL_ASSET_ID = 'GLOWING_GRAPHICAL_ASSET';
 export const BOOK_GRAPHICAL_ASSET_ID = 'BOOK_GRAPHICAL_ASSET';
+export const BOSS_GRAPHICAL_ASSET_ID = 'BOSS_GRAPHICAL_ASSET';
 
 export const UTIL_GRAPHICAL_ASSET_ID = 'UTIL_GRAPHICAL_ASSET';
 
@@ -469,6 +470,46 @@ export const enemySpiderParkGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.DEATH,
       start: 0x09,
       end: 0x11,
+      frameRate: 3,
+      repeat: false
+    },
+  }
+};
+
+export const bossGraphicalAsset: SpriteAsset = {
+  name: BOSS_GRAPHICAL_ASSET_ID,
+  width: 48,
+  height: 48,
+  file: '/tiles/Enemy_4_Boss.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0, 1, 2, 1],
+      frameRate: 6,
+      repeat: true
+    },
+    [LevelObjectAnimation.IDLE_LEFT]: {
+      name: LevelObjectAnimation.IDLE_LEFT,
+      frames: [5, 6, 7, 6],
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.DEATH]: {
+      name: LevelObjectAnimation.DEATH,
+      start: 10,
+      end: 12,
+      frameRate: 1,
+      repeat: false
+    },
+    [LevelObjectAnimation.SHOOT]: {
+      name: LevelObjectAnimation.SHOOT,
+      frames: [3, 4],
+      frameRate: 3,
+      repeat: false
+    },
+    [LevelObjectAnimation.SHOOT_LEFT]: {
+      name: LevelObjectAnimation.SHOOT_LEFT,
+      frames: [8, 9],
       frameRate: 3,
       repeat: false
     },

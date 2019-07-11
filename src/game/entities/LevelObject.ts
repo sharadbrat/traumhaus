@@ -66,7 +66,7 @@ export class LevelObject {
   public setDead(val: boolean) {
     this.isDead = val;
     this.sprite.setVisible(!val);
-    this.sprite.disableBody();
+    val ? this.sprite.disableBody() : this.sprite.enableBody(false, this.sprite.x, this.sprite.y, true, true);
   }
 
   public setVisible(val: boolean) {

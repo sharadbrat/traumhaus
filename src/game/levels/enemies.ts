@@ -1,5 +1,12 @@
-import { EnemyLevelObjectData, EnemyLevelObjectType, LevelObjectType, MapPosition } from '../entities/model';
-import { AssetManager } from '../assets';
+import {
+  EnemyLevelObjectData,
+  EnemyLevelObjectType,
+  LevelObjectAnimation,
+  LevelObjectType,
+  MapPosition
+} from '../entities/model';
+import { AssetManager, BOSS_GRAPHICAL_ASSET_ID } from '../assets';
+import { LevelLastBossObjectData } from '../entities';
 
 export function getSpiderEnemyChasing(pos: MapPosition): EnemyLevelObjectData {
   return {
@@ -98,5 +105,49 @@ export function getGhostEnemyDashing(id: string, pos: MapPosition): EnemyLevelOb
       }
     },
     inGhostWorld: true,
+  };
+}
+
+export function getBoss(): LevelLastBossObjectData {
+  return {
+    id: 'boss',
+    type: LevelObjectType.LAST_BOSS,
+    isCollideable: false,
+    position: {x: 29, y: 13},
+    width: 30,
+    height: 30,
+    graphics: {
+      asset: AssetManager.spriteAssets.boss,
+      offsetX: 10,
+      offsetY: 16,
+    },
+    inGhostWorld: true,
+    positions: [
+      {
+        pos: {x: 29, y: 13},
+        anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
+        flip: false,
+      },
+      {
+        pos: {x: 20, y: 21},
+        anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
+        flip: true,
+      },
+      {
+        pos: {x: 20, y: 13},
+        anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
+        flip: true,
+      },
+      {
+        pos: {x: 29, y: 21},
+        anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE_LEFT}`,
+        flip: false,
+      },
+      {
+        pos: {x: 25, y: 13},
+        anim: `${BOSS_GRAPHICAL_ASSET_ID}__${LevelObjectAnimation.IDLE}`,
+        flip: false,
+      },
+    ]
   };
 }

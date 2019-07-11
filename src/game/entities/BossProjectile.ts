@@ -1,18 +1,25 @@
 import Phaser from 'phaser';
 
 import { AssetManager, SHOOT_SOUND_ASSET_ID, SpriteAsset } from '../assets';
-import { GameGhostService, GameSoundService } from '../../service';
+import { GameGhostService, GameMenuService, GameProgressService, GameSoundService } from '../../service';
 import { LevelMap } from './LevelMap';
 import { LevelObjectAnimation, LevelObjectType, MapPosition } from './model';
 import { GameScene } from '../scenes/GameScene';
 import { EnemyLevelObject } from './EnemyLevelObject';
 import { LevelLastBossObject } from './LevelLastBossObject';
+import { TriggerContents, TriggerManager } from '../TriggerManager';
+import { GameControlsService } from '../../service/GameControlsService';
+import { DialogManager } from '../dialogs';
+import { GameManager } from '../GameManager';
+import { SceneManager } from '../scenes/SceneManager';
+import { LevelManager } from '../levels';
+import { LevelObject } from './LevelObject';
 
 const SPEED = 200;
 const ACC = 400;
 const MAX_SPEED = 600;
 
-export class Projectile {
+export class BossProjectile {
   public readonly id: string;
   private readonly sprite: Phaser.Physics.Arcade.Sprite;
   private readonly body: Phaser.Physics.Arcade.Body;
@@ -49,25 +56,11 @@ export class Projectile {
       return;
     }
 
-    const objects = this.scene.getCurrentObjects();
+    const player = this.scene.getPlayer();
 
-    if (objects) {
-      objects
-        .filter(el => el.getOptions().type === LevelObjectType.ENEMY)
-        .forEach((el) => {
-          if (this.scene.physics.overlap(el.getSprite(), this.sprite)) {
-            (el as EnemyLevelObject).onHit();
-            this.destroy();
-          }
-        })
-    }
-
-    const boss = this.scene.getAllObjects().find(el => el.getOptions().id == 'boss');
-    if (boss) {
-      if (this.scene.physics.overlap(boss.getSprite(), this.sprite)) {
-        (boss as LevelLastBossObject).onHit();
-        this.destroy();
-      }
+    if (this.scene.physics.overlap(player.getSprite(), this.sprite) && GameProgressService.getInstance().getProgress().isVulnerable) {
+      player.onPlayerHit(this.getTriggerContentObject());
+      this.destroy();
     }
   }
 
@@ -85,7 +78,7 @@ export class Projectile {
     sprite.setAcceleration(dir.x * ACC, dir.y * ACC);
     sprite.setMaxVelocity(MAX_SPEED);
     sprite.setScale(1.5);
-    sprite.setTint(0xFFFFFF);
+    sprite.setTint(0xFF00FF);
     sprite.setAngle(this.getRotation(dir));
     sprite.anims.play(`${asset.name}__${asset.animations[LevelObjectAnimation.IDLE].name}`);
     sprite.setDepth(LevelMap.OBJECT_LAYER_DEPTH);
@@ -95,7 +88,7 @@ export class Projectile {
 
   public destroy() {
     try {
-      this.scene.removeProjectile(this.id);
+      this.scene.removeBossProjectile(this.id);
       this.isDead = true;
       this.sprite.anims.play(`${this.asset.name}__${this.asset.animations[LevelObjectAnimation.DEATH].name}`);
       this.sprite.setVelocity(0);
@@ -109,8 +102,12 @@ export class Projectile {
       });
 
       setTimeout(() => {
-        this.collider.destroy();
-        this.sprite.destroy();
+        try {
+          this.collider.destroy();
+          this.sprite.destroy();
+        } catch (e) {
+          console.log('Couldn\'t remove boss projectile')
+        }
       }, 400);
     } catch (e) {
       this.sprite.destroy();
@@ -140,5 +137,32 @@ export class Projectile {
       return -270;
     }
     return 0;
+  }
+
+  public getPosition() {
+    return this.sprite.body.position;
+  }
+
+  protected getTriggerContentObject(): TriggerContents {
+    return {
+      scene: this.scene,
+      player: this.scene.getPlayer(),
+      object: this as unknown as LevelObject,
+      services: {
+        progress: GameProgressService.getInstance(),
+        ghost: GameGhostService.getInstance(),
+        sound: GameSoundService.getInstance(),
+        menu: GameMenuService.getInstance(),
+        controls: GameControlsService.getInstance(),
+      },
+      managers: {
+        dialog: DialogManager,
+        trigger: TriggerManager,
+        game: GameManager,
+        asset: AssetManager,
+        scene: SceneManager,
+        level: LevelManager,
+      }
+    };
   }
 }

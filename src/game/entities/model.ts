@@ -57,6 +57,9 @@ export enum LevelObjectAnimation {
   HIT = 'hit',
   DEATH = 'death',
   WALK_LEFT = 'walk_left',
+  IDLE_LEFT = 'idle_left',
+  SHOOT = 'shoot',
+  SHOOT_LEFT = 'shoot_left',
 }
 
 export enum TriggerEvent {
@@ -75,7 +78,8 @@ export interface Trigger {
 export enum LevelObjectType {
   STATIC,
   NPC,
-  ENEMY
+  ENEMY,
+  LAST_BOSS,
 }
 
 export enum EnemyLevelObjectType {

@@ -4,6 +4,7 @@ import { GameScene } from '../scenes/GameScene';
 import { NPCLevelObject } from './NPCLevelObject';
 import { EnemyLevelObject } from './EnemyLevelObject';
 import { EnemyLevelObjectData, EnemyLevelObjectType, LevelObjectData, LevelObjectType } from './model';
+import { LevelLastBossObject } from './LevelLastBossObject';
 
 export class MapObjectFactory {
   public static create(scene: GameScene, data: LevelObjectData): LevelObject {
@@ -13,6 +14,8 @@ export class MapObjectFactory {
       return new EnemyLevelObject(scene, data as EnemyLevelObjectData);
     } else if (data.type === LevelObjectType.NPC) {
       return new NPCLevelObject(scene, data);
+    } else if (data.type === LevelObjectType.LAST_BOSS) {
+      return new LevelLastBossObject(scene, data);
     }
   }
 }

@@ -398,12 +398,12 @@ export const LEVEL_5_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Wow, I feel different."',
+          phrase: '(That\'s the strange feeling from before, when I got my student card.)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Feels like I can become something different right now..."',
+          phrase: '(But this time it seems that i have more control.)',
           position: 'right',
         },
         {
@@ -413,7 +413,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'While in a ghost form, use B gamepad button to dash.',
+          phrase: 'While moving in ghost form, use B gamepad button to dash.',
           position: 'right',
         },
         {
@@ -468,17 +468,17 @@ export const LEVEL_5_DATA: LevelMapData = {
       steps: [
         {
           actor: ghostActor,
-          phrase: '"Now it feels like I\'m completely powered up!"',
+          phrase: '(An empowering feeling.)',
           position: 'right',
         },
         {
           actor: ghostActor,
-          phrase: '"So much power!!!"',
+          phrase: '(It will help me to make the way to the library safer.)',
           position: 'right',
         },
         {
           actor: gameActor,
-          phrase: 'Use W keyboard button to shoot while you are a ghost.',
+          phrase: 'Use W keyboard button to shoot while you are moving as a ghost.',
           position: 'right',
         },
       ],
@@ -488,17 +488,17 @@ export const LEVEL_5_DATA: LevelMapData = {
       steps: [
         {
           actor: ghostActor,
-          phrase: '"Now it feels like I\'m completely powered up!"',
+          phrase: '(An empowering feeling.)',
           position: 'right',
         },
         {
           actor: ghostActor,
-          phrase: '"So much power!!!"',
+          phrase: '(It will help me to make the way to the library safer.)',
           position: 'right',
         },
         {
           actor: gameActor,
-          phrase: 'Use A gamepad button to shoot while you are a ghost.',
+          phrase: 'Use A gamepad button to shoot while you are moving in ghost form.',
           position: 'right',
         },
       ],
@@ -528,12 +528,12 @@ export const LEVEL_5_DATA: LevelMapData = {
       steps: [
         {
           actor: ghostActor,
-          phrase: '"Hmm, it feels like I\'m not done in here."',
+          phrase: '(Strange feeling ... like I missed something in here.)',
           position: 'right',
         },
         {
           actor: ghostActor,
-          phrase: '"I have to find something else"',
+          phrase: '(Something is hidden inside this cave. I have to find it.)',
           position: 'right',
         },
       ],
@@ -543,12 +543,12 @@ export const LEVEL_5_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Ah man, what\'s with my luck today? This lever is broken..."',
+          phrase: '(I saw it coming. With my luck this lever had to be broken...)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"I have to find a way to activate it to get out of here."',
+          phrase: '(There must be a way to activate it to get out of here.)',
           position: 'right',
         },
       ],

@@ -331,17 +331,12 @@ export const LEVEL_3_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Shiiiish, where is my Thoska?"',
+          phrase: '(Argh ... I forgot my student card in the lecture hall again.)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Feels like I forgot it again ..."',
-          position: 'right',
-        },
-        {
-          actor: playerActor,
-          phrase: '"Maybe it is in the lecture hall?"',
+          phrase: '(I have to find a way back inside ...)',
           position: 'right',
         },
       ],
@@ -352,17 +347,17 @@ export const LEVEL_3_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Ahh, the door is locked ..."',
+          phrase: '(Like I thought, the door is already locked.)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"I\'m soo tired OMG."',
+          phrase: '(Seems like I have no choice than to wait for someone to enter or exit.)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Better find a bench and rest for a while."',
+          phrase: '(Apart from that I\'m sleepy, so better find a bench and rest for a while.)',
           position: 'right',
         },
       ],
@@ -373,7 +368,7 @@ export const LEVEL_3_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"This bench looks perfect!"',
+          phrase: '(Only bench on the campus ... feeling lucky today!)',
           position: 'right',
         },
       ],
@@ -384,17 +379,17 @@ export const LEVEL_3_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Whoa! What is going on here?"',
+          phrase: '(Whoa! What is going on here?)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Did I become a ghost?"',
+          phrase: '(What the ... happened to me?)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Anyway, it will help me to get my Thoska back"',
+          phrase: '(Anyway, it will help me to get my student card back.)',
           position: 'right',
         },
       ],
@@ -404,17 +399,22 @@ export const LEVEL_3_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Did I woke up? Weird dream ..."',
+          phrase: '(Everything\'s back to normal it seems. What was that right now?)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"And I have my Thoska in my pocket!"',
+          phrase: '(But I have my student card in my pocket!)',
           position: 'right',
         },
         {
           actor: playerActor,
-          phrase: '"Better head to home now ..."',
+          phrase: '(Fastest way home from here would through the caves until I reach the library.)',
+          position: 'right',
+        },
+        {
+          actor: playerActor,
+          phrase: '(Like Prof. W. said, I need some books to learn for his next exam ...)',
           position: 'right',
         },
       ],

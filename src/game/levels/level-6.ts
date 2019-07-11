@@ -312,17 +312,17 @@ export const LEVEL_6_DATA: LevelMapData = {
       steps: [
         {
           actor: playerActor,
-          phrase: '"Can I go further, please?"',
+          phrase: 'Good evening sir, i need to pass this haunted park.',
           position: 'right',
         },
         {
           actor: professorActor,
-          phrase: '"I will not let you go further."',
+          phrase: 'Haunted indeed! But i can\'t let you go further, as long as the evil pressences are in the park. My Son is gone missing since the daylight vanished.',
           position: 'left',
         },
         {
           actor: professorActor,
-          phrase: '"Till this ghost energy in the park is gone."',
+          phrase: 'Can you please find him? It\'s such a dark forest, i\'m scared all by myself. I will let you through when you found information about my son and defeated all evilness in the park.',
           position: 'left',
         },
       ],
@@ -332,12 +332,12 @@ export const LEVEL_6_DATA: LevelMapData = {
       steps: [
         {
           actor: professorActor,
-          phrase: '"Now it feels way more safer."',
+          phrase: 'You found him? My little boy is in another dimension you say? what nonsense ... just begone now.',
           position: 'left',
         },
         {
           actor: professorActor,
-          phrase: '"You can go."',
+          phrase: 'You can go.',
           position: 'left',
         },
       ],

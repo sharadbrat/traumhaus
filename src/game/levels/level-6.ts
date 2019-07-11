@@ -341,6 +341,7 @@ export const LEVEL_6_DATA: LevelMapData = {
           position: 'left',
         },
       ],
+      onDialogFinishedTrigger: LEVEL_6_TRIGGER_ACTIONS.ON_STOP_NPC_TALK_SUCCESS_FINISH,
     },
   ],
   onLoad: contents => {

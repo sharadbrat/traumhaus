@@ -3,6 +3,7 @@ import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
 import { getSpiderEnemyChasing, getSpiderEnemyPatroling } from './enemies';
 import { TriggerContents } from '../TriggerManager';
 import { gameActor, ghostActor, playerActor, signActor } from './actors';
+import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
 
 const LEVEL_5_TRIGGER_ACTIONS = {
   ON_TRANSFORM_ESSENCE_TOUCH: 'ON_TRANSFORM_ESSENCE_TOUCH',
@@ -29,7 +30,7 @@ export const LEVEL_5_DIALOGS_IDS = {
 const lightSettings = {
   playerLightRadius: 6,
   playerLightRolloff: 8,
-  fogAlpha: 0.8,
+  fogAlpha: 0.5,
   sources: [
     {
       position: {x: 2, y: 3},
@@ -291,6 +292,12 @@ export const LEVEL_5_DATA: LevelMapData = {
   },
   triggerActions: [
     {
+      action: ENEMY_TRIGGERS_ACTIONS.ON_DEATH,
+      callback: contents => {
+        // empty
+      }
+    },
+    {
       action: LEVEL_5_TRIGGER_ACTIONS.ON_TRANSFORM_ESSENCE_TOUCH,
       callback: (content: TriggerContents) => {
         if (!content.services.progress.getProgress().stage2.transformTouched) {
@@ -298,7 +305,7 @@ export const LEVEL_5_DATA: LevelMapData = {
           content.services.progress.getProgress().controls.switch = true;
           content.services.progress.getProgress().showGhostHud = true;
           content.services.progress.getProgress().stage2.transformTouched = true;
-          content.object.setVisible(false);
+          content.object.setDead(true);
         }
       },
     },
@@ -309,7 +316,7 @@ export const LEVEL_5_DATA: LevelMapData = {
           content.managers.dialog.runDialog(LEVEL_5_DIALOGS_IDS.ON_SHOOTING_OBJECT_KEYBOARD);
           content.services.progress.getProgress().controls.shoot = true;
           content.services.progress.getProgress().stage2.shootingTouched = true;
-          content.object.setVisible(false);
+          content.object.setDead(true);
         }
       },
     },

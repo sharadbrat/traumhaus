@@ -1,5 +1,7 @@
 import { LevelManager } from '../game/levels';
 import { Door, LevelMapData } from '../game/entities/model';
+import { TriggerManager } from '../game/TriggerManager';
+import { ENEMY_TRIGGERS_ACTIONS } from '../game/entities/EnemyLevelObject';
 
 export interface GameProgress {
   isNewGame: boolean;
@@ -21,9 +23,31 @@ export interface GameProgress {
     shootingTouched: boolean;
     leverTouched: boolean;
   };
+  stagePark: {
+    free: boolean;
+    enemies: {
+      park_01: boolean;
+      park_02: boolean;
+      park_03: boolean;
+      park_04: boolean;
+      park_05: boolean;
+      park_06: boolean;
+    }
+  },
   stage3: {
     book1: boolean;
     book2: boolean;
+    enemies: {
+      lib1_01: boolean;
+      lib1_02: boolean;
+      lib1_03: boolean;
+      lib1_04: boolean;
+      lib1_05: boolean;
+      lib1_06: boolean;
+      lib2_01: boolean;
+      lib2_02: boolean;
+      lib2_03: boolean;
+    },
   };
   controls: {
     dash: boolean;
@@ -54,9 +78,31 @@ const DEFAULT_PROGRESS: GameProgress = {
     shootingTouched: false,
     leverTouched: false,
   },
+  stagePark: {
+    free: false,
+    enemies: {
+      park_01: false,
+      park_02: false,
+      park_03: false,
+      park_04: false,
+      park_05: false,
+      park_06: false,
+    },
+  },
   stage3: {
     book1: false,
     book2: false,
+    enemies: {
+      lib1_01: false,
+      lib1_02: false,
+      lib1_03: false,
+      lib1_04: false,
+      lib1_05: false,
+      lib1_06: false,
+      lib2_01: false,
+      lib2_02: false,
+      lib2_03: false,
+    },
   },
   controls: {
     dash: false,

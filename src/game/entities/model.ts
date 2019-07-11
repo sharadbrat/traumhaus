@@ -1,6 +1,6 @@
 import { SpriteAsset } from '../assets';
 import { GameDialog } from '../dialogs';
-import { TriggerCallback } from '../TriggerManager';
+import { TriggerCallback, TriggerContents } from '../TriggerManager';
 import { GameScene } from '../scenes/GameScene';
 
 export type CollisionDetector = 0 | 1;
@@ -83,6 +83,7 @@ export enum EnemyLevelObjectType {
   SHOOTING,
   PATROLING,
   DASHING,
+  STATIC,
 }
 
 export interface LevelObjectGraphicData {
@@ -146,6 +147,7 @@ export interface LevelMapData {
   startPosition?: MapPosition;
   triggerActions?: TriggerAction[];
   dialogs?: GameDialog[];
+  onLoad?: (contents: TriggerContents) => any,
 }
 
 export interface TriggerAction {

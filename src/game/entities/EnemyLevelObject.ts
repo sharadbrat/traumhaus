@@ -16,6 +16,7 @@ import { LevelMap } from './LevelMap';
 
 export const ENEMY_TRIGGERS_ACTIONS = {
   ON_PLAYER_HIT: 'ON_ENEMY_PLAYER_HIT',
+  ON_DEATH: 'ON_ENEMY_DEATH',
 };
 
 export class EnemyLevelObject extends LevelObject {
@@ -57,8 +58,8 @@ export class EnemyLevelObject extends LevelObject {
       case EnemyLevelObjectType.PATROLING:
         this.initPatrolingEnemy();
         break;
-      case EnemyLevelObjectType.SHOOTING:
-        this.initShootingEnemy();
+      case EnemyLevelObjectType.STATIC:
+        this.initStaticEnemy();
         break;
       case EnemyLevelObjectType.CHASING:
       default:
@@ -99,8 +100,8 @@ export class EnemyLevelObject extends LevelObject {
       case EnemyLevelObjectType.PATROLING:
         this.updatePatrolingEnemy(time);
         break;
-      case EnemyLevelObjectType.SHOOTING:
-        this.updateShootingEnemy(time);
+      case EnemyLevelObjectType.STATIC:
+        this.updateStaticEnemy(time);
         break;
       case EnemyLevelObjectType.CHASING:
       default:
@@ -143,25 +144,27 @@ export class EnemyLevelObject extends LevelObject {
       }
     }
 
-    const speed = this.options.meta.dash.speed === 0 ? 1 : this.options.meta.dash.speed;
-    const distance = this.scene.getPlayer().getPosition().distance(this.sprite.body.position);
-    const cooldown = (EnemyLevelObject.UPDATE_COOLDOWN / speed) * 10;
+    if (this.isAlive) {
+      const speed = this.options.meta.dash.speed === 0 ? 1 : this.options.meta.dash.speed;
+      const distance = this.scene.getPlayer().getPosition().distance(this.sprite.body.position);
+      const cooldown = (EnemyLevelObject.UPDATE_COOLDOWN / speed) * 10;
 
-    if (distance < this.options.meta.dash.dashRadius * AssetManager.TILE_SIZE) {
-      if (time > this.prevDash + this.options.meta.dash.cooldown) {
-        this.prevDash = time;
-        this.makeDash(this.options.meta.dash.duration, speed * 3);
-        return;
+      if (distance < this.options.meta.dash.dashRadius * AssetManager.TILE_SIZE) {
+        if (time > this.prevDash + this.options.meta.dash.cooldown) {
+          this.prevDash = time;
+          this.makeDash(this.options.meta.dash.duration, speed * 3);
+          return;
+        }
       }
-    }
 
-    if (distance < this.options.meta.dash.radius * AssetManager.TILE_SIZE) {
-      if (time - this.prevPathCalculation > cooldown) {
-        this.prevPathCalculation = time;
-        this.makeChase(this.options.meta.dash.radius, this.options.meta.dash.speed);
+      if (distance < this.options.meta.dash.radius * AssetManager.TILE_SIZE) {
+        if (time - this.prevPathCalculation > cooldown) {
+          this.prevPathCalculation = time;
+          this.makeChase(this.options.meta.dash.radius, this.options.meta.dash.speed);
+        }
+      } else {
+        this.sprite.setVelocity(0, 0);
       }
-    } else {
-      this.sprite.setVelocity(0, 0);
     }
   }
 
@@ -180,8 +183,17 @@ export class EnemyLevelObject extends LevelObject {
     }
   }
 
-  private updateShootingEnemy(time: number) {
-// todo: Add impl
+  private updateStaticEnemy(time: number) {
+    if (this.isCollidingWithPlayer()) {
+      try {
+        this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.HIT}`);
+      } catch (e) {
+        this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.IDLE}`);
+      }
+      TriggerManager.fire(ENEMY_TRIGGERS_ACTIONS.ON_PLAYER_HIT, this.getTriggerContentObject());
+    } else {
+      this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.IDLE}`);
+    }
   }
 
   private initDashingEnemy() {
@@ -231,8 +243,15 @@ export class EnemyLevelObject extends LevelObject {
     this.oppDirection = this.options.meta.patrol.from;
   }
 
-  private initShootingEnemy() {
-    // todo: Add impl
+  private initStaticEnemy() {
+    let world;
+    if (this.options.inGhostWorld) {
+      world = this.scene.getLevelMap().getMapData().ghostWorld;
+    } else {
+      world = this.scene.getLevelMap().getMapData().realWorld;
+    }
+
+    this.collision = world.collisionMap;
   }
 
   private initChasingEnemy() {
@@ -419,21 +438,25 @@ export class EnemyLevelObject extends LevelObject {
   }
 
   public onHit() {
-    this.isAlive = false;
-    this.sprite.setVelocity(0);
-    this.sprite.disableBody();
-    this.sprite.anims.stop();
-    this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.DEATH}`);
-    setTimeout(() => {
-      this.scene.tweens.add({
-        targets: this.sprite,
-        alpha: 0,
-        duration: 10000
-      });
-    }, 5000);
-    setTimeout(() => {
-      this.sprite.destroy();
-    }, 15000);
+    if (this.isAlive) {
+      TriggerManager.fire(ENEMY_TRIGGERS_ACTIONS.ON_DEATH, this.getTriggerContentObject());
+
+      this.isAlive = false;
+      this.sprite.setVelocity(0);
+      this.sprite.disableBody();
+      this.sprite.anims.stop();
+      this.sprite.anims.play(`${this.options.graphics.asset.name}__${LevelObjectAnimation.DEATH}`);
+      setTimeout(() => {
+        this.scene.tweens.add({
+          targets: this.sprite,
+          alpha: 0,
+          duration: 10000
+        });
+      }, 5000);
+      setTimeout(() => {
+        this.sprite.destroy();
+      }, 15000);
+    }
   }
 
   private makeDash(duration: number, speed: number) {

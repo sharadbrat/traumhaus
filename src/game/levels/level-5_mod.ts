@@ -6,7 +6,7 @@ import { LEVEL_5_DIALOGS_IDS } from './level-5';
 const lightSettings = {
   playerLightRadius: 6,
   playerLightRolloff: 8,
-  fogAlpha: 0.8,
+  fogAlpha: 0.5,
   sources: [
     {
       position: {x: 2, y: 3},

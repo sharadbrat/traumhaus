@@ -23,6 +23,7 @@ export class LevelObject {
   protected tilemap: Phaser.Tilemaps.Tilemap;
   protected triggers: CheckedTrigger[];
   protected isCollided: boolean;
+  private isDead: boolean;
 
   constructor(scene: GameScene, options: LevelObjectData) {
     this.scene = scene;
@@ -62,9 +63,16 @@ export class LevelObject {
     }
   }
 
+  public setDead(val: boolean) {
+    this.isDead = val;
+    this.sprite.setVisible(!val);
+  }
+
   public setVisible(val: boolean) {
-    this.isVisible = val;
-    this.sprite.setVisible(this.isVisible);
+    if (!this.isDead) {
+      this.isVisible = val;
+      this.sprite.setVisible(this.isVisible);
+    }
   }
 
   public getPosition(): MapPosition {

@@ -85,23 +85,27 @@ export class Projectile {
   }
 
   public destroy() {
-    this.scene.removeProjectile(this.id);
-    this.isDead = true;
-    this.sprite.anims.play(`${this.asset.name}__${this.asset.animations[LevelObjectAnimation.DEATH].name}`);
-    this.sprite.setVelocity(0);
-    this.sprite.setAcceleration(0);
-    this.sprite.disableBody();
+    try {
+      this.scene.removeProjectile(this.id);
+      this.isDead = true;
+      this.sprite.anims.play(`${this.asset.name}__${this.asset.animations[LevelObjectAnimation.DEATH].name}`);
+      this.sprite.setVelocity(0);
+      this.sprite.setAcceleration(0);
+      this.sprite.disableBody();
 
-    this.scene.tweens.add({
-      targets: this.sprite,
-      alpha: 0,
-      duration: 400
-    });
+      this.scene.tweens.add({
+        targets: this.sprite,
+        alpha: 0,
+        duration: 400
+      });
 
-    setTimeout(() => {
-      this.collider.destroy();
+      setTimeout(() => {
+        this.collider.destroy();
+        this.sprite.destroy();
+      }, 400);
+    } catch (e) {
       this.sprite.destroy();
-    }, 400);
+    }
   }
 
   private onCollide = () => {

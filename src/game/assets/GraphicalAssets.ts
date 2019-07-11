@@ -2,6 +2,8 @@ import { Asset } from './AssetManager';
 import { LevelObjectAnimation } from '../entities/model';
 
 export const STAGE_1_REAL_GRAPHICAL_ASSET_ID = 'STAGE_1_REAL_GRAPHICAL_ASSET';
+export const STAGE_CORRIDOR_REAL_GRAPHICAL_ASSET_ID = 'STAGE_CORRIDOR_REAL_GRAPHICAL_ASSET';
+export const STAGE_STREET_REAL_GRAPHICAL_ASSET_ID = 'STAGE_STREET_REAL_GRAPHICAL_ASSET';
 export const STAGE_1_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_1_GHOST_GRAPHICAL_ASSET';
 export const STAGE_2_REAL_GRAPHICAL_ASSET_ID = 'STAGE_2_REAL_GRAPHICAL_ASSET';
 export const STAGE_2_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_2_GHOST_GRAPHICAL_ASSET';
@@ -16,6 +18,7 @@ export const STAGE_6_REAL_GRAPHICAL_ASSET_ID = 'STAGE_6_REAL_GRAPHICAL_ASSET';
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
 export const GHOST_PLAYER_GRAPHICAL_ASSET_ID = 'GHOST_PLAYER_GRAPHICAL_ASSET';
 export const ENEMY_SPIDER_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_GRAPHICAL_ASSET';
+export const ENEMY_SPIDER_PARK_GRAPHICAL_ASSET_ID = 'ENEMY_SPIDER_PARK_GRAPHICAL_ASSET';
 export const ENEMY_GHOST_GRAPHICAL_ASSET_ID = 'ENEMY_GHOST_GRAPHICAL_ASSET';
 export const PROFESSOR_GRAPHICAL_ASSET_ID = 'PROFESSOR_GRAPHICAL_ASSET';
 export const STUDENT_CARD_GRAPHICAL_ASSET_ID = 'STUDENT_CARD_GRAPHICAL_ASSET';
@@ -53,6 +56,20 @@ export const stage1realGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/stage-1.png',
+};
+
+export const stageCorridorRealGraphicalAsset: GraphicalAsset = {
+  name: STAGE_CORRIDOR_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/corridor.png',
+};
+
+export const stageStreetRealGraphicalAsset: GraphicalAsset = {
+  name: STAGE_STREET_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/street.png',
 };
 
 export const stage1ghostGraphicalAsset: GraphicalAsset = {
@@ -375,6 +392,46 @@ export const enemySpiderGraphicalAsset: SpriteAsset = {
   width: 48,
   height: 48,
   file: '/tiles/Enemy_1_Spider.png',
+  animations: {
+    [LevelObjectAnimation.IDLE]: {
+      name: LevelObjectAnimation.IDLE,
+      frames: [0x03, 0x04, 0x05, 0x04],
+      frameRate: 6,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK]: {
+      name: LevelObjectAnimation.WALK,
+      frames: [0x00, 0x01, 0x02],
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK_BACK]: {
+      name: LevelObjectAnimation.WALK_BACK,
+      frames: [0x06, 0x07, 0x08],
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.WALK_LEFT]: {
+      name: LevelObjectAnimation.WALK_LEFT,
+      frames: [0x03, 0x04, 0x05],
+      frameRate: 5,
+      repeat: true
+    },
+    [LevelObjectAnimation.DEATH]: {
+      name: LevelObjectAnimation.DEATH,
+      start: 0x09,
+      end: 0x11,
+      frameRate: 3,
+      repeat: false
+    },
+  }
+};
+
+export const enemySpiderParkGraphicalAsset: SpriteAsset = {
+  name: ENEMY_SPIDER_PARK_GRAPHICAL_ASSET_ID,
+  width: 48,
+  height: 48,
+  file: '/tiles/Enemy_2_Park_Spider.png',
   animations: {
     [LevelObjectAnimation.IDLE]: {
       name: LevelObjectAnimation.IDLE,

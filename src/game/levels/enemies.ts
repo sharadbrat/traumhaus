@@ -24,6 +24,29 @@ export function getSpiderEnemyChasing(pos: MapPosition): EnemyLevelObjectData {
     inGhostWorld: true,
   };
 }
+export function getSpiderParkEnemyChasing(id: string, pos: MapPosition): EnemyLevelObjectData {
+  return {
+    id: id,
+    type: LevelObjectType.ENEMY,
+    isCollideable: false,
+    position: pos,
+    width: 12,
+    height: 12,
+    graphics: {
+      asset: AssetManager.spriteAssets.enemySpiderPark,
+      offsetX: 16,
+      offsetY: 20,
+    },
+    meta: {
+      enemyType: EnemyLevelObjectType.CHASING,
+      chase: {
+        speed: 50,
+        radius: 9,
+      },
+    },
+    inGhostWorld: true,
+  };
+}
 
 export function getSpiderEnemyPatroling(pos: MapPosition, pos1: MapPosition, pos2: MapPosition): EnemyLevelObjectData {
   return {
@@ -51,9 +74,9 @@ export function getSpiderEnemyPatroling(pos: MapPosition, pos1: MapPosition, pos
   };
 }
 
-export function getGhostEnemyDashing(pos: MapPosition): EnemyLevelObjectData {
+export function getGhostEnemyDashing(id: string, pos: MapPosition): EnemyLevelObjectData {
   return {
-    id: `${Date.now()}-${Math.random()}`,
+    id: id,
     type: LevelObjectType.ENEMY,
     isCollideable: false,
     position: pos,

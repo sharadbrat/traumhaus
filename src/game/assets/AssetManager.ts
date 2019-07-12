@@ -11,7 +11,7 @@ import {
   footStepStoneSoundAsset,
   forestAmbientAudioAsset, gateSoundAsset,
   ghostThemeAudioAsset,
-  hitSoundAsset,
+  hitSoundAsset, libraryThemeAudioAsset,
   mainThemeAudioAsset, parkGhostThemeAudioAsset, parkThemeAudioAsset,
   shootSoundAsset,
   SoundAsset
@@ -123,6 +123,7 @@ export class AssetManager {
     parkGhostThemeAudioAsset,
     caveGhostThemeAudioAsset,
     bossThemeAudioAsset,
+    libraryThemeAudioAsset,
   ];
 
   public static readonly graphicalAssets = {

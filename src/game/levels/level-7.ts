@@ -318,5 +318,11 @@ export const LEVEL_7_DATA: LevelMapData = {
       ],
     },
   ],
+  onLoad: contents => {
+    if (contents.services.progress.getProgress().stage3.book3) {
+      const book = contents.scene.getAllObjects().find(el => el.getOptions().id === 'book_3');
+      book.setDead(true);
+    }
+  },
   startPosition: {x: 14, y: 18},
 };

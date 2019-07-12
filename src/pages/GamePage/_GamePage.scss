@@ -111,3 +111,8 @@
     opacity: 0.25;
   }
 }
+
+.pause__paragraph {
+  @include TypographyHeadingMedium();
+  text-align: center;
+}

@@ -220,7 +220,26 @@ export class GamePage extends React.Component<any, GamePageState> {
           {hudAddition}
           {HUD}
           <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
-          <Menu heading="Pause" isActive={this.state.pause}/>
+          <Menu heading="Pause" isActive={this.state.pause}>
+            <br/>
+            <br/>
+            <br/>
+            <p className="pause__paragraph">Press START to continue playing</p>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <p className="pause__paragraph">Press SELECT to go to main menu.</p>
+            <p className="pause__paragraph">Careful, the progress will not be saved!</p>
+          </Menu>
           <SettingsMenu isActive={this.state.isSettingsActive} onClose={this.onMenuSettingsClose}/>
           <DeathMenu show={this.state.isDeathMenuActive}/>
         </div>

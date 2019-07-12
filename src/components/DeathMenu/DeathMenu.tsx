@@ -3,8 +3,6 @@ import * as React from 'react';
 import './DeathMenu.scss';
 
 interface DeathMenuProps {
-  onGoToMainMenu: () => any;
-  onGoToCheckpoint: () => any;
   show: boolean;
 }
 
@@ -21,8 +19,7 @@ export class DeathMenu extends React.Component<DeathMenuProps> {
         <div className="death-menu__container">
           <h1 className="death-menu__heading">Wasted</h1>
           <div className="death-menu__options">
-            <button className="death-menu__button" onClick={this.props.onGoToMainMenu}>Go to main menu</button>
-            <button className="death-menu__button" onClick={this.props.onGoToCheckpoint}>Start from checkpoint</button>
+            <h2 className="about__paragraph">Press any button to retry from checkpoint</h2>
           </div>
         </div>
       </div>

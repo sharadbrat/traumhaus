@@ -19,32 +19,51 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
 
   private progress: GameProgress;
 
+  private reqId: number;
+
   state = {
     isControlsMenuActive: false
   };
 
-  componentWillMount(): void {
+  componentDidMount(): void {
     this.progress = GameProgressService.getInstance().getProgressFromLocalStorage();
+
+    if (navigator.getGamepads()[0]) {
+      this.gamepadTick()
+    } else {
+      window.addEventListener("gamepadconnected", this.gamepadListener);
+    }
   }
 
-  onContinueClick = (event: React.MouseEvent) => {
-    event.preventDefault();
-    GameProgressService.getInstance().loadProgress(this.progress);
-    if (this.progress) {
-      this.setState({isControlsMenuActive: true});
+  componentWillUnmount(): void {
+    window.removeEventListener("gamepadconnected", this.gamepadListener);
+    window.cancelAnimationFrame(this.reqId);
+  }
+
+  gamepadListener = (event: any) => {
+    this.gamepadTick()
+  };
+
+  gamepadTick = () => {
+    const gamepad = navigator.getGamepads()[0];
+
+    if (gamepad) {
+      const pressed = gamepad.buttons.filter((el, i) => i !== 8 && i !== 9).find(el => el.pressed);
+
+      if (pressed) {
+        this.onNewGameClick(null);
+      }
     }
+
+    this.reqId = window.requestAnimationFrame(this.gamepadTick);
   };
 
   onNewGameClick = (event: React.MouseEvent) => {
-    event.preventDefault();
-    this.setState({isControlsMenuActive: true});
-  };
-
-  onControlsModeSelect = (mode: ControlsType) => {
+    if (event) {
+      event.preventDefault();
+    }
     this.enableFullscreen();
-
-    this.setState({isControlsMenuActive: false});
-    GameControlsService.getInstance().setMode(mode);
+    GameControlsService.getInstance().setMode(ControlsType.GAMEPAD);
     setTimeout(() => this.props.history.push('/game'), 100)
   };
 
@@ -54,13 +73,9 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
         <div className="home__container">
           <img className="home__heading" src="/image/logo_black.png" alt="Traumhaus game"/>
           <div className="home__group">
-            <Link to="game" className="home__link" onClick={this.onNewGameClick}>New game</Link>
-            <Link aria-disabled={!this.progress} to="game" className={`home__link${this.progress ? '' : ' home__link_inactive'}`} onClick={this.onContinueClick}>Continue</Link>
-            <Link to="settings" className="home__link">Settings</Link>
-            <Link to="about" className="home__link">About</Link>
+            <Link to="game" className="home__link" onClick={this.onNewGameClick}>Start (press any button)</Link>
           </div>
         </div>
-        <ControlsMenu isActive={this.state.isControlsMenuActive} onControlsModeSelect={this.onControlsModeSelect}/>
       </section>
     );
   }

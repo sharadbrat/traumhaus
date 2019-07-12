@@ -54,6 +54,9 @@ export class GamePage extends React.Component<any, GamePageState> {
     isFinished: false,
   };
 
+  private reqId: number;
+  private pauseLock: boolean;
+
   constructor(props: GamePageProps) {
     super(props);
 
@@ -65,14 +68,16 @@ export class GamePage extends React.Component<any, GamePageState> {
     GameProgressService.getInstance().setOnGameFinish(this.onGameFinish);
     GameGhostService.getInstance().setOnGhostHud(this.onGhostHud);
 
+    if (navigator.getGamepads()[0]) {
+      this.gamepadTick()
+    } else {
+      window.addEventListener("gamepadconnected", this.gamepadListener);
+    }
+
     if (!GameControlsService.getInstance().getMode()) {
       this.props.history.push('/');
       return;
     } else {
-      if (GameControlsService.getInstance().getMode() === ControlsType.ON_SCREEN) {
-        this.setState({virtualJoystickEnabled: true});
-      }
-
       const canvas: HTMLCanvasElement = document.getElementById(this.GAME_CANVAS_ID) as HTMLCanvasElement;
 
       const options: GameManagerOptions = {canvas};
@@ -199,7 +204,6 @@ export class GamePage extends React.Component<any, GamePageState> {
 
     const HUD = (
       <div className="game__hud-container">
-        <button className="game__hud-back" aria-label="Menu" onClick={this.onMenuToggle}/>
         <div className={ this.state.showHud ? 'game__hud-hearts game__hud-hearts_enabled' : 'game__hud-hearts'} id="hearts">
           <div className={`game__hud-heart ${this.state.health < 1 ? 'game__hud-heart_damaged' : ''}`}/>
           <div className={`game__hud-heart ${this.state.health < 2 ? 'game__hud-heart_damaged' : ''}`}/>
@@ -216,13 +220,9 @@ export class GamePage extends React.Component<any, GamePageState> {
           {hudAddition}
           {HUD}
           <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
-          <Menu heading="Pause" isActive={this.state.pause}>
-            <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>
-            <button className="game__menu-option" onClick={this.onMenuSettingsClick}>Settings</button>
-            <button className="game__menu-option" onClick={this.onMenuExitClick}>Exit to main menu</button>
-          </Menu>
+          <Menu heading="Pause" isActive={this.state.pause}/>
           <SettingsMenu isActive={this.state.isSettingsActive} onClose={this.onMenuSettingsClose}/>
-          <DeathMenu onGoToMainMenu={this.onDeathMenuMainMenuClick} onGoToCheckpoint={this.onDeathMenuCheckpointClick} show={this.state.isDeathMenuActive}/>
+          <DeathMenu show={this.state.isDeathMenuActive}/>
         </div>
       </section>
     );
@@ -288,5 +288,49 @@ export class GamePage extends React.Component<any, GamePageState> {
   private onGameFinishClose = () => {
     GameProgressService.getInstance().clearProgressInLocalStorage();
     this.gameManager.shutdown();
+  };
+
+  componentWillUnmount(): void {
+    window.removeEventListener("gamepadconnected", this.gamepadListener);
+    window.cancelAnimationFrame(this.reqId);
+  }
+
+  gamepadListener = (event: any) => {
+    this.gamepadTick();
+  };
+
+  gamepadTick = () => {
+    const gamepad = navigator.getGamepads()[0];
+
+    if (gamepad) {
+      if (this.state.isDeathMenuActive) {
+        const pressed = gamepad.buttons.find(el => el.pressed);
+        if (pressed) {
+          this.onDeathMenuCheckpointClick();
+        }
+      }
+
+      const pause = gamepad.buttons[9].pressed;
+      const select = gamepad.buttons[8].pressed;
+      if (pause && !this.pauseLock) {
+        this.pauseLock = true;
+
+        if (this.state.pause) {
+          this.onMenuContinueClick();
+        } else {
+          this.onMenuToggle();
+        }
+      } else if (this.pauseLock && !pause) {
+        this.pauseLock = false;
+      }
+
+      if (this.state.pause && select) {
+        this.gameManager.shutdown();
+        GameProgressService.getInstance().clearProgressInLocalStorage();
+        location.href = '/';
+      }
+    }
+
+    this.reqId = window.requestAnimationFrame(this.gamepadTick);
   };
 }

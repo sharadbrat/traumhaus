@@ -88,7 +88,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
     const root = document.getElementById('root');
     if (root) {
       root.requestFullscreen().catch((e: Error) => {
-        alert(`Could not start fullscreen mode!\nError message: ${e.message}`);
+        console.log(`Could not start fullscreen mode!\nError message: ${e.message}`);
       });
     }
   }

@@ -12,6 +12,7 @@ import { Load } from '../../components/Load';
 import { ControlsType, GameControlsService } from '../../service/GameControlsService';
 
 import './_GamePage.scss';
+import { FinishMenu } from '../../components/FinishMenu';
 
 interface GamePageProps {
   history: History;
@@ -27,6 +28,7 @@ interface GamePageState {
   showHud: boolean;
   isSettingsActive: boolean;
   isDeathMenuActive: boolean;
+  isFinished: boolean;
 }
 
 const ACTION_BUTTON_CODE = ' ';
@@ -49,6 +51,7 @@ export class GamePage extends React.Component<any, GamePageState> {
     showHud: false,
     isSettingsActive: false,
     isDeathMenuActive: false,
+    isFinished: false,
   };
 
   constructor(props: GamePageProps) {
@@ -59,7 +62,9 @@ export class GamePage extends React.Component<any, GamePageState> {
 
   componentDidMount(): void {
     GameProgressService.getInstance().setOnHealthChange(this.onHealthChange);
+    GameProgressService.getInstance().setOnGameFinish(this.onGameFinish);
     GameGhostService.getInstance().setOnGhostHud(this.onGhostHud);
+
     if (!GameControlsService.getInstance().getMode()) {
       this.props.history.push('/');
       return;
@@ -181,6 +186,10 @@ export class GamePage extends React.Component<any, GamePageState> {
   };
 
   render() {
+    if (this.state.isFinished) {
+      return <FinishMenu isActive={true} onClose={this.onGameFinishClose} history={this.props.history}/>;
+    }
+
     let hudAddition;
     if (this.state.virtualJoystickEnabled) {
       hudAddition = <VirtualControls/>;
@@ -270,5 +279,14 @@ export class GamePage extends React.Component<any, GamePageState> {
   private onDeathMenuCheckpointClick = () => {
     this.gameManager.restartFromCheckpoint();
     this.setState({isDeathMenuActive: false});
+  };
+
+  private onGameFinish = () => {
+    this.setState({isFinished: true});
+  };
+
+  private onGameFinishClose = () => {
+    GameProgressService.getInstance().clearProgressInLocalStorage();
+    this.gameManager.shutdown();
   };
 }

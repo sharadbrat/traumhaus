@@ -40,3 +40,8 @@ export const gameActor: GameDialogActor = {
   id: 'gameActor',
   title: 'Tutorial'
 };
+
+export const noActor: GameDialogActor = {
+  id: 'noActor',
+  title: ''
+};

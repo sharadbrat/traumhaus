@@ -1,7 +1,7 @@
 import { AssetManager, BOSS_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
 import { Door, LevelMapData, LevelObjectType, LightSource, TriggerEvent } from '../entities/model';
 import { getBook } from './objects';
-import { ghostActor, playerActor } from './actors';
+import { ghostActor, noActor, playerActor } from './actors';
 import { getBoss, getGhostEnemyDashing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
 import { LAST_BOSS_TRIGGERS } from '../entities/LevelLastBossObject';
@@ -10,6 +10,7 @@ const LEVEL_8_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
   ON_BOSS_ACTIVATE: 'ON_BOSS_ACTIVATE',
   ON_BOSS_ACTIVATE_GHOST: 'ON_BOSS_ACTIVATE_GHOST',
+  AFTER_DEATH: 'AFTER_DEATH',
 };
 
 export const LEVEL_8_DIALOGS_IDS = {
@@ -17,6 +18,7 @@ export const LEVEL_8_DIALOGS_IDS = {
   ON_BOOK_TOUCH_DIALOG_FINAL: 'ON_BOOK_TOUCH_DIALOG_FINAL',
   ON_LIB_INIT: 'ON_LIB_INIT',
   ON_BOSS_INIT: 'ON_BOSS_INIT',
+  ON_BOSS_DEATH: 'ON_BOSS_DEATH',
 };
 
 function getLantern(x: number, y: number): LightSource {
@@ -305,6 +307,15 @@ export const LEVEL_8_DATA: LevelMapData = {
       action: LAST_BOSS_TRIGGERS.DEATH,
       callback: contents => {
         contents.services.progress.getProgress().isControllable = false;
+        contents.managers.dialog.runDialog(LEVEL_8_DIALOGS_IDS.ON_BOSS_DEATH)
+      },
+    },
+    {
+      action: LEVEL_8_TRIGGER_ACTIONS.AFTER_DEATH,
+      callback: contents => {
+        contents.services.progress.getProgress().isControllable = false;
+        contents.services.sound.stopTheme();
+        contents.services.sound.stopFootstep();
         contents.services.progress.onGameFinish();
       },
     },
@@ -407,6 +418,22 @@ export const LEVEL_8_DATA: LevelMapData = {
           position: 'right',
         },
       ],
+    },
+    {
+      id: LEVEL_8_DIALOGS_IDS.ON_BOSS_DEATH,
+      steps: [
+        {
+          actor: noActor,
+          phrase: 'You go on your way home without other strange occurrences.',
+          position: 'right',
+        },
+        {
+          actor: noActor,
+          phrase: 'The only thing to worry about now are the exams next week',
+          position: 'left',
+        },
+      ],
+      onDialogFinishedTrigger: LEVEL_8_TRIGGER_ACTIONS.AFTER_DEATH,
     },
   ],
   onLoad: contents => {

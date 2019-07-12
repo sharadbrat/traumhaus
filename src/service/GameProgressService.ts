@@ -62,10 +62,10 @@ export interface GameProgress {
 const DEFAULT_PROGRESS: GameProgress = {
   health: 3,
   isVulnerable: true,
-  // isControllable: false,
-  // isNewGame: true,
-  isControllable: true,
-  isNewGame: false,
+  isControllable: false,
+  isNewGame: true,
+  // isControllable: true,
+  // isNewGame: false,
   lastDoor: null,
   stage1: {
     gateDialogFinished: false,
@@ -111,15 +111,15 @@ const DEFAULT_PROGRESS: GameProgress = {
     },
   },
   controls: {
-    // dash: false,
-    // switch: false,
-    // shoot: false,
-    dash: true,
-    switch: true,
-    shoot: true,
+    dash: false,
+    switch: false,
+    shoot: false,
+    // dash: true,
+    // switch: true,
+    // shoot: true,
   },
-  // showGhostHud: false,
-  showGhostHud: true,
+  showGhostHud: false,
+  // showGhostHud: true,
 };
 
 export class GameProgressService {

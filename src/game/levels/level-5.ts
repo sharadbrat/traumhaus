@@ -377,12 +377,12 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use Q keyboard button to switch to the different world.',
+          phrase: 'Use X gamepad button to switch to the different world.',
           position: 'right',
         },
         {
           actor: gameActor,
-          phrase: 'While moving in ghost form, use SPACE keyboard button to dash.',
+          phrase: 'While moving in ghost form, use B gamepad button to dash.',
           position: 'right',
         },
         {
@@ -447,12 +447,12 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use switch button to switch to the different world.',
+          phrase: 'Use X gamepad button to switch to the different world.',
           position: 'right',
         },
         {
           actor: gameActor,
-          phrase: 'While moving in ghost form, use dash button to dash.',
+          phrase: 'While moving in ghost form, use B gamepad button to dash.',
           position: 'right',
         },
         {
@@ -482,7 +482,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use W keyboard button to shoot while you are moving in ghost form.',
+          phrase: 'Use A gamepad button to shoot while you are moving in ghost form.',
           position: 'right',
         },
       ],
@@ -522,7 +522,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use shoot button to shoot while you are moving in ghost form.',
+          phrase: 'Use A gamepad button to shoot while you are moving in ghost form.',
           position: 'right',
         },
       ],

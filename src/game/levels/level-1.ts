@@ -1,7 +1,7 @@
 import { AssetManager, GHOST_THEME_AUDIO_ID, MAIN_THEME_AUDIO_ID } from '../assets';
 import { TriggerContents } from '../TriggerManager';
 import { LevelMapData, LevelObjectType, TriggerEvent } from '../entities/model';
-import { gameActor, playerActor, professorActor } from './actors';
+import { gameActor, ghostActor, playerActor, professorActor } from './actors';
 import { ControlsType } from '../../service/GameControlsService';
 
 export const LEVEL_1_TRIGGER_ACTIONS = {
@@ -377,17 +377,17 @@ export const LEVEL_1_DATA: LevelMapData = {
       id: LEVEL_1_DIALOGS_IDS.STUDENT_CARD_RETRIEVE_DIALOG,
       steps: [
         {
-          actor: playerActor,
+          actor: ghostActor,
           phrase: '(Here it is!)',
           position: 'right',
         },
         {
-          actor: playerActor,
+          actor: ghostActor,
           phrase: '(Now I can finally leave university grounds again  ...)',
           position: 'right',
         },
         {
-          actor: playerActor,
+          actor: ghostActor,
           phrase: '(But firstly I have to find my body!)',
           position: 'right',
         },

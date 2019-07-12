@@ -4,6 +4,7 @@ import { getBook } from './objects';
 import { playerActor } from './actors';
 import { getGhostEnemyDashing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
+import { LEVEL_8_DIALOGS_IDS } from './level-8';
 
 const LEVEL_9_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
@@ -206,7 +207,7 @@ export const LEVEL_9_DATA: LevelMapData = {
         if (!stage3.book2) {
           stage3.book2 = true;
 
-          if (stage3.book1) {
+          if (stage3.book1 && stage3.book3) {
             content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL);
           } else {
             content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
@@ -214,7 +215,7 @@ export const LEVEL_9_DATA: LevelMapData = {
 
         }
 
-        if (stage3.book2 && stage3.book1) {
+        if (stage3.book2 && stage3.book1 && stage3.book3) {
           content.services.progress.getProgress().stage3.isBossAvailable = true;
           console.log('boss is alive');
         }

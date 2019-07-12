@@ -1,17 +1,21 @@
-import { AssetManager, CAVE_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
-import { Door, LevelMapData, LevelObjectType, LightSource, MapPosition, TriggerEvent } from '../entities/model';
-import { getSpiderEnemyChasing, getSpiderParkEnemyChasing } from './enemies';
+import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
+import { Door, LevelMapData, LevelObjectType, LightSource, TriggerEvent } from '../entities/model';
+import { getSpiderParkEnemyChasing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
-import { ghostActor, playerActor, professorActor } from './actors';
+import { ghostActor, playerActor } from './actors';
+import { getBook } from './objects';
 
 const LEVEL_7_TRIGGER_ACTIONS = {
   ON_DOOR_ACTION: 'ON_DOOR_ACTION',
   ON_DOOR_ACTION_GHOST: 'ON_DOOR_ACTION_GHOST',
+  ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
 };
 
 const LEVEL_7_DIALOGS_IDS = {
   ON_DOOR_DIALOG: 'ON_DOOR_DIALOG',
   ON_DOOR_DIALOG_GHOST: 'ON_DOOR_DIALOG_GHOST',
+  ON_BOOK_TOUCH_DIALOG_FINAL: 'ON_BOOK_TOUCH_DIALOG_FINAL',
+  ON_BOOK_TOUCH_DIALOG: 'ON_BOOK_TOUCH_DIALOG',
 };
 
 function getLantern(x: number, y: number): LightSource {
@@ -154,7 +158,8 @@ export const LEVEL_7_DATA: LevelMapData = {
     lightSettings: lightSettings,
 
     objects: [
-      door
+      door,
+      getBook('book_3', 11, 11, LEVEL_7_TRIGGER_ACTIONS.ON_BOOK_TOUCH),
     ],
 
     themeId: PARK_THEME_AUDIO_ID,
@@ -240,6 +245,26 @@ export const LEVEL_7_DATA: LevelMapData = {
         contents.managers.dialog.runDialog(LEVEL_7_DIALOGS_IDS.ON_DOOR_DIALOG_GHOST);
       },
     },
+    {
+      action: LEVEL_7_TRIGGER_ACTIONS.ON_BOOK_TOUCH,
+      callback: content => {
+        content.object.setDead(true);
+        const stage3 = content.services.progress.getProgress().stage3;
+        if (!stage3.book3) {
+          stage3.book3 = true;
+          if (stage3.book1 && stage3.book2) {
+            content.managers.dialog.runDialog(LEVEL_7_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL);
+          } else {
+            content.managers.dialog.runDialog(LEVEL_7_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
+          }
+        }
+
+        if (stage3.book2 && stage3.book1 && stage3.book3) {
+          content.services.progress.getProgress().stage3.isBossAvailable = true;
+          console.log('boss is alive');
+        }
+      },
+    },
   ],
   dialogs: [
     {
@@ -268,6 +293,26 @@ export const LEVEL_7_DATA: LevelMapData = {
         {
           actor: ghostActor,
           phrase: '(There must be another way in for me.)',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_7_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '(Awesome! I found one of the books. That will help me study for the exam.)',
+          position: 'right',
+        },
+      ],
+    },
+    {
+      id: LEVEL_7_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL,
+      steps: [
+        {
+          actor: playerActor,
+          phrase: '(That should be the last one I needed. Now I‘m off to the student dorm as fast as possible.)',
           position: 'right',
         },
       ],

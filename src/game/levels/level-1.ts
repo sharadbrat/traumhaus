@@ -307,7 +307,7 @@ export const LEVEL_1_DATA: LevelMapData = {
       steps: [
         {
           actor: gameActor,
-          phrase: 'Press SPACE (keyboard mode), "B" (gamepad mode) or tap on the screen (touch mode) to go to the next dialog step.',
+          phrase: 'Press "B" to go to the next dialog step.',
           position: 'right',
         },
         {

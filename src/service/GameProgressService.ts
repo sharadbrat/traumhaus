@@ -33,6 +33,7 @@ export interface GameProgress {
     }
   },
   stage3: {
+    book3: boolean;
     isLibraryInitialized: boolean;
     isBossAvailable: boolean;
     isBossActive: boolean;
@@ -61,10 +62,10 @@ export interface GameProgress {
 const DEFAULT_PROGRESS: GameProgress = {
   health: 3,
   isVulnerable: true,
-  isControllable: false,
-  isNewGame: true,
-  // isControllable: true,
-  // isNewGame: false,
+  // isControllable: false,
+  // isNewGame: true,
+  isControllable: true,
+  isNewGame: false,
   lastDoor: null,
   stage1: {
     gateDialogFinished: false,
@@ -93,6 +94,7 @@ const DEFAULT_PROGRESS: GameProgress = {
   stage3: {
     book1: false,
     book2: false,
+    book3: false,
     isBossAvailable: false,
     isBossActive: false,
     isLibraryInitialized: false,
@@ -109,15 +111,15 @@ const DEFAULT_PROGRESS: GameProgress = {
     },
   },
   controls: {
-    dash: false,
-    switch: false,
-    shoot: false,
-    // dash: true,
-    // switch: true,
-    // shoot: true,
+    // dash: false,
+    // switch: false,
+    // shoot: false,
+    dash: true,
+    switch: true,
+    shoot: true,
   },
-  showGhostHud: false,
-  // showGhostHud: true,
+  // showGhostHud: false,
+  showGhostHud: true,
 };
 
 export class GameProgressService {

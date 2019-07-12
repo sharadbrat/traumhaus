@@ -560,18 +560,18 @@ export const bossGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.DEATH,
       start: 10,
       end: 12,
-      frameRate: 1,
+      frameRate: 2,
       repeat: false
     },
     [LevelObjectAnimation.SHOOT]: {
       name: LevelObjectAnimation.SHOOT,
-      frames: [3, 4],
+      frames: [3, 4, 4, 4, 4],
       frameRate: 3,
       repeat: false
     },
     [LevelObjectAnimation.SHOOT_LEFT]: {
       name: LevelObjectAnimation.SHOOT_LEFT,
-      frames: [8, 9],
+      frames: [8, 9, 9, 9, 9],
       frameRate: 3,
       repeat: false
     },

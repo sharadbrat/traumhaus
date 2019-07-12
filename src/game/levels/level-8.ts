@@ -429,7 +429,7 @@ export const LEVEL_8_DATA: LevelMapData = {
       id: LEVEL_8_DIALOGS_IDS.ON_BOSS_DEATH,
       steps: [
         {
-          actor: noActor,
+          actor: playerActor,
           phrase: 'That’s it! I\'ve got  everything I needed. Let\'s go home now.',
           position: 'right',
         },

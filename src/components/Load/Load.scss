@@ -62,7 +62,7 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url("/image/Poster_Traumhaus.jpg");
+  background-image: url("/image/Loading_Screen_Traumhaus.png");
   image-rendering: pixelated;
 
   &.load_hidden {
@@ -85,14 +85,8 @@
 
 .load__progress {
   @include FontPixel();
-  margin-top: 16px;
-  font-size: 22px;
+  font-size: 30px;
+  margin-bottom: 40px;
   color: white;
-}
-
-.load__description {
-  @include FontPixel();
-  margin-top: 16px;
-  font-size: 18px;
-  color: white;
+  text-shadow: 0px 0px 10px rgba(0,0,0, 0.5);
 }

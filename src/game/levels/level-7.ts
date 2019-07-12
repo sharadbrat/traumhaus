@@ -40,7 +40,7 @@ const doors: Door[] = [
   {
     toId: '08',
     fromPosition: {x: 25, y: 9},
-    toPosition: {x: 6, y: 46},
+    toPosition: {x: 8, y: 46},
   },
 ];
 

@@ -47,25 +47,25 @@ const lightSettings = {
 const door1_1: Door = {
   toId: '08',
   fromPosition: {x: 5, y: 3},
-  toPosition: {x: 13, y: 8},
+  toPosition: {x: 15, y: 9},
 };
 
 const door1_2: Door = {
   toId: '08',
   fromPosition: {x: 6, y: 3},
-  toPosition: {x: 14, y: 8},
+  toPosition: {x: 15, y: 9},
 };
 
 const door2_1: Door = {
   toId: '08',
   fromPosition: {x: 23, y: 3},
-  toPosition: {x: 36, y: 8},
+  toPosition: {x: 38, y: 8},
 };
 
 const door2_2: Door = {
   toId: '08',
   fromPosition: {x: 24, y: 3},
-  toPosition: {x: 37, y: 8},
+  toPosition: {x: 38, y: 8},
 };
 
 const enemies = [

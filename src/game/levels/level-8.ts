@@ -63,25 +63,25 @@ const enemies = [
 const door1_1: Door = {
   toId: '09',
   fromPosition: {x: 13, y: 7},
-  toPosition: {x: 5, y: 4},
+  toPosition: {x: 5, y: 6},
 };
 
 const door1_2: Door = {
   toId: '09',
   fromPosition: {x: 14, y: 7},
-  toPosition: {x: 6, y: 4},
+  toPosition: {x: 6, y: 6},
 };
 
 const door2_1: Door = {
   toId: '09',
   fromPosition: {x: 36, y: 7},
-  toPosition: {x: 23, y: 4},
+  toPosition: {x: 25, y: 4},
 };
 
 const door2_2: Door = {
   toId: '09',
   fromPosition: {x: 37, y: 7},
-  toPosition: {x: 24, y: 4},
+  toPosition: {x: 25, y: 4},
 };
 
 const bossTriggerArea = {

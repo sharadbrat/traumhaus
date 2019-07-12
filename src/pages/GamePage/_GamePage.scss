@@ -55,13 +55,14 @@
 
 .game__hud-container {
   position: fixed;
-  left: 0;
   top: 0;
   display: flex;
   align-items: center;
   padding-left: 15px;
   padding-top: 15px;
   padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .game__hud-back {
@@ -94,13 +95,15 @@
 .game__hud-heart {
   display: block;
   margin-right: 15px;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
 
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   background-image: url('/image/life.png');
+
+  image-rendering: pixelated;
 
   opacity: 0.8;
 

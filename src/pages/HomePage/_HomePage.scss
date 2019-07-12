@@ -31,6 +31,7 @@
 .home__group {
   @include PageBlock();
   margin-top: 35px;
+  padding-top: 50px;
 
   @media screen and (max-height: 510px) {
     margin-top: 0;

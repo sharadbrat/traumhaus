@@ -33,6 +33,10 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
     } else {
       window.addEventListener("gamepadconnected", this.gamepadListener);
     }
+
+    setTimeout(() => {
+      this.enableFullscreen();
+    }, 500);
   }
 
   componentWillUnmount(): void {
@@ -73,7 +77,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
         <div className="home__container">
           <img className="home__heading" src="/image/logo_black.png" alt="Traumhaus game"/>
           <div className="home__group">
-            <Link to="game" className="home__link" onClick={this.onNewGameClick}>Start (press any button)</Link>
+            <Link to="game" className="home__link" onClick={this.onNewGameClick}>(Press any button)</Link>
           </div>
         </div>
       </section>

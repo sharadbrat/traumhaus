@@ -212,12 +212,12 @@ export const LEVEL_8_DATA: LevelMapData = {
       {
         toId: '07',
         fromPosition: {x: 6, y: 45},
-        toPosition: {x: 25, y: 10},
+        toPosition: {x: 25, y: 11},
       },
       {
         toId: '07',
         fromPosition: {x: 5, y: 45},
-        toPosition: {x: 25, y: 10},
+        toPosition: {x: 25, y: 11},
       },
     ],
     lightSettings: lightSettings,
@@ -281,12 +281,12 @@ export const LEVEL_8_DATA: LevelMapData = {
       {
         toId: '07',
         fromPosition: {x: 6, y: 45},
-        toPosition: {x: 25, y: 10},
+        toPosition: {x: 25, y: 11},
       },
       {
         toId: '07',
         fromPosition: {x: 5, y: 45},
-        toPosition: {x: 25, y: 10},
+        toPosition: {x: 25, y: 11},
       },
     ],
 

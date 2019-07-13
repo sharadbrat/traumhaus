@@ -34,23 +34,6 @@ const LEVEL_6_DIALOGS_IDS = {
   ON_SON_NPC_TALK: 'ON_SON_NPC_TALK',
 };
 
-const level7Doors = [
-  getDoor(13),
-  getDoor(12),
-  getDoor(11),
-  getDoor(10),
-  getDoor(9),
-  getDoor(8),
-  getDoor(7),
-  getDoor(6),
-  getDoor(5),
-  getDoor(4),
-  getDoor(3),
-  getDoor(2),
-  getDoor(1),
-  getDoor(0),
-];
-
 const sources = [
   getLantern(7, 38),
   getLantern(14, 32),
@@ -228,7 +211,6 @@ export const LEVEL_6_DATA: LevelMapData = {
         toPosition: {x: 43, y: 40},
         toId: '05_mod',
       },
-      ...level7Doors
     ],
     lightSettings: lightSettings,
 
@@ -293,7 +275,6 @@ export const LEVEL_6_DATA: LevelMapData = {
         toPosition: {x: 43, y: 40},
         toId: '05_mod',
       },
-      ...level7Doors
     ],
 
     objects: [
@@ -341,6 +322,12 @@ export const LEVEL_6_DATA: LevelMapData = {
         barrierGhost.setDead(true);
 
         contents.services.progress.getProgress().stagePark.free = true;
+
+        contents.scene.changeLevel({
+          fromPosition: null,
+          toPosition: {x: 14, y: 18},
+          toId: '07',
+        });
       },
     },
   ],

@@ -33,7 +33,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
       event.preventDefault();
     }
 
-    GameControlsService.getInstance().setMode(ControlsType.KEYBOARD);
+    GameControlsService.getInstance().setMode(ControlsType.ON_SCREEN);
     this.props.history.push('/game');
   };
 

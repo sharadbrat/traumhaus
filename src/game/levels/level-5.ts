@@ -306,6 +306,8 @@ export const LEVEL_5_DATA: LevelMapData = {
           content.services.progress.getProgress().showGhostHud = true;
           content.services.progress.getProgress().stage2.transformTouched = true;
           content.object.setDead(true);
+
+          content.services.progress.saveProgressToLocalStorage();
         }
       },
     },
@@ -317,6 +319,8 @@ export const LEVEL_5_DATA: LevelMapData = {
           content.services.progress.getProgress().controls.shoot = true;
           content.services.progress.getProgress().stage2.shootingTouched = true;
           content.object.setDead(true);
+
+          content.services.progress.saveProgressToLocalStorage();
         }
       },
     },
@@ -373,12 +377,12 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use Q keyboard button to switch to the different world.',
+          phrase: 'Use X gamepad button to switch to the different world.',
           position: 'right',
         },
         {
           actor: gameActor,
-          phrase: 'While moving in ghost form, use SPACE keyboard button to dash.',
+          phrase: 'While moving in ghost form, use B gamepad button to dash.',
           position: 'right',
         },
         {
@@ -443,12 +447,12 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use switch button to switch to the different world.',
+          phrase: 'Use X gamepad button to switch to the different world.',
           position: 'right',
         },
         {
           actor: gameActor,
-          phrase: 'While moving in ghost form, use dash button to dash.',
+          phrase: 'While moving in ghost form, use B gamepad button to dash.',
           position: 'right',
         },
         {
@@ -478,7 +482,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use W keyboard button to shoot while you are moving in ghost form.',
+          phrase: 'Use A gamepad button to shoot while you are moving in ghost form.',
           position: 'right',
         },
       ],
@@ -518,7 +522,7 @@ export const LEVEL_5_DATA: LevelMapData = {
         },
         {
           actor: gameActor,
-          phrase: 'Use shoot button to shoot while you are moving in ghost form.',
+          phrase: 'Use A gamepad button to shoot while you are moving in ghost form.',
           position: 'right',
         },
       ],
@@ -564,5 +568,18 @@ export const LEVEL_5_DATA: LevelMapData = {
       ],
     },
   ],
+  onLoad: contents => {
+    const transform = contents.scene.getAllObjects().find(el => el.getOptions().id === 'transform_essence');
+    if (contents.services.progress.getProgress().stage2.transformTouched) {
+      transform.setDead(true);
+      contents.services.progress.getProgress().controls.switch = true;
+      contents.services.progress.getProgress().controls.dash = true;
+    }
+    const shooting = contents.scene.getAllObjects().find(el => el.getOptions().id === 'shooting_essence');
+    if (contents.services.progress.getProgress().stage2.shootingTouched) {
+      shooting.setDead(true);
+      contents.services.progress.getProgress().controls.shoot = true;
+    }
+  },
   startPosition: {x: 3, y: 4},
 };

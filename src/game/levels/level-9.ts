@@ -1,9 +1,10 @@
-import { AssetManager, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
+import { AssetManager, LIBRARY_THEME_AUDIO_ID, PARK_GHOST_THEME_AUDIO_ID, PARK_THEME_AUDIO_ID } from '../assets';
 import { Door, LevelMapData, LightSource } from '../entities/model';
 import { getBook } from './objects';
 import { playerActor } from './actors';
 import { getGhostEnemyDashing } from './enemies';
 import { ENEMY_TRIGGERS_ACTIONS } from '../entities/EnemyLevelObject';
+import { LEVEL_8_DIALOGS_IDS } from './level-8';
 
 const LEVEL_9_TRIGGER_ACTIONS = {
   ON_BOOK_TOUCH: 'ON_BOOK_TOUCH',
@@ -46,25 +47,25 @@ const lightSettings = {
 const door1_1: Door = {
   toId: '08',
   fromPosition: {x: 5, y: 3},
-  toPosition: {x: 13, y: 8},
+  toPosition: {x: 15, y: 9},
 };
 
 const door1_2: Door = {
   toId: '08',
   fromPosition: {x: 6, y: 3},
-  toPosition: {x: 14, y: 8},
+  toPosition: {x: 15, y: 9},
 };
 
 const door2_1: Door = {
   toId: '08',
   fromPosition: {x: 23, y: 3},
-  toPosition: {x: 36, y: 8},
+  toPosition: {x: 38, y: 8},
 };
 
 const door2_2: Door = {
   toId: '08',
   fromPosition: {x: 24, y: 3},
-  toPosition: {x: 37, y: 8},
+  toPosition: {x: 38, y: 8},
 };
 
 const enemies = [
@@ -135,7 +136,7 @@ export const LEVEL_9_DATA: LevelMapData = {
       getBook('book_2', 12, 22, LEVEL_9_TRIGGER_ACTIONS.ON_BOOK_TOUCH),
     ],
 
-    themeId: PARK_THEME_AUDIO_ID,
+    themeId: LIBRARY_THEME_AUDIO_ID,
   },
   ghostWorld: {
     collisionMap: [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1],[1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1],[1,0,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1],[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],[1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1],[1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1],[1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1],[1,1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1],[1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1],[1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1],[1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1],[1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,0,0,0,0,1,1,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,0,1,1,0,1,1,1,0,0,0,0,0,1,1,1,1,1],[1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],[1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],[1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,1,1],[1,0,0,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1],[1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],
@@ -195,7 +196,7 @@ export const LEVEL_9_DATA: LevelMapData = {
     objects: [
       ...enemies,
     ],
-    themeId: PARK_GHOST_THEME_AUDIO_ID,
+    themeId: LIBRARY_THEME_AUDIO_ID,
   },
   triggerActions: [
     {
@@ -206,7 +207,7 @@ export const LEVEL_9_DATA: LevelMapData = {
         if (!stage3.book2) {
           stage3.book2 = true;
 
-          if (stage3.book1) {
+          if (stage3.book1 && stage3.book3) {
             content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG_FINAL);
           } else {
             content.managers.dialog.runDialog(LEVEL_9_DIALOGS_IDS.ON_BOOK_TOUCH_DIALOG);
@@ -214,7 +215,7 @@ export const LEVEL_9_DATA: LevelMapData = {
 
         }
 
-        if (stage3.book2 && stage3.book1) {
+        if (stage3.book2 && stage3.book1 && stage3.book3) {
           content.services.progress.getProgress().stage3.isBossAvailable = true;
           console.log('boss is alive');
         }

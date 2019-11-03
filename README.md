@@ -38,34 +38,3 @@ Your app is ready to be deployed!
 Florian Batze - Graphics
 Jacob Januar - Music
 Georgii Sharadze - Coding
-
-### Things to do
-- Rotate level map + 
-- Shadows and lightning + 
-- Light settings for level - character + 
-- Light settings for level - light sources +
-- Sound Management +
-- Ghost mode +
-- Level management +
-- Game pausing +
-- Several graphical layers (Background and foreground layers) + 
-- Change to free assets +
-- Trigger system +
-- Dialogs + 
-- Action mechanics +
-- Refactoring +
-- Sound manager +
-- Game state system +
-- Game saving / loading +
-- HUD +
-- Enemies +
-- Netlify toml +
-- Controls manager +
-- Gamepad controls
-- Ambient sounds +
-- Footsteps sounds +
-- Health recovery and enemy hit system +
-- Dashing Enemies
-- Shooting mechanics
-- All settings and menus and dialog windows +
-- Bugfixing

@@ -14,6 +14,7 @@ export const STAGE_4_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_4_GHOST_GRAPHICAL_ASSET';
 export const STAGE_5_REAL_GRAPHICAL_ASSET_ID = 'STAGE_5_REAL_GRAPHICAL_ASSET';
 export const STAGE_5_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_5_GHOST_GRAPHICAL_ASSET';
 export const STAGE_6_REAL_GRAPHICAL_ASSET_ID = 'STAGE_6_REAL_GRAPHICAL_ASSET';
+export const STAGE_70_REAL_GRAPHICAL_ASSET_ID = 'STAGE_70_REAL_GRAPHICAL_ASSET';
 export const STAGE_6_GHOST_GRAPHICAL_ASSET_ID = 'STAGE_6_GHOST_GRAPHICAL_ASSET';
 
 export const PLAYER_GRAPHICAL_ASSET_ID = 'PLAYER_GRAPHICAL_ASSET';
@@ -131,6 +132,13 @@ export const stage5realGraphicalAsset: GraphicalAsset = {
   width: 16,
   height: 16,
   file: '/tiles/lib.png',
+};
+
+export const stage70realGraphicalAsset: GraphicalAsset = {
+  name: STAGE_70_REAL_GRAPHICAL_ASSET_ID,
+  width: 16,
+  height: 16,
+  file: '/tiles/lib3.png',
 };
 
 export const stage5ghostGraphicalAsset: GraphicalAsset = {
@@ -552,18 +560,18 @@ export const bossGraphicalAsset: SpriteAsset = {
       name: LevelObjectAnimation.DEATH,
       start: 10,
       end: 12,
-      frameRate: 1,
+      frameRate: 2,
       repeat: false
     },
     [LevelObjectAnimation.SHOOT]: {
       name: LevelObjectAnimation.SHOOT,
-      frames: [3, 4],
+      frames: [3, 4, 4, 4, 4],
       frameRate: 3,
       repeat: false
     },
     [LevelObjectAnimation.SHOOT_LEFT]: {
       name: LevelObjectAnimation.SHOOT_LEFT,
-      frames: [8, 9],
+      frames: [8, 9, 9, 9, 9],
       frameRate: 3,
       repeat: false
     },

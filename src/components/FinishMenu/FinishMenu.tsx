@@ -22,7 +22,7 @@ export class FinishMenu extends React.Component<SettingsMenuProps> {
 
   private close = () => {
     this.props.onClose();
-    this.props.history.push('/');
+    location.href = '/';
   };
 
   render() {

@@ -33,6 +33,7 @@ export interface GameProgress {
     }
   },
   stage3: {
+    book3: boolean;
     isLibraryInitialized: boolean;
     isBossAvailable: boolean;
     isBossActive: boolean;
@@ -93,6 +94,7 @@ const DEFAULT_PROGRESS: GameProgress = {
   stage3: {
     book1: false,
     book2: false,
+    book3: false,
     isBossAvailable: false,
     isBossActive: false,
     isLibraryInitialized: false,

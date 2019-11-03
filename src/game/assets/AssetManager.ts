@@ -3,16 +3,21 @@ import {
   caveGhostThemeAudioAsset,
   caveThemeAudioAsset,
   cityAmbientAudioAsset,
-  dashSoundAsset, footStepDirtSoundAsset,
+  dashSoundAsset,
+  footStepDirtSoundAsset,
   footStepFloorSoundAsset,
   footStepGhostSoundAsset,
   footStepGrassSoundAsset,
   footStepPlainSoundAsset,
   footStepStoneSoundAsset,
-  forestAmbientAudioAsset, gateSoundAsset,
+  forestAmbientAudioAsset,
+  gateSoundAsset,
   ghostThemeAudioAsset,
   hitSoundAsset,
-  mainThemeAudioAsset, parkGhostThemeAudioAsset, parkThemeAudioAsset,
+  libraryThemeAudioAsset,
+  mainThemeAudioAsset,
+  parkGhostThemeAudioAsset,
+  parkThemeAudioAsset,
   shootSoundAsset,
   SoundAsset
 } from './SoundAssets';
@@ -50,7 +55,9 @@ import {
   stage6ghostGraphicalAsset,
   bossGraphicalAsset,
   lumberGraphicalAsset,
-  lumberSonGraphicalAsset, projectileBossGraphicalAsset
+  lumberSonGraphicalAsset,
+  projectileBossGraphicalAsset,
+  stage70realGraphicalAsset,
 } from './GraphicalAssets';
 
 export interface Asset {
@@ -76,7 +83,8 @@ export class AssetManager {
     stage6realGraphicalAsset,
     stageCorridorRealGraphicalAsset,
     stageStreetRealGraphicalAsset,
-    stage6ghostGraphicalAsset
+    stage6ghostGraphicalAsset,
+    stage70realGraphicalAsset,
   ];
 
   public static readonly sprites: SpriteAsset[] = [
@@ -122,6 +130,7 @@ export class AssetManager {
     parkGhostThemeAudioAsset,
     caveGhostThemeAudioAsset,
     bossThemeAudioAsset,
+    libraryThemeAudioAsset,
   ];
 
   public static readonly graphicalAssets = {
@@ -139,6 +148,7 @@ export class AssetManager {
     stage5ghost: stage5ghostGraphicalAsset,
     stage6real: stage6realGraphicalAsset,
     stage6ghost: stage6ghostGraphicalAsset,
+    stage70Real: stage70realGraphicalAsset,
     util: utilGraphicalAsset,
   };
 

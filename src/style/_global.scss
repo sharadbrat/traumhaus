@@ -5,3 +5,19 @@
 #root {
   background-color: white;
 }
+
+
+.hide {
+
+  &_fullscreen {
+    opacity: 1;
+    transform: none;
+    transition: transform cubic-bezier(1,-1.13,.54,1) 375ms 200ms, opacity linear 375ms 200ms;
+  }
+
+  :fullscreen &_fullscreen {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+}

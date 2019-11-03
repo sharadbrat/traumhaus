@@ -31,6 +31,7 @@
 .home__group {
   @include PageBlock();
   margin-top: 35px;
+  padding-top: 50px;
 
   @media screen and (max-height: 510px) {
     margin-top: 0;
@@ -54,5 +55,11 @@
     &:before {
       display: none;
     }
+  }
+
+  &.home__link_option {
+    margin-top: 30px;
+    font-size: 24px;
+    opacity: 0.7;
   }
 }

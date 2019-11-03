@@ -54,6 +54,8 @@ export class GamePage extends React.Component<any, GamePageState> {
     isFinished: false,
   };
 
+  private pauseLock: boolean;
+
   constructor(props: GamePageProps) {
     super(props);
 
@@ -199,7 +201,6 @@ export class GamePage extends React.Component<any, GamePageState> {
 
     const HUD = (
       <div className="game__hud-container">
-        <button className="game__hud-back" aria-label="Menu" onClick={this.onMenuToggle}/>
         <div className={ this.state.showHud ? 'game__hud-hearts game__hud-hearts_enabled' : 'game__hud-hearts'} id="hearts">
           <div className={`game__hud-heart ${this.state.health < 1 ? 'game__hud-heart_damaged' : ''}`}/>
           <div className={`game__hud-heart ${this.state.health < 2 ? 'game__hud-heart_damaged' : ''}`}/>
@@ -218,14 +219,30 @@ export class GamePage extends React.Component<any, GamePageState> {
           <Dialog step={this.state.dialogStep} isActive={this.state.isDialogActive}/>
           <Menu heading="Pause" isActive={this.state.pause}>
             <button className="game__menu-option" onClick={this.onMenuContinueClick}>Continue</button>
-            <button className="game__menu-option" onClick={this.onMenuSettingsClick}>Settings</button>
             <button className="game__menu-option" onClick={this.onMenuExitClick}>Exit to main menu</button>
+            <button className="home__link hide_fullscreen home__link_option" onClick={this.enableFullscreen}>Enable fullscreen</button>
           </Menu>
           <SettingsMenu isActive={this.state.isSettingsActive} onClose={this.onMenuSettingsClose}/>
-          <DeathMenu onGoToMainMenu={this.onDeathMenuMainMenuClick} onGoToCheckpoint={this.onDeathMenuCheckpointClick} show={this.state.isDeathMenuActive}/>
+          <DeathMenu
+            onGoToMainMenu={this.onDeathMenuMainMenuClick}
+            onGoToCheckpoint={this.onDeathMenuCheckpointClick}
+            show={this.state.isDeathMenuActive}
+          />
         </div>
       </section>
     );
+  }
+
+  private enableFullscreen() {
+    const root = document.getElementById('root');
+    if (root) {
+      root.requestFullscreen()
+      .then(r => {
+        debugger
+      }).catch((e: Error) => {
+        console.log(`Could not start fullscreen mode!\nError message: ${e.message}`);
+      });
+    }
   }
 
   private onHealthChange = (health: number) => {

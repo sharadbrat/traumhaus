@@ -7,6 +7,7 @@ export const CAVE_GHOST_THEME_AUDIO_ID = 'CAVE_GHOST_THEME_AUDIO';
 export const PARK_THEME_AUDIO_ID = 'PARK_THEME_AUDIO';
 export const PARK_GHOST_THEME_AUDIO_ID = 'PARK_GHOST_THEME_AUDIO';
 export const BOSS_THEME_AUDIO_ID = 'BOSS_THEME_AUDIO';
+export const LIBRARY_THEME_AUDIO_ID = 'LIBRARY_THEME_AUDIO';
 
 export const DASH_SOUND_ASSET_ID = 'DASH_SOUND_ASSET';
 export const SHOOT_SOUND_ASSET_ID = 'SHOOT_SOUND_ASSET';
@@ -84,6 +85,15 @@ export const parkGhostThemeAudioAsset: SoundAsset = {
 export const bossThemeAudioAsset: SoundAsset = {
   name: BOSS_THEME_AUDIO_ID,
   file: '/sounds/theme_boss.mp3',
+  soundConfig: {
+    volume: 0.3,
+    loop: true,
+  }
+};
+
+export const libraryThemeAudioAsset: SoundAsset = {
+  name: LIBRARY_THEME_AUDIO_ID,
+  file: '/sounds/theme_library.mp3',
   soundConfig: {
     volume: 0.3,
     loop: true,

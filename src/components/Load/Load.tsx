@@ -11,12 +11,6 @@ export class Load extends React.PureComponent<LoadProps> {
     return (
       <div className={`load${this.props.progress === 1 ? ' load_hidden' : ''}`}>
         <div className="load__container">
-          <div className="load__icon">
-            <div/>
-            <div/>
-            <div/>
-            <div/>
-          </div>
           <p className="load__progress">{`${this.props.progress * 100}`.substr(0, 3)}% loaded</p>
         </div>
       </div>

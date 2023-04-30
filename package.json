@@ -41,7 +41,7 @@
     "@types/react-router-dom": "4.3.1",
     "@types/react-transition-group": "2.8.0",
     "phaser3-docs": "github:photonstorm/phaser3-docs",
-    "tile-extruder": "^1.1.0",
+    "tile-extruder": "^1.2.0",
     "typescript": "3.4.2"
   }
 }
